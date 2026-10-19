@@ -1516,7 +1516,8 @@
         n.el.style.opacity = o.toFixed(3);
         if (o <= 0) continue;
         tmp.copy(n.at).project(camera);
-        const x = (tmp.x + 1) / 2 * cw;
+        // dimension chips stay fully on screen; part labels keep their exact anchor
+        const x = n.dim ? Math.min(cw - 64, Math.max(64, (tmp.x + 1) / 2 * cw)) : (tmp.x + 1) / 2 * cw;
         n.el.style.transform = `translate(${x.toFixed(1)}px, ${((1 - tmp.y) / 2 * ch).toFixed(1)}px)`;
         if (n.dim) continue;
         n.el.style.setProperty('--o', o.toFixed(3));
