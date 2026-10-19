@@ -1,0 +1,5 @@
+# Only the static site is deployed; sources and tooling stay in the repo.
+_src/
+tools/
+README.md
+.playwright-mcp/

@@ -1,0 +1,410 @@
+<!doctype html>
+<!-- Studio renders of the five stair models for the "Merdiven modelleri" section.
+     Serve the project root, open tools/studio.html?model=konsol (duz, l, z, doner), wait for
+     window.ready, then screenshot the canvas (1500 × 1000). Same materials and light as the film. -->
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Maviron studio</title>
+<style>html, body { margin: 0; background: #e7e4de; } canvas { display: block; width: 1500px; height: 1000px; }</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.min.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<canvas></canvas>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+const model = new URLSearchParams(location.search).get('model') || 'duz';
+const canvas = document.querySelector('canvas');
+const [WIDTH, HEIGHT] = (new URLSearchParams(location.search).get('size') || '1500x1000').split('x').map(Number); // ?size=1000x1250 for portrait
+canvas.style.width = `${WIDTH}px`;
+canvas.style.height = `${HEIGHT}px`;
+
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1);
+renderer.setSize(WIDTH, HEIGHT, false);
+renderer.toneMapping = THREE.NeutralToneMapping;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#e7e4de');
+scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = .6;
+
+// ---- textures and materials (as in index.html) ----
+const loader = new THREE.TextureLoader();
+const pending = [];
+const tex = (name, srgb) => {
+  let done;
+  pending.push(new Promise(r => { done = r; }));
+  const t = loader.load(`../img/tex/${name}.webp`, () => done());
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.anisotropy = 8;
+  if (srgb) t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+};
+const oakMaps = { map: tex('oak-diff', true), roughnessMap: tex('oak-rough'), normalMap: tex('oak-nor') };
+const floorMaps = { map: tex('floor-diff', true), roughnessMap: tex('floor-rough'), normalMap: tex('floor-nor') };
+for (const t of Object.values(floorMaps)) t.repeat.set(20 / 2.2, 20 / 2.2);
+
+const steelMat = new THREE.MeshPhysicalMaterial({ color: '#1c1e21', metalness: .3, roughness: .48, clearcoat: .3, clearcoatRoughness: .35 });
+const oakMat = new THREE.MeshStandardMaterial({ ...oakMaps, color: '#f2e2cc', roughness: .95, normalScale: new THREE.Vector2(.5, .5) });
+const glassFace = new THREE.MeshPhysicalMaterial({ color: '#eef7f3', roughness: .03, envMapIntensity: 1.6, clearcoat: 1, clearcoatRoughness: .02, transparent: true, opacity: .14, depthWrite: false, side: THREE.DoubleSide });
+const glassEdge = new THREE.MeshStandardMaterial({ color: '#7fb5a1', roughness: .1, transparent: true, opacity: .92 });
+const inoxMat = new THREE.MeshStandardMaterial({ color: '#dfe3e8', metalness: 1, roughness: .16 });
+const slabMat = new THREE.MeshStandardMaterial({ color: '#d9d6cf', roughness: .92 });
+const wallMat = new THREE.MeshStandardMaterial({ color: '#e4e3e0', roughness: .94 });
+const darkMat = new THREE.MeshStandardMaterial({ color: '#141517', roughness: .55, envMapIntensity: .4 });
+
+const boxUV = (geo, size) => {
+  const p = geo.attributes.position, n = geo.attributes.normal, uv = geo.attributes.uv;
+  const du = Math.random(), dv = Math.random();
+  for (let i = 0; i < p.count; i++) {
+    const ax = Math.abs(n.getX(i)), ay = Math.abs(n.getY(i)), az = Math.abs(n.getZ(i));
+    const [u, v] = ay >= ax && ay >= az ? [p.getX(i), p.getZ(i)] : ax >= az ? [p.getY(i), p.getZ(i)] : [p.getX(i), p.getY(i)];
+    uv.setXY(i, u / size + du, v / size + dv);
+  }
+  return geo;
+};
+const mesh = (geo, mat, x, y, z, rotY = 0) => {
+  const m = new THREE.Mesh(geo, mat);
+  m.position.set(x, y, z);
+  m.rotation.y = rotY;
+  m.castShadow = m.receiveShadow = mat !== glassFace;
+  scene.add(m);
+  return m;
+};
+const rbox = (w, h, d, r) => new RoundedBoxGeometry(w, h, d, 2, Math.min(r, w / 3, h / 3, d / 3));
+const steel = (w, h, d, x, y, z) => mesh(rbox(w, h, d, .006), steelMat, x, y, z);
+const tread = (depth, thick, len, x, y, z, rotY = 0) => mesh(boxUV(rbox(depth, thick, len, .005), .9), oakMat, x, y, z, rotY);
+const plate = (x, z, s = .24) => {
+  steel(s, .012, s, x, .006, z);
+  for (const [a, b] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) mesh(new THREE.CylinderGeometry(.011, .011, .014, 6), steelMat, x + a * s * .36, .019, z + b * s * .36);
+};
+const GT = .0175, GAP = .03;
+// glass pane in the XY plane of a frame placed at (x, z) with rotation rotY; out = side the fixings face
+const pane = (pts, x, z, rotY, out, fixings) => {
+  const geo = new THREE.ExtrudeGeometry(new THREE.Shape(pts.map(([u, v]) => new THREE.Vector2(u, v))), { depth: GT, bevelEnabled: false });
+  const m = new THREE.Mesh(geo, [glassFace, glassEdge]);
+  m.position.set(x, 0, z);
+  m.rotation.y = rotY;
+  scene.add(m);
+  for (const [u, v] of fixings) {
+    const disc = new THREE.Mesh(new THREE.CylinderGeometry(.025, .025, .012, 28), inoxMat);
+    disc.rotation.x = Math.PI / 2;
+    disc.position.set(u, v, out > 0 ? GT + .006 : -.006);
+    const rod = new THREE.Mesh(new THREE.CylinderGeometry(.009, .009, GAP, 16), inoxMat);
+    rod.rotation.x = Math.PI / 2;
+    rod.position.set(u, v, out > 0 ? -GAP / 2 : GT + GAP / 2);
+    disc.castShadow = rod.castShadow = true;
+    m.add(disc, rod);
+  }
+};
+const slopedGlass = (n, perPanel, base, x, z, rotY, out) => {
+  for (let a = 0; a < n; a += perPanel) {
+    const u0 = a * G + .02, u1 = Math.min(n, a + perPanel) * G - .02;
+    const low = u => base + u / G * R - .2, high = u => base + u / G * R + .95;
+    pane([[u0, low(u0)], [u1, low(u1)], [u1, high(u1)], [u0, high(u0)]], x, z, rotY, out, [u0 + .12, u1 - .12].map(u => [u, low(u) + .13]));
+  }
+};
+const slab = (x0, x1, z0, z1, top) => mesh(new THREE.BoxGeometry(x1 - x0, .22, z1 - z0), slabMat, (x0 + x1) / 2, top - .11, (z0 + z1) / 2);
+
+// ---- the five models (metres) ----
+const R = 3.2 / 17, G = .27, W = .95, T = .045, P = .008, S = .12, B = .14;
+let shot; // [camera position, look-at, fov]
+
+// zigzag spine along +x (dir 1) or -x (dir -1) from x0, steps n, first tread top at (k0 + 1) * R, at depth z
+const spineRun = (x0, z, n, k0, dir, withTreads = true) => {
+  for (let i = 0; i < n; i++) {
+    const k = k0 + i + 1, top = k * R - T - P, bottom = i || k0 ? (k - 1) * R - T - P - S : .012;
+    const xa = x0 + dir * i * G;
+    steel(S, top - bottom, B, xa + dir * S / 2, (top + bottom) / 2, z);
+    steel(G + S, S, B, xa + dir * (G + S) / 2, top - S / 2, z);
+    steel(G * .8, P, W * .5, xa + dir * G / 2, top + P / 2, z);
+    if (withTreads) tread(G + .03, T, W, xa + dir * (G / 2 - .015), k * R - T / 2, z);
+  }
+};
+
+const back = (z, w = 30) => {
+  const m = mesh(new THREE.PlaneGeometry(w, 7), wallMat, 1.5, 3.5, z);
+  m.castShadow = false;
+  const skirt = mesh(new THREE.PlaneGeometry(w, .05), darkMat, 1.5, .025, z + .002);
+  skirt.castShadow = false;
+};
+
+if (model === 'konsol') {
+  // treads anchored into the wall, nothing underneath
+  const n = 16, KT = .08;
+  back(-W / 2 - .001);
+  for (let i = 0; i < n; i++) tread(G + .03, KT, W, i * G + G / 2 - .015, (i + 1) * R - KT / 2, 0);
+  slab(n * G, n * G + 2.5, -W / 2, 2.2, (n + 1) * R);
+  slopedGlass(n, 4, R, 0, W / 2 + GAP, 0, 1);
+  shot = [[7.6, 1.6, 7.6], [2.3, 1.5, -.2], 34];
+} else if (model === 'duz') {
+  const n = 15;
+  back(-1.6);
+  plate(S / 2, 0);
+  spineRun(0, 0, n, 0, 1);
+  slab(n * G, n * G + 2.5, -1.6, 1.4, (n + 1) * R);
+  slopedGlass(n, 5, R, 0, W / 2 + GAP, 0, 1);
+  shot = [[7.4, 1.6, 7.8], [2.1, 1.45, -.3], 34];
+} else if (model === 'l') {
+  const X2 = 8 * G + W / 2, Z0 = -W / 2;
+  back(Z0 - 6 * G - 1.4);
+  plate(S / 2, 0);
+  spineRun(0, 0, 8, 0, 1);
+  const top = 9 * R - T - P;
+  steel(S, S + R, B, 8 * G + S / 2, top - (S + R) / 2, 0);
+  steel(W / 2 + S / 2, S, B, 8 * G + (W / 2 + S / 2) / 2, top - S / 2, 0);
+  steel(B, S, W / 2 + B / 2, X2, top - S / 2, (B / 2 + Z0) / 2);
+  steel(.1, top - S - .012, .1, X2, (top - S + .012) / 2, 0);
+  plate(X2, 0, .22);
+  tread(W, T, W, X2, 9 * R - T / 2, 0);
+  for (let j = 0; j < 7; j++) {
+    const k = 10 + j, zs = Z0 - j * G, t2 = k * R - T - P;
+    steel(B, S + R, S, X2, t2 - (S + R) / 2, zs - S / 2);
+    steel(B, S, G + S, X2, t2 - S / 2, zs - (G + S) / 2);
+    steel(W * .5, P, G * .8, X2, t2 + P / 2, zs - G / 2);
+    tread(G + .03, T, W, X2, k * R - T / 2, zs - G / 2 + .015, Math.PI / 2);
+  }
+  slab(-1.5, 8 * G + W, Z0 - 7 * G - 1.4, Z0 - 7 * G, 17 * R);
+  slopedGlass(8, 4, R, 0, W / 2 + GAP, 0, 1);
+  pane([[8 * G + .01, 9 * R - .2], [8 * G + W - .01, 9 * R - .2], [8 * G + W - .01, 9 * R + .95], [8 * G + .01, 9 * R + .95]], 0, W / 2 + GAP, 0, 1,
+    [[8 * G + .13, 9 * R - .07], [8 * G + W - .13, 9 * R - .07]]);
+  slopedGlass(7, 4, 10 * R, 8 * G - GAP - GT, Z0, Math.PI / 2, -1);
+  shot = [[6.2, 1.6, 5.4], [1.5, 1.5, -1.0], 38];
+} else if (model === 'z') {
+  // up along +x to a landing, then back along -x on a second spine behind the first
+  const n1 = 8, n2 = 8, zb = -(W + .06), XL = n1 * G;
+  back(zb - W / 2 - .9);
+  plate(S / 2, 0);
+  spineRun(0, 0, n1, 0, 1);
+  const top = (n1 + 1) * R - T - P;
+  steel(S, S + R, B, XL + S / 2, top - (S + R) / 2, 0);
+  steel(W * .55, S, B, XL + W * .55 / 2, top - S / 2, 0);
+  steel(B, S, W + .06 + B, XL + W / 2, top - S / 2, zb / 2);
+  steel(W * .55, S, B, XL + W * .55 / 2, top - S / 2, zb);
+  for (const z of [0, zb]) { steel(.1, top - S - .012, .1, XL + W - .1, (top - S + .012) / 2, z); plate(XL + W - .1, z, .22); }
+  tread(W, T, 2 * W + .06, XL + W / 2, (n1 + 1) * R - T / 2, zb / 2);
+  spineRun(XL, zb, n2, n1 + 1, -1);
+  slab(-2.2, 0, zb - W / 2 - .9, zb + W / 2, (n1 + n2 + 2) * R);
+  slopedGlass(n1, 4, R, 0, W / 2 + GAP, 0, 1);
+  pane([[XL + .01, (n1 + 1) * R - .2], [XL + W, (n1 + 1) * R - .2], [XL + W, (n1 + 1) * R + .95], [XL + .01, (n1 + 1) * R + .95]], 0, W / 2 + GAP, 0, 1, [[XL + .13, (n1 + 1) * R - .07], [XL + W - .13, (n1 + 1) * R - .07]]);
+  shot = [[-2.2, 2.5, 6.6], [1.5, 1.7, -.6], 38];
+} else if (model === 'doner') {
+  // wedge treads around a central column, steel balusters and a helical handrail
+  const n = 15, step = Math.PI * 2 / 12.5, r0 = .07, r1 = .85, cx = 0, cz = 0;
+  back(-1.3);
+  const col = mesh(new THREE.CylinderGeometry(.06, .06, n * R + 1, 40), steelMat, cx, (n * R + 1) / 2, cz);
+  plate(cx, cz, .3);
+  const pts = [];
+  for (let i = 0; i < n; i++) {
+    const a0 = i * step, a1 = a0 + step * 1.06, y = (i + 1) * R;
+    const s = new THREE.Shape();
+    s.moveTo(r0, 0); s.absarc(0, 0, r1, 0, a1 - a0, false); s.lineTo(r0 * Math.cos(a1 - a0), r0 * Math.sin(a1 - a0)); s.closePath();
+    const geo = new THREE.ExtrudeGeometry(s, { depth: T, bevelEnabled: true, bevelThickness: .004, bevelSize: .004, bevelSegments: 2, curveSegments: 24 });
+    geo.rotateX(-Math.PI / 2);
+    const m = mesh(geo, oakMat, cx, y - T, cz);
+    m.rotation.y = a0;
+    m.position.y = y - T;
+    const collar = mesh(new THREE.CylinderGeometry(.085, .085, .1, 32), steelMat, cx, y - T - .05, cz);
+    const ab = a0 + step * .5, bx = cx + (r1 - .06) * Math.cos(ab), bz = cz - (r1 - .06) * Math.sin(ab);
+    mesh(new THREE.CylinderGeometry(.011, .011, .95, 12), steelMat, bx, y + .95 / 2, bz);
+    pts.push(new THREE.Vector3(bx, y + .95, bz));
+  }
+  const rail = new THREE.CatmullRomCurve3(pts);
+  mesh(new THREE.TubeGeometry(rail, 200, .022, 16, false), steelMat, 0, 0, 0);
+  shot = [[4.6, 1.9, 5.4], [.1, 1.7, 0], 40];
+}
+let shadowSize = 6;
+
+// ---- steel structures for the services section: bungalov, çatı makası, carport, depo ----
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+// a straight member from a to b; 'box' w × h section or an I-section of height h, flange w
+const member = (a, b, w, h, kind = 'box', mat = steelMat) => {
+  const len = a.distanceTo(b);
+  let geo;
+  if (kind === 'I') {
+    const s = new THREE.Shape(), x = w / 2, y = h / 2, t = Math.max(.006, h * .025), f = Math.max(.008, h * .04);
+    [[-x, -y], [x, -y], [x, -y + f], [t, -y + f], [t, y - f], [x, y - f], [x, y], [-x, y], [-x, y - f], [-t, y - f], [-t, -y + f], [-x, -y + f]]
+      .forEach(([u, v], k) => k ? s.lineTo(u, v) : s.moveTo(u, v));
+    geo = new THREE.ExtrudeGeometry(s, { depth: len, bevelEnabled: false });
+  } else {
+    geo = rbox(w, h, len, .004);
+    geo.translate(0, 0, len / 2);
+  }
+  const m = new THREE.Mesh(geo, mat);
+  m.position.copy(a);
+  m.lookAt(b);
+  m.castShadow = m.receiveShadow = true;
+  scene.add(m);
+  return m;
+};
+// trapezoidal sheet from corner o, across U (ribs repeat along U) and along V (ribs run along V)
+const sheetMat = new THREE.MeshStandardMaterial({ color: '#33373c', metalness: .2, roughness: .55, side: THREE.DoubleSide });
+const sheetLight = new THREE.MeshStandardMaterial({ color: '#c4c7cb', metalness: .25, roughness: .5, side: THREE.DoubleSide });
+const sheet = (o, U, Vv, mat = sheetMat) => {
+  const n = new THREE.Vector3().crossVectors(Vv, U).normalize();
+  if (n.y < 0 || (Math.abs(n.y) < .01 && n.x < 0)) n.negate();
+  const w = U.length(), k = Math.round(w / .025), pos = [], idx = [];
+  for (let i = 0; i <= k; i++) {
+    const t = i / k, ph = (t * w % .25) / .25, off = ph < .2 || ph > .6 ? .035 : 0;
+    const p0 = o.clone().addScaledVector(U, t).addScaledVector(n, off);
+    pos.push(...p0.toArray(), ...p0.clone().add(Vv).toArray());
+    if (i) idx.push(2 * i - 2, 2 * i - 1, 2 * i, 2 * i - 1, 2 * i + 1, 2 * i);
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  geo.setIndex(idx);
+  geo.computeVertexNormals();
+  const m = new THREE.Mesh(geo, mat);
+  m.castShadow = m.receiveShadow = true;
+  scene.add(m);
+  return m;
+};
+const column = (x, z, h, s = .1, kind = 'box') => { plate(x, z, s + .12); return member(V(x, .012, z), V(x, h, z), s, s, kind); };
+
+if (model === 'bungalov') {
+  // mono-pitch cabin on a raised steel deck: timber-clad back and side, glazed front, frame left open
+  const L = 5.2, D = 3.6, F = .45, HF = 3.1, HB = 2.6;
+  back(-4.5);
+  for (const x of [0, L / 2, L]) for (const z of [0, -D]) { plate(x, z, .2); member(V(x, .012, z), V(x, F - .14, z), .1, .1); }
+  for (const z of [0, -D]) member(V(-.05, F - .07, z), V(L + .05, F - .07, z), .08, .14, 'I');
+  for (let i = 0; i <= 6; i++) member(V(i * L / 6, F - .07, .05), V(i * L / 6, F - .07, -D - .05), .06, .12);
+  for (let i = 0; i < 22; i++) {
+    const b = rbox(.22, .03, D + .5, .004);
+    boxUV(b, .9);
+    const m = new THREE.Mesh(b, oakMat);
+    m.position.set(-.1 + i * .245, F + .015, -D / 2 + .25);
+    m.castShadow = m.receiveShadow = true;
+    scene.add(m);
+  }
+  const top = z => HF + (HB - HF) * (-z / D);
+  for (const x of [0, L / 2, L]) for (const z of [0, -D]) member(V(x, F, z), V(x, top(z), z), .1, .1);
+  for (const z of [0, -D]) member(V(-.3, top(z) + .07, z), V(L + .3, top(z) + .07, z), .1, .14, 'I');
+  for (let i = 0; i <= 6; i++) { const x = i * L / 6; member(V(x, top(.5) + .14, .5), V(x, top(-D - .5) + .14, -D - .5), .05, .1); }
+  sheet(V(-.4, top(.55) + .24, .55), V(L + .8, 0, 0), V(0, top(-D - .55) - top(.55), -D - 1.1));
+  // timber cladding: back wall and right wall
+  const board = (len, h, x, y, z, rotY) => { const g = rbox(.12, h, .02, .003); boxUV(g, .9); const m = new THREE.Mesh(g, oakMat); m.position.set(x, y, z); m.rotation.y = rotY; m.castShadow = m.receiveShadow = true; scene.add(m); };
+  for (let i = 0; i < 40; i++) { const x = .06 + i * .13; board(.12, top(-D) - F, x, F + (top(-D) - F) / 2, -D - .07, 0); }
+  for (let i = 0; i < 27; i++) { const z = -.06 - i * .13, h = top(z) - F; board(.12, h, L + .07, F + h / 2, z, Math.PI / 2); }
+  // glazed front between the columns
+  for (const [x0, x1] of [[.06, L / 2 - .06], [L / 2 + .06, L - .06]]) {
+    pane([[x0, F + .02], [x1, F + .02], [x1, HF - .02], [x0, HF - .02]], 0, -.04, 0, 1, []);
+    member(V(x0 - .02, F + .03, -.03), V(x1 + .02, F + .03, -.03), .04, .04, 'box', darkMat);
+  }
+  // left side stays an open frame with X bracing, to show the karkas
+  member(V(0, F, 0), V(0, top(-D), -D), .03, .03);
+  member(V(0, F, -D), V(0, top(0), 0), .03, .03);
+  shot = [[-5, 6, 6], [2.4, 1.6, -1.7], 38];
+} else if (model === 'cati') {
+  // three Warren trusses on columns, purlins, half the roof sheeted
+  const SPAN = 8, H0 = 3, RISE = 1.6, BAYS = 2, BAY = 2.6;
+  back(-BAYS * BAY - 3);
+  const chordY = x => H0 + RISE * (1 - Math.abs(x - SPAN / 2) / (SPAN / 2));
+  for (let b = 0; b <= BAYS; b++) {
+    const z = -b * BAY;
+    column(0, z, H0, .14, 'I'); column(SPAN, z, H0, .14, 'I');
+    member(V(-.2, H0, z), V(SPAN + .2, H0, z), .08, .1);                         // bottom chord
+    member(V(-.2, chordY(-.2) - .03, z), V(SPAN / 2, chordY(SPAN / 2), z), .08, .1); // top chords
+    member(V(SPAN / 2, chordY(SPAN / 2), z), V(SPAN + .2, chordY(SPAN + .2) - .03, z), .08, .1);
+    for (let i = 0; i < 8; i++) {
+      const x0 = i, x1 = i + 1, up = i % 2 === 0;
+      member(V(up ? x0 : x0, up ? H0 : chordY(x0), z), V(x1, up ? chordY(x1) : H0, z), .05, .05);
+      if (i === 4) member(V(x0, H0, z), V(x0, chordY(x0), z), .05, .05);
+    }
+  }
+  for (let i = 0; i <= 8; i++) {
+    const x = i, y = chordY(x) + .08;
+    member(V(x, y, .3), V(x, y, -BAYS * BAY - .3), .05, .1);                       // purlins
+  }
+  sheet(V(SPAN / 2, chordY(SPAN / 2) + .16, .3), V(0, 0, -BAYS * BAY - .6), V(SPAN / 2 + .3, -RISE - .3 * RISE / (SPAN / 2), 0));
+  shot = [[-3.6, 2.4, 7.4], [4, 3.2, -2.6], 40];
+} else if (model === 'carport') {
+  // 3 × 6 m single-car carport, 100 × 100 posts, mono-pitch roof
+  const L = 6, D = 3.2, HF = 2.55, HB = 2.3;
+  back(-D - 2.5);
+  const top = z => HF + (HB - HF) * (-z / D);
+  for (const x of [0, L]) for (const z of [0, -D]) column(x, z, top(z));
+  for (const z of [0, -D]) member(V(-.3, top(z) + .1, z), V(L + .3, top(z) + .1, z), .1, .2);
+  for (let i = 0; i <= 6; i++) { const x = -.25 + i * (L + .5) / 6; member(V(x, top(.4) + .22, .4), V(x, top(-D - .4) + .22, -D - .4), .05, .08); }
+  sheet(V(-.35, top(.45) + .3, .45), V(L + .7, 0, 0), V(0, top(-D - .45) - top(.45), -D - .9));
+  // paving under the car space
+  const pav = new THREE.Mesh(new THREE.BoxGeometry(L + .6, .03, D + .8), new THREE.MeshStandardMaterial({ color: '#b3afa8', roughness: .9 }));
+  pav.position.set(L / 2, .015, -D / 2);
+  pav.receiveShadow = true;
+  scene.add(pav);
+  shot = [[-3.2, 2, 6.6], [3, 1.3, -1.6], 38];
+} else if (model === 'depo') {
+  // portal-frame warehouse: IPE columns and rafters, purlins, girts, end-bay bracing, partly clad
+  const SPAN = 10, EAVE = 4.5, RIDGE = 5.6, BAYS = 4, BAY = 3;
+  const roofY = x => EAVE + (RIDGE - EAVE) * (1 - Math.abs(x - SPAN / 2) / (SPAN / 2));
+  for (let b = 0; b <= BAYS; b++) {
+    const z = -b * BAY;
+    column(0, z, EAVE, .2, 'I'); column(SPAN, z, EAVE, .2, 'I');
+    member(V(0, EAVE, z), V(SPAN / 2, RIDGE, z), .14, .27, 'I');
+    member(V(SPAN / 2, RIDGE, z), V(SPAN, EAVE, z), .14, .27, 'I');
+  }
+  for (let i = 0; i <= 10; i++) { const x = i; member(V(x, roofY(x) + .2, .1), V(x, roofY(x) + .2, -BAYS * BAY - .1), .06, .12); }
+  for (const x of [0, SPAN]) for (const y of [1.5, 3]) member(V(x, y, .1), V(x, y, -BAYS * BAY - .1), .06, .12);
+  for (const x of [0, SPAN]) { member(V(x, .3, 0), V(x, EAVE - .2, -BAY), .025, .025); member(V(x, .3, -BAY), V(x, EAVE - .2, 0), .025, .025); }
+  // cladding on the far half: right roof slope and the right wall, last two bays
+  const len = 2 * BAY + .2, zc = -BAYS * BAY + BAY - .1;
+  const fall = RIDGE - EAVE;
+  sheet(V(SPAN / 2, RIDGE + .32, zc + len / 2), V(0, 0, -len), V(-SPAN / 2 - .3, -fall - .3 * fall / (SPAN / 2), 0), sheetLight);
+  sheet(V(-.14, 0, zc + len / 2), V(0, 0, -len), V(0, EAVE + .25, 0), sheetLight);
+  shadowSize = 11;
+  shot = [[-8.5, 8, 10.5], [5, 2.4, -6], 40];
+}
+
+// floor
+const floor = mesh(new THREE.PlaneGeometry(20, 20), new THREE.MeshStandardMaterial({ ...floorMaps, color: '#ffffff', roughness: 1, normalScale: new THREE.Vector2(.6, .6) }), 1.5, 0, 0);
+floor.rotation.x = -Math.PI / 2;
+floor.castShadow = false;
+
+// light: low warm sun from the front left throws the stair's shadow on the wall
+scene.add(new THREE.HemisphereLight('#e6eef8', '#4a4036', .5));
+const sun = new THREE.DirectionalLight('#fff6ec', 3.1);
+sun.position.set(-4.5, 6, 6.5);
+sun.target.position.set(1.5, .8, -.6);
+sun.castShadow = true;
+sun.shadow.mapSize.set(4096, 4096);
+Object.assign(sun.shadow.camera, { left: -shadowSize, right: shadowSize, top: shadowSize, bottom: -shadowSize, near: 1, far: 30 });
+sun.shadow.bias = -.0003;
+sun.shadow.normalBias = .015;
+scene.add(sun, sun.target);
+
+// portrait frames open the lens a little; a full horizontal match would shrink the subject
+const fov = WIDTH >= HEIGHT ? shot[2] : shot[2] * 1.2;
+const camera = new THREE.PerspectiveCamera(fov, WIDTH / HEIGHT, .1, 80);
+const camQ = new URLSearchParams(location.search).get('cam'); // ?cam=x,y,z to inspect a model from elsewhere
+camera.position.set(...(camQ ? camQ.split(',').map(Number) : shot[0]));
+camera.lookAt(...shot[1]);
+
+const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(WIDTH, HEIGHT, { type: THREE.HalfFloatType, samples: 8 }));
+composer.addPass(new RenderPass(scene, camera));
+const gtao = new GTAOPass(scene, camera, WIDTH, HEIGHT);
+gtao.updateGtaoMaterial({ radius: .3, distanceExponent: 1.5, thickness: 1, scale: 1.2, samples: 24 });
+gtao.updatePdMaterial({ lumaPhi: 10, depthPhi: 2, normalPhi: 3, radius: 6, rings: 2, samples: 16 });
+composer.addPass(gtao);
+composer.addPass(new OutputPass());
+composer.setSize(WIDTH, HEIGHT);
+
+await Promise.all(pending);
+composer.render();
+window.ready = true;
+</script>
+</body>
+</html>
