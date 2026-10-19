@@ -3,3 +3,5 @@ _src/
 tools/
 README.md
 .playwright-mcp/
+.env*
+.vercel

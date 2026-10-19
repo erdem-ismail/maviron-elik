@@ -68,5 +68,6 @@ backwards works) and a warmer, lower sun over the closing shots.
 - Ask Maviron for full-resolution photos and a vector logo; the Instagram thumbnails are small.
 - Confirm: service area (İstanbul ve Kocaeli is inferred from project locations), "own workshop /
   own installation team" wording, and the example dimensions in the film (illustrative, 340 cm).
-- `og:image` needs an absolute URL once the site has a domain.
+- Live demo: https://maviron-celik-scroll.vercel.app (Vercel project `maviron-celik-scroll`). Update the
+  canonical, `og:` and JSON-LD URLs in `index.html` if it moves to a real domain.
 - mavironcelik.com currently shows a Squarespace parking page.
