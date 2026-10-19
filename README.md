@@ -59,6 +59,13 @@ backwards works) and a warmer, lower sun over the closing shots.
 - Process images (`img/steps/`) and `img/asma-kat.webp` are frames of the film (t = 2.7, 0.4,
   5.0, 9.8 and 12), captured with the copy overlays hidden.
 - Service renders (`img/services/*.webp`, 640 × 800): `tools/studio.html?model=bungalov|cati|carport|depo&size=1000x1250`.
+  These are shot on location: a Poly Haven HDRI is projected onto the ground (three.js
+  GroundedSkybox) and lights the scene, its sun disc is clamped out and replaced by a
+  shadow-casting lamp turned to the front left, a shadow catcher puts the shadows on the photo
+  ground, and a light vignette and grain finish the frame. The tool expects these CC0 files
+  (not in the repo) in `_src/env/`:
+  `meadow_2.hdr` and `rural_asphalt_road.hdr` (4k), and 2k `asphalt_02` and `gravel_concrete_03`
+  maps saved as `<name>_diff.jpg`, `<name>_rough.jpg`, `<name>_nor_gl.jpg`.
   Add `&cam=x,y,z` to look at a model from elsewhere while working on it.
 - Services: on wide screens the sticky picture swaps as each row passes the middle of the screen;
   from 1024 px down every row shows its own picture. "Teklif iste" preselects that job in the form.

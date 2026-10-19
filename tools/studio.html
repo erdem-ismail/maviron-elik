@@ -1,7 +1,9 @@
 <!doctype html>
-<!-- Studio renders of the five stair models for the "Merdiven modelleri" section.
+<!-- Studio renders: the five stair models (studio set) and the four service structures (outdoor set).
      Serve the project root, open tools/studio.html?model=konsol (duz, l, z, doner), wait for
-     window.ready, then screenshot the canvas (1500 × 1000). Same materials and light as the film. -->
+     window.ready, then screenshot the canvas (1500 × 1000). Same materials and light as the film.
+     The outdoor set (bungalov, cati, carport, depo) needs the CC0 Poly Haven files listed in the
+     README under _src/env/: two 4k location HDRIs and 2k gravel and asphalt maps. -->
 <html lang="tr">
 <head>
 <meta charset="utf-8">
@@ -24,8 +26,12 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
+import { GroundedSkybox } from 'three/addons/objects/GroundedSkybox.js';
 
 const model = new URLSearchParams(location.search).get('model') || 'duz';
+const outdoor = ['bungalov', 'cati', 'carport', 'depo'].includes(model);
 const canvas = document.querySelector('canvas');
 const [WIDTH, HEIGHT] = (new URLSearchParams(location.search).get('size') || '1500x1000').split('x').map(Number); // ?size=1000x1250 for portrait
 canvas.style.width = `${WIDTH}px`;
@@ -67,6 +73,15 @@ const inoxMat = new THREE.MeshStandardMaterial({ color: '#dfe3e8', metalness: 1,
 const slabMat = new THREE.MeshStandardMaterial({ color: '#d9d6cf', roughness: .92 });
 const wallMat = new THREE.MeshStandardMaterial({ color: '#e4e3e0', roughness: .94 });
 const darkMat = new THREE.MeshStandardMaterial({ color: '#141517', roughness: .55, envMapIntensity: .4 });
+if (outdoor) {
+  Object.assign(steelMat, { roughness: .62, clearcoat: .12, clearcoatRoughness: .5 });
+  steelMat.color.set('#2b2e33');
+  oakMat.color.set('#d9bd9c');
+  Object.assign(glassFace, { opacity: .06, envMapIntensity: .7 });
+}
+// concrete for footings, from the floor maps at a 1:1 scale
+const footMaps = { map: tex('floor-diff', true), roughnessMap: tex('floor-rough'), normalMap: tex('floor-nor') };
+const footMat = new THREE.MeshStandardMaterial({ ...footMaps, color: '#ece9e3', roughness: 1 });
 
 const boxUV = (geo, size) => {
   const p = geo.attributes.position, n = geo.attributes.normal, uv = geo.attributes.uv;
@@ -90,6 +105,7 @@ const rbox = (w, h, d, r) => new RoundedBoxGeometry(w, h, d, 2, Math.min(r, w / 
 const steel = (w, h, d, x, y, z) => mesh(rbox(w, h, d, .006), steelMat, x, y, z);
 const tread = (depth, thick, len, x, y, z, rotY = 0) => mesh(boxUV(rbox(depth, thick, len, .005), .9), oakMat, x, y, z, rotY);
 const plate = (x, z, s = .24) => {
+  if (outdoor) mesh(rbox(s + .28, .5, s + .28, .01), footMat, x, -.25, z);
   steel(s, .012, s, x, .006, z);
   for (const [a, b] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) mesh(new THREE.CylinderGeometry(.011, .011, .014, 6), steelMat, x + a * s * .36, .019, z + b * s * .36);
 };
@@ -138,6 +154,7 @@ const spineRun = (x0, z, n, k0, dir, withTreads = true) => {
 };
 
 const back = (z, w = 30) => {
+  if (outdoor) return;
   const m = mesh(new THREE.PlaneGeometry(w, 7), wallMat, 1.5, 3.5, z);
   m.castShadow = false;
   const skirt = mesh(new THREE.PlaneGeometry(w, .05), darkMat, 1.5, .025, z + .002);
@@ -229,6 +246,20 @@ if (model === 'konsol') {
   shot = [[4.6, 1.9, 5.4], [.1, 1.7, 0], 40];
 }
 let shadowSize = 6;
+// ground maps from _src/env, tiled every `tile` metres over a w × d area
+const groundMaps = (name, tile, w, d) => {
+  const load = (suffix, srgb) => {
+    let done;
+    pending.push(new Promise(r => { done = r; }));
+    const t = loader.load(`../_src/env/${name}_${suffix}.jpg`, () => done());
+    t.wrapS = t.wrapT = THREE.RepeatWrapping;
+    t.anisotropy = 16;
+    t.repeat.set(w / tile, d / tile);
+    if (srgb) t.colorSpace = THREE.SRGBColorSpace;
+    return t;
+  };
+  return { map: load('diff', true), roughnessMap: load('rough'), normalMap: load('nor_gl') };
+};
 
 // ---- steel structures for the services section: bungalov, çatı makası, carport, depo ----
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
@@ -253,8 +284,8 @@ const member = (a, b, w, h, kind = 'box', mat = steelMat) => {
   return m;
 };
 // trapezoidal sheet from corner o, across U (ribs repeat along U) and along V (ribs run along V)
-const sheetMat = new THREE.MeshStandardMaterial({ color: '#33373c', metalness: .2, roughness: .55, side: THREE.DoubleSide });
-const sheetLight = new THREE.MeshStandardMaterial({ color: '#c4c7cb', metalness: .25, roughness: .5, side: THREE.DoubleSide });
+const sheetMat = new THREE.MeshStandardMaterial({ color: '#4a5057', metalness: .3, roughness: .52, side: THREE.DoubleSide });  // RAL 7016-ish
+const sheetLight = new THREE.MeshStandardMaterial({ color: '#b9bec3', metalness: .7, roughness: .38, side: THREE.DoubleSide }); // galvanised
 const sheet = (o, U, Vv, mat = sheetMat) => {
   const n = new THREE.Vector3().crossVectors(Vv, U).normalize();
   if (n.y < 0 || (Math.abs(n.y) < .01 && n.x < 0)) n.negate();
@@ -308,7 +339,7 @@ if (model === 'bungalov') {
   // left side stays an open frame with X bracing, to show the karkas
   member(V(0, F, 0), V(0, top(-D), -D), .03, .03);
   member(V(0, F, -D), V(0, top(0), 0), .03, .03);
-  shot = [[-5, 6, 6], [2.4, 1.6, -1.7], 38];
+  shot = outdoor ? [[-4.6, 2.2, 7.2], [2.3, 2.1, -1.6], 38] : [[-5, 6, 6], [2.4, 1.6, -1.7], 38];
 } else if (model === 'cati') {
   // three Warren trusses on columns, purlins, half the roof sheeted
   const SPAN = 8, H0 = 3, RISE = 1.6, BAYS = 2, BAY = 2.6;
@@ -331,7 +362,8 @@ if (model === 'bungalov') {
     member(V(x, y, .3), V(x, y, -BAYS * BAY - .3), .05, .1);                       // purlins
   }
   sheet(V(SPAN / 2, chordY(SPAN / 2) + .16, .3), V(0, 0, -BAYS * BAY - .6), V(SPAN / 2 + .3, -RISE - .3 * RISE / (SPAN / 2), 0));
-  shot = [[-3.6, 2.4, 7.4], [4, 3.2, -2.6], 40];
+  if (outdoor) mesh(new THREE.BoxGeometry(SPAN + 1.6, .04, BAYS * BAY + 1.6), new THREE.MeshStandardMaterial({ ...groundMaps('gravel_concrete_03', 3, SPAN + 1.6, BAYS * BAY + 1.6), roughness: 1 }), SPAN / 2, -.016, -BAYS * BAY / 2).castShadow = false;
+  shot = [[-4.4, 1.7, 8.2], [4, 2.9, -2.6], 40];
 } else if (model === 'carport') {
   // 3 × 6 m single-car carport, 100 × 100 posts, mono-pitch roof
   const L = 6, D = 3.2, HF = 2.55, HB = 2.3;
@@ -342,11 +374,11 @@ if (model === 'bungalov') {
   for (let i = 0; i <= 6; i++) { const x = -.25 + i * (L + .5) / 6; member(V(x, top(.4) + .22, .4), V(x, top(-D - .4) + .22, -D - .4), .05, .08); }
   sheet(V(-.35, top(.45) + .3, .45), V(L + .7, 0, 0), V(0, top(-D - .45) - top(.45), -D - .9));
   // paving under the car space
-  const pav = new THREE.Mesh(new THREE.BoxGeometry(L + .6, .03, D + .8), new THREE.MeshStandardMaterial({ color: '#b3afa8', roughness: .9 }));
+  const pav = new THREE.Mesh(new THREE.BoxGeometry(L + .6, .03, D + .8), new THREE.MeshStandardMaterial({ ...groundMaps('asphalt_02', 2.5, L + .6, D + .8), roughness: 1 }));
   pav.position.set(L / 2, .015, -D / 2);
   pav.receiveShadow = true;
   scene.add(pav);
-  shot = [[-3.2, 2, 6.6], [3, 1.3, -1.6], 38];
+  shot = [[-3.8, 1.65, 6.8], [3, 1.85, -1.6], 38];
 } else if (model === 'depo') {
   // portal-frame warehouse: IPE columns and rafters, purlins, girts, end-bay bracing, partly clad
   const SPAN = 10, EAVE = 4.5, RIDGE = 5.6, BAYS = 4, BAY = 3;
@@ -365,30 +397,69 @@ if (model === 'bungalov') {
   const fall = RIDGE - EAVE;
   sheet(V(SPAN / 2, RIDGE + .32, zc + len / 2), V(0, 0, -len), V(-SPAN / 2 - .3, -fall - .3 * fall / (SPAN / 2), 0), sheetLight);
   sheet(V(-.14, 0, zc + len / 2), V(0, 0, -len), V(0, EAVE + .25, 0), sheetLight);
+  if (outdoor) mesh(new THREE.BoxGeometry(SPAN + 3, .04, BAYS * BAY + 3), new THREE.MeshStandardMaterial({ ...groundMaps('gravel_concrete_03', 3, SPAN + 3, BAYS * BAY + 3), roughness: 1 }), SPAN / 2, -.016, -BAYS * BAY / 2).castShadow = false;
   shadowSize = 11;
-  shot = [[-8.5, 8, 10.5], [5, 2.4, -6], 40];
+  shot = [[-9.5, 2.4, 12.5], [5, 3.2, -6], 40];
 }
 
-// floor
-const floor = mesh(new THREE.PlaneGeometry(20, 20), new THREE.MeshStandardMaterial({ ...floorMaps, color: '#ffffff', roughness: 1, normalScale: new THREE.Vector2(.6, .6) }), 1.5, 0, 0);
-floor.rotation.x = -Math.PI / 2;
-floor.castShadow = false;
-
-// light: low warm sun from the front left throws the stair's shadow on the wall
-scene.add(new THREE.HemisphereLight('#e6eef8', '#4a4036', .5));
 const sun = new THREE.DirectionalLight('#fff6ec', 3.1);
-sun.position.set(-4.5, 6, 6.5);
-sun.target.position.set(1.5, .8, -.6);
+if (!outdoor) {
+  const floor = mesh(new THREE.PlaneGeometry(20, 20), new THREE.MeshStandardMaterial({ ...floorMaps, color: '#ffffff', roughness: 1, normalScale: new THREE.Vector2(.6, .6) }), 1.5, 0, 0);
+  floor.rotation.x = -Math.PI / 2;
+  floor.castShadow = false;
+  // low warm sun from the front left throws the stair's shadow on the wall
+  scene.add(new THREE.HemisphereLight('#e6eef8', '#4a4036', .5));
+  sun.position.set(-4.5, 6, 6.5);
+  sun.target.position.set(1.5, .8, -.6);
+} else {
+  // a real location: the HDRI is projected onto the ground (GroundedSkybox) and lights the scene;
+  // its sun disc is taken out and handed to the shadow-casting lamp, turned to come from the front left
+  const site = { bungalov: 'meadow_2', carport: 'meadow_2', cati: 'rural_asphalt_road', depo: 'rural_asphalt_road' }[model];
+  const hdr = await new HDRLoader().setDataType(THREE.FloatType).loadAsync(`../_src/env/${site}.hdr`);
+  hdr.mapping = THREE.EquirectangularReflectionMapping;
+  const { data, width: hw, height: hh } = hdr.image;
+  let best = 0, bi = 0;
+  for (let i = 0; i < hw * hh; i++) { const l = data[i * 4] + data[i * 4 + 1] + data[i * 4 + 2]; if (l > best) { best = l; bi = i; } }
+  for (let i = 0; i < data.length; i += 4) { const m = Math.max(data[i], data[i + 1], data[i + 2]); if (m > 8) { const k = 8 / m; data[i] *= k; data[i + 1] *= k; data[i + 2] *= k; } }
+  hdr.needsUpdate = true;
+  // texel → direction, as SphereGeometry (inverted) maps it
+  const u = (bi % hw + .5) / hw, th = (Math.floor(bi / hw) + .5) / hh * Math.PI;
+  const sunDir = new THREE.Vector3(-Math.cos(2 * Math.PI * u) * Math.sin(th), Math.cos(th), -Math.sin(2 * Math.PI * u) * Math.sin(th));
+  const turn = Math.atan2(sunDir.z, sunDir.x) - Math.atan2(.75, -.66);
+  const sky = new GroundedSkybox(hdr, 3, 120);
+  sky.position.y = 3 - .01;
+  renderer.toneMappingExposure = 1.15;
+  sky.rotation.y = turn;
+  scene.add(sky);
+  window.__sky = sky;
+  scene.environment = new THREE.PMREMGenerator(renderer).fromEquirectangular(hdr).texture;
+  scene.environmentRotation.y = turn;
+  scene.environmentIntensity = 1;
+  // shadow catcher over the projected ground
+  const catcher = new THREE.Mesh(new THREE.PlaneGeometry(120, 120), new THREE.ShadowMaterial({ opacity: .55 }));
+  catcher.rotation.x = -Math.PI / 2;
+  catcher.position.y = .002;
+  catcher.receiveShadow = true;
+  scene.add(catcher);
+  const dir = sunDir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), turn);
+  dir.y = Math.max(dir.y, .45);
+  dir.normalize();
+  sun.target.position.set(...shot[1]).setY(0);
+  sun.position.copy(sun.target.position).addScaledVector(dir, 40);
+  sun.color.set('#fff3e3');
+  sun.intensity = 3.6;
+  shadowSize += 4;
+}
 sun.castShadow = true;
 sun.shadow.mapSize.set(4096, 4096);
-Object.assign(sun.shadow.camera, { left: -shadowSize, right: shadowSize, top: shadowSize, bottom: -shadowSize, near: 1, far: 30 });
+Object.assign(sun.shadow.camera, { left: -shadowSize, right: shadowSize, top: shadowSize, bottom: -shadowSize, near: 1, far: 90 });
 sun.shadow.bias = -.0003;
 sun.shadow.normalBias = .015;
 scene.add(sun, sun.target);
 
 // portrait frames open the lens a little; a full horizontal match would shrink the subject
 const fov = WIDTH >= HEIGHT ? shot[2] : shot[2] * 1.2;
-const camera = new THREE.PerspectiveCamera(fov, WIDTH / HEIGHT, .1, 80);
+const camera = new THREE.PerspectiveCamera(fov, WIDTH / HEIGHT, .1, 600);
 const camQ = new URLSearchParams(location.search).get('cam'); // ?cam=x,y,z to inspect a model from elsewhere
 camera.position.set(...(camQ ? camQ.split(',').map(Number) : shot[0]));
 camera.lookAt(...shot[1]);
@@ -398,8 +469,24 @@ composer.addPass(new RenderPass(scene, camera));
 const gtao = new GTAOPass(scene, camera, WIDTH, HEIGHT);
 gtao.updateGtaoMaterial({ radius: .3, distanceExponent: 1.5, thickness: 1, scale: 1.2, samples: 24 });
 gtao.updatePdMaterial({ lumaPhi: 10, depthPhi: 2, normalPhi: 3, radius: 6, rings: 2, samples: 16 });
+// the projected sky is a backdrop, not geometry: keep it out of the AO
+const hideForAO = gtao._overrideVisibility.bind(gtao);
+gtao._overrideVisibility = () => { hideForAO(); if (window.__sky) { window.__sky.visible = false; gtao._visibilityCache.push(window.__sky); } };
 composer.addPass(gtao);
 composer.addPass(new OutputPass());
+if (outdoor) composer.addPass(new ShaderPass({
+  uniforms: { tDiffuse: { value: null }, seed: { value: Math.random() * 100 } },
+  vertexShader: 'varying vec2 vUv; void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+  fragmentShader: `uniform sampler2D tDiffuse; uniform float seed; varying vec2 vUv;
+    float h(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233)) + seed) * 43758.5453); }
+    void main() {
+      vec4 c = texture2D(tDiffuse, vUv);
+      float v = smoothstep(.95, .35, length(vUv - .5) * 1.25);
+      c.rgb *= mix(.82, 1., v);
+      c.rgb += (h(vUv * 1000.) - .5) * .028;
+      gl_FragColor = c;
+    }`,
+}));
 composer.setSize(WIDTH, HEIGHT);
 
 await Promise.all(pending);
