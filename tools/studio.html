@@ -27,7 +27,8 @@ import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 
 const model = new URLSearchParams(location.search).get('model') || 'duz';
-const structure = ['bungalov', 'cati', 'carport', 'depo'].includes(model);
+// everything shown in the services section stands on the same seamless sweep
+const structure = ['bungalov', 'cati', 'carport', 'depo', 'merdiven', 'asmakat', 'yangin'].includes(model);
 const canvas = document.querySelector('canvas');
 const [WIDTH, HEIGHT] = (new URLSearchParams(location.search).get('size') || '1500x1000').split('x').map(Number); // ?size=1000x1250 for portrait
 canvas.style.width = `${WIDTH}px`;
@@ -168,7 +169,7 @@ if (model === 'konsol') {
   slab(n * G, n * G + 2.5, -1.6, 1.4, (n + 1) * R);
   slopedGlass(n, 5, R, 0, W / 2 + GAP, 0, 1);
   shot = [[7.4, 1.6, 7.8], [2.1, 1.45, -.3], 34];
-} else if (model === 'l') {
+} else if (model === 'l' || model === 'merdiven') {
   const X2 = 8 * G + W / 2, Z0 = -W / 2;
   back(Z0 - 6 * G - 1.4);
   plate(S / 2, 0);
@@ -192,7 +193,7 @@ if (model === 'konsol') {
   pane([[8 * G + .01, 9 * R - .2], [8 * G + W - .01, 9 * R - .2], [8 * G + W - .01, 9 * R + .95], [8 * G + .01, 9 * R + .95]], 0, W / 2 + GAP, 0, 1,
     [[8 * G + .13, 9 * R - .07], [8 * G + W - .13, 9 * R - .07]]);
   slopedGlass(7, 4, 10 * R, 8 * G - GAP - GT, Z0, Math.PI / 2, -1);
-  shot = [[6.2, 1.6, 5.4], [1.5, 1.5, -1.0], 38];
+  shot = model === 'merdiven' ? [[6.8, 4.6, 7.2], [1.6, 1.5, -1.1], 36] : [[6.2, 1.6, 5.4], [1.5, 1.5, -1.0], 38];
 } else if (model === 'z') {
   // up along +x to a landing, then back along -x on a second spine behind the first
   const n1 = 8, n2 = 8, zb = -(W + .06), XL = n1 * G;
@@ -377,6 +378,74 @@ if (model === 'bungalov') {
   mesh(new THREE.BoxGeometry(SPAN + 3, .04, BAYS * BAY + 3), footMat, SPAN / 2, -.016, -BAYS * BAY / 2).castShadow = false;
   shadowSize = 11;
   shot = [[-11, 11.5, 15], [5, 2.4, -6], 38];
+} else if (model === 'yangin') {
+  // two-storey exterior fire escape on a facade: U flights with bar-grating treads, landings on posts
+  const FR = 1.5 / 8, FG = .27, FW = .9, run = 7 * FG, zo = 0, zi = -(FW + .25), wallZ = zi - FW / 2 - .1;
+  const paint = new THREE.MeshStandardMaterial({ color: '#5a616a', metalness: .35, roughness: .55 });
+  const facade = new THREE.MeshStandardMaterial({ color: '#d6d2ca', roughness: .92 });
+  const doorMat = new THREE.MeshStandardMaterial({ color: '#2a2e33', metalness: .4, roughness: .5 });
+  mesh(new THREE.BoxGeometry(9, 8.6, .3), facade, run / 2 - .4, 4.3, wallZ - .15).castShadow = true;
+  for (const y of [3, 6]) {
+    mesh(new THREE.BoxGeometry(.95, 2.15, .06), doorMat, -FW / 2, y + 1.075, wallZ + .02);
+    mesh(new THREE.BoxGeometry(1.05, .05, .1), doorMat, -FW / 2, y + 2.18, wallZ + .04);
+  }
+  const grate = (x0, x1, z0, z1, y) => {
+    const n = Math.max(3, Math.round(Math.abs(x1 - x0) / .045));
+    for (let i = 0; i <= n; i++) mesh(new THREE.BoxGeometry(.006, .03, Math.abs(z1 - z0)), paint, x0 + (x1 - x0) * i / n, y - .015, (z0 + z1) / 2);
+    for (const z of [z0, z1]) mesh(new THREE.BoxGeometry(Math.abs(x1 - x0), .035, .008), paint, (x0 + x1) / 2, y - .0175, z);
+  };
+  const rail = (a, b) => {
+    const len = a.distanceTo(b), k = Math.max(1, Math.round(len / 1.1));
+    for (let i = 0; i <= k; i++) { const p0 = a.clone().lerp(b, i / k); member(p0, p0.clone().setY(p0.y + 1), .04, .04, 'box', paint); }
+    member(a.clone().setY(a.y + 1), b.clone().setY(b.y + 1), .045, .045, 'box', paint);
+    member(a.clone().setY(a.y + .5), b.clone().setY(b.y + .5), .025, .025, 'box', paint);
+  };
+  // one flight: from x0 going dir, rising 1.5 m from y0, centred on lane z
+  const flight = (x0, dir, y0, z) => {
+    for (let i = 0; i < 7; i++) { const xa = x0 + dir * i * FG; grate(xa, xa + dir * FG, z - FW / 2 + .02, z + FW / 2 - .02, y0 + (i + 1) * FR); }
+    for (const side of [-1, 1]) member(V(x0, y0 - .12, z + side * FW / 2), V(x0 + dir * run, y0 + 1.5 - .12, z + side * FW / 2), .02, .2, 'box', paint);
+  };
+  const landing = (x0, x1, y) => {
+    const za = zi - FW / 2, zb = zo + FW / 2;
+    grate(x0, x1, za, zb, y);
+    for (const z of [za, zb]) member(V(x0, y - .1, z), V(x1, y - .1, z), .06, .14, 'box', paint);
+    for (const x of [x0, x1]) member(V(x, y - .1, za), V(x, y - .1, zb), .06, .14, 'box', paint);
+  };
+  for (const lvl of [0, 3]) {
+    flight(0, 1, lvl, zo);
+    landing(run, run + FW, lvl + 1.5);
+    flight(run, -1, lvl + 1.5, zi);
+    landing(-FW, 0, lvl + 3);
+    rail(V(0, lvl, zo + FW / 2 + .03), V(run, lvl + 1.5, zo + FW / 2 + .03));
+    rail(V(run, lvl + 1.5, zi + FW / 2 + .03), V(0, lvl + 3, zi + FW / 2 + .03));
+    rail(V(run, lvl + 1.5, zo + FW / 2 + .03), V(run + FW, lvl + 1.5, zo + FW / 2 + .03));
+    rail(V(run + FW + .03, lvl + 1.5, zo + FW / 2), V(run + FW + .03, lvl + 1.5, zi - FW / 2));
+    rail(V(-FW - .03, lvl + 3, zo + FW / 2), V(-FW - .03, lvl + 3, zi - FW / 2 + .2));
+    rail(V(-FW, lvl + 3, zo + FW / 2 + .03), V(0, lvl + 3, zo + FW / 2 + .03));
+  }
+  for (const [x, z, h] of [[run + FW, zo + FW / 2, 4.5], [run + FW, zi - FW / 2 + .06, 4.5], [-FW, zo + FW / 2, 6]]) column(x, z, h - .1, .1);
+  shot = [[8.2, 6, 9.4], [.7, 3.2, -1.1], 38];
+} else if (model === 'asmakat') {
+  // steel mezzanine: IPE frame on four columns, oak deck, glass guard, straight spine stair up to it
+  const n = 15, X0 = n * G, LX = 5.6, LZ = 4, TOP = (n + 1) * R, Z1 = 1.4;
+  plate(S / 2, 0);
+  spineRun(0, 0, n, 0, 1);
+  slopedGlass(n, 5, R, 0, W / 2 + GAP, 0, 1);
+  const yb = TOP - .06 - .135;
+  for (const x of [X0 + .12, X0 + LX - .12]) for (const z of [Z1 - .12, Z1 - LZ + .12]) column(x, z, yb - .135, .12);
+  for (const z of [Z1 - .07, Z1 - LZ + .07]) member(V(X0, yb, z), V(X0 + LX, yb, z), .135, .27, 'I');
+  for (const x of [X0 + .07, X0 + LX - .07]) member(V(x, yb, Z1 - .07), V(x, yb, Z1 - LZ + .07), .135, .27, 'I');
+  for (let i = 1; i < 5; i++) member(V(X0 + i * LX / 5, yb + .035, Z1 - .14), V(X0 + i * LX / 5, yb + .035, Z1 - LZ + .14), .1, .2, 'I');
+  mesh(boxUV(rbox(LX, .06, LZ, .004), .9), oakMat, X0 + LX / 2, TOP - .03, Z1 - LZ / 2);
+  const guard = (u0, u1) => [[u0, TOP - .18], [u1, TOP - .18], [u1, TOP + 1], [u0, TOP + 1]];
+  const fixings = (u0, u1) => [[u0 + .15, TOP - .09], [u1 - .15, TOP - .09]];
+  for (const [a, b] of [[0, LX / 2 - .01], [LX / 2 + .01, LX]]) pane(guard(X0 + a, X0 + b), 0, Z1 + GAP, 0, 1, fixings(X0 + a, X0 + b));
+  // front edge, either side of where the stair lands
+  for (const [a, b] of [[Z1 - LZ, -W / 2 - .05], [W / 2 + .05, Z1]]) {
+    const len = b - a;
+    pane(guard(0, len), X0 - GAP, a, -Math.PI / 2, 1, fixings(0, len));
+  }
+  shot = [[-4.4, 6.4, 10], [4.4, 1.7, -.6], 38];
 }
 
 const sun = new THREE.DirectionalLight('#fff6ec', 3.1);

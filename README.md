@@ -50,7 +50,7 @@ backwards works) and a warmer, lower sun over the closing shots.
 - Bio, services, phone, e-mail, highlight names (Şile, Ömerli, Gebze, Acıbadem, Beylikdüzü,
   Benesta Center, Ersoy Hastanesi; Keşif, Projelendirme, Üretim) and the five stair models:
   Maviron's Instagram profile and posts (October 2026).
-- Project photos in `img/`: thumbnails of their own Instagram posts (360–640 px). Each tile links
+- Project photos in `img/` (Projeler only; the services section uses renders): thumbnails of their own Instagram posts (360–640 px). Each tile links
   to the original post. `img/mark.webp` and the icons come from the 150 px profile picture.
 - Stair model diagrams: `python tools/make_models.py` writes `img/models/*.svg` (shown as insets).
 - Stair model renders (`img/models/*.webp`): `tools/studio.html?model=konsol|duz|l|z|doner` builds
@@ -58,7 +58,8 @@ backwards works) and a warmer, lower sun over the closing shots.
   screenshot the 1500 × 1000 canvas, save at 1200 × 800 WebP.
 - Process images (`img/steps/`) and `img/asma-kat.webp` are frames of the film (t = 2.7, 0.4,
   5.0, 9.8 and 12), captured with the copy overlays hidden.
-- Service renders (`img/services/*.webp`, 800 × 800): `tools/studio.html?model=bungalov|cati|carport|depo&size=1000x1250`,
+- Service renders (`img/services/*.webp`, 800 × 800), one per row so the section reads as one set:
+  `tools/studio.html?model=merdiven|asmakat|depo|carport|bungalov|cati|yangin&size=1000x1250`,
   then cropped square around the structure. They stand on a seamless studio sweep (floor curving
   into the back wall) under a soft key light, like catalogue shots, to match the stair models.
   Add `&cam=x,y,z` to look at a model from elsewhere while working on it.
