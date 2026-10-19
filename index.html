@@ -290,9 +290,12 @@
   .services { padding: clamp(90px, 12vw, 160px) 0 clamp(70px, 9vw, 120px); background: var(--ink); }
   .services__body { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(28px, 5vw, 80px); padding: 0 var(--gutter); }
   .services__visual { position: sticky; top: calc(var(--header-h) + 28px); align-self: start; margin: 0; }
-  .services__visual img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 70%; transition: opacity .35s ease; }
+  .services__visual img { width: 100%; aspect-ratio: 1; object-fit: cover; object-position: 50% 60%; transition: opacity .35s ease; }
   .services__visual img.is-swapping { opacity: 0; }
   .services__visual figcaption { margin-top: 12px; color: var(--muted); }
+  /* room under the last row, so the sticky picture is still whole when that row reaches mid-screen:
+     picture height (5/12 column, square) + header − half the viewport */
+  .services__body > div { padding-bottom: max(0px, calc((100vw - 2 * var(--gutter) - clamp(28px, 5vw, 80px)) * 5 / 12 + var(--header-h) - 50svh + 20px)); }
   .service { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 6px 18px; padding: clamp(22px, 2.6vw, 34px) 0; border-top: 1px solid var(--line); }
   .service:last-child { border-bottom: 1px solid var(--line); }
   .service__n { grid-row: 1 / span 3; font: 500 .78rem/2.4 var(--mono); color: var(--oak); }
@@ -429,6 +432,7 @@
     .nav .long { display: none; }
     .services__body { grid-template-columns: minmax(0, 1fr); }
     .services__visual { display: none; } /* each row carries its own picture instead */
+    .services__body > div { padding-bottom: 0; }
     .service__img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; margin: 12px 0 6px; background: #e7e4de; }
     .work__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .shot:nth-child(4n + 2), .shot:nth-child(4n + 4) { transform: none; }
@@ -743,7 +747,7 @@
         <article class="service" data-reveal data-photo="img/services/depo.webp" data-caption="Görselleştirme · portal çerçeveli depo" data-alt="Kısmen trapez sacla kaplanmış, I profil kolon ve kirişli çelik depo iskeleti görselleştirmesi">
           <span class="service__n">03</span>
           <h3 class="wide">Endüstriyel yapılar</h3>
-          <img class="service__img" src="img/services/depo.webp" width="640" height="800" loading="lazy" alt="Kısmen trapez sacla kaplanmış, I profil kolon ve kirişli çelik depo iskeleti görselleştirmesi">
+          <img class="service__img" src="img/services/depo.webp" width="800" height="800" loading="lazy" alt="Kısmen trapez sacla kaplanmış, I profil kolon ve kirişli çelik depo iskeleti görselleştirmesi">
           <p>Depo, atölye ve üretim alanları için portal çerçeveli çelik konstrüksiyon: kolon, makas, aşık ve kaplama.</p>
           <ul><li>Depo</li><li>Atölye</li><li>Üretim alanı</li></ul>
           <a class="service__cta" href="#teklif" data-quote="Endüstriyel çelik yapı">Teklif iste <span aria-hidden="true">→</span></a>
@@ -751,7 +755,7 @@
         <article class="service" data-reveal data-photo="img/services/carport.webp" data-caption="Görselleştirme · tek araçlık carport" data-alt="Dört kare profil kolon üzerinde trapez sac örtülü çelik carport görselleştirmesi">
           <span class="service__n">04</span>
           <h3 class="wide">Carport &amp; sundurma</h3>
-          <img class="service__img" src="img/services/carport.webp" width="640" height="800" loading="lazy" alt="Dört kare profil kolon üzerinde trapez sac örtülü çelik carport görselleştirmesi">
+          <img class="service__img" src="img/services/carport.webp" width="800" height="800" loading="lazy" alt="Dört kare profil kolon üzerinde trapez sac örtülü çelik carport görselleştirmesi">
           <p>Tek araçlık 3 × 6 m carport’tan site otoparkına. Kare profil kolonlar, trapez sac örtü, temiz detaylar.</p>
           <ul><li>Carport</li><li>Sundurma</li><li>Otopark</li></ul>
           <a class="service__cta" href="#teklif" data-quote="Carport / sundurma">Teklif iste <span aria-hidden="true">→</span></a>
@@ -759,7 +763,7 @@
         <article class="service" data-reveal data-photo="img/services/bungalov.webp" data-caption="Görselleştirme · çelik karkas bungalov" data-alt="Yükseltilmiş ahşap döşemeli, cam cepheli, tek eğimli çatılı çelik karkas bungalov görselleştirmesi">
           <span class="service__n">05</span>
           <h3 class="wide">Villa &amp; bungalov</h3>
-          <img class="service__img" src="img/services/bungalov.webp" width="640" height="800" loading="lazy" alt="Yükseltilmiş ahşap döşemeli, cam cepheli, tek eğimli çatılı çelik karkas bungalov görselleştirmesi">
+          <img class="service__img" src="img/services/bungalov.webp" width="800" height="800" loading="lazy" alt="Yükseltilmiş ahşap döşemeli, cam cepheli, tek eğimli çatılı çelik karkas bungalov görselleştirmesi">
           <p>Çelik karkas konut ve bungalov. Hafif, hızlı kurulan ve uzun ömürlü bir taşıyıcı sistem; ahşap ve camla tamamlanır.</p>
           <ul><li>Çelik karkas</li><li>Bungalov</li><li>Tiny house</li></ul>
           <a class="service__cta" href="#teklif" data-quote="Villa / bungalov">Teklif iste <span aria-hidden="true">→</span></a>
@@ -767,7 +771,7 @@
         <article class="service" data-reveal data-photo="img/services/cati.webp" data-caption="Görselleştirme · kafes çatı makası" data-alt="Kolonlar üzerinde kafes çelik çatı makasları ve yarısı sacla kaplanmış çatı görselleştirmesi">
           <span class="service__n">06</span>
           <h3 class="wide">Çatı</h3>
-          <img class="service__img" src="img/services/cati.webp" width="640" height="800" loading="lazy" alt="Kolonlar üzerinde kafes çelik çatı makasları ve yarısı sacla kaplanmış çatı görselleştirmesi">
+          <img class="service__img" src="img/services/cati.webp" width="800" height="800" loading="lazy" alt="Kolonlar üzerinde kafes çelik çatı makasları ve yarısı sacla kaplanmış çatı görselleştirmesi">
           <p>Çelik çatı makası ve aşıklar: yeni yapı, çatı katı ve eski çatının yenilenmesi.</p>
           <ul><li>Çatı makası</li><li>Çatı katı</li><li>Yenileme</li></ul>
           <a class="service__cta" href="#teklif" data-quote="Çatı">Teklif iste <span aria-hidden="true">→</span></a>
@@ -1010,22 +1014,34 @@
     });
   });
 
-  // Services: the sticky picture follows the row in the middle of the screen
+  // Services: the sticky picture follows whichever row is closest to the middle of the screen
   const svcPhoto = document.getElementById('svc-photo'), svcCaption = document.getElementById('svc-caption');
-  if ('IntersectionObserver' in window) {
-    const show = el => {
-      if (svcPhoto.getAttribute('src') === el.dataset.photo) return;
-      svcPhoto.classList.add('is-swapping');
-      setTimeout(() => {
-        svcPhoto.onload = () => svcPhoto.classList.remove('is-swapping');
-        svcPhoto.src = el.dataset.photo;
-        svcPhoto.alt = el.dataset.alt;
-        svcCaption.textContent = el.dataset.caption;
-      }, 200);
-    };
-    const svcIO = new IntersectionObserver(entries => entries.forEach(en => en.isIntersecting && show(en.target)), { rootMargin: '-45% 0px -45% 0px' });
-    document.querySelectorAll('.service[data-photo]').forEach(el => svcIO.observe(el));
-  }
+  const svcVisual = svcPhoto.closest('figure'), svcRows = [...document.querySelectorAll('.service[data-photo]')];
+  let svcWanted = svcRows[0], svcTimer = 0, svcQueued = false;
+  const svcShow = el => {
+    if (el === svcWanted) return;
+    svcWanted = el;
+    svcPhoto.classList.add('is-swapping');
+    clearTimeout(svcTimer);
+    svcTimer = setTimeout(() => {
+      svcPhoto.onload = () => svcPhoto.classList.remove('is-swapping');
+      svcPhoto.src = svcWanted.dataset.photo;
+      svcPhoto.alt = svcWanted.dataset.alt;
+      svcCaption.textContent = svcWanted.dataset.caption;
+    }, 180);
+  };
+  const svcPick = () => {
+    svcQueued = false;
+    if (!svcVisual.offsetParent) return;           // hidden on narrow screens: rows carry their own pictures
+    const mid = innerHeight / 2;
+    let best = svcRows[0], bestD = Infinity;
+    for (const r of svcRows) {
+      const box = r.getBoundingClientRect(), d = Math.abs((box.top + box.bottom) / 2 - mid);
+      if (d < bestD) { bestD = d; best = r; }
+    }
+    svcShow(best);
+  };
+  addEventListener('scroll', () => { if (!svcQueued) { svcQueued = true; requestAnimationFrame(svcPick); } }, { passive: true });
 
   // Tasarla: the configurator module loads when its section comes near
   const configRoot = document.getElementById('tasarla');
