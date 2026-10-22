@@ -72,6 +72,8 @@ backwards works) and a warmer, lower sun over the closing shots.
 - Ask Maviron for full-resolution photos and a vector logo; the Instagram thumbnails are small.
 - Confirm: service area (İstanbul ve Kocaeli is inferred from project locations), "own workshop /
   own installation team" wording, and the example dimensions in the film (illustrative, 340 cm).
-- Live demo: https://maviron-celik-scroll.vercel.app (Vercel project `maviron-celik-scroll`). Update the
-  canonical, `og:` and JSON-LD URLs in `index.html` if it moves to a real domain.
+- Live demo: https://erdemakkas1-ops.github.io/maviron-elik/ (GitHub Pages, served from the
+  `gh-pages` branch: after committing, `git push origin main main:gh-pages`). The Vercel copy
+  (https://maviron-celik-scroll.vercel.app) works but `*.vercel.app` is blocked on some Turkish
+  networks. Update the canonical, `og:` and JSON-LD URLs in `index.html` if it moves to a real domain.
 - mavironcelik.com currently shows a Squarespace parking page.
