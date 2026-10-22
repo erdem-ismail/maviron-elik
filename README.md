@@ -56,8 +56,8 @@ backwards works) and a warmer, lower sun over the closing shots.
 - Stair model renders (`img/models/*.webp`): `tools/studio.html?model=konsol|duz|l|z|doner` builds
   each model with the film's materials and light; serve the project root, wait for `window.ready`,
   screenshot the 1500 × 1000 canvas, save at 1200 × 800 WebP.
-- Process images (`img/steps/`) and `img/asma-kat.webp` are frames of the film (t = 2.7, 0.4,
-  5.0, 9.8 and 12), captured with the copy overlays hidden.
+- Process images (`img/steps/`) are frames of the film (t = 2.7, 0.4, 5.0 and 9.8), captured with
+  the copy overlays hidden.
 - Service renders (`img/services/*.webp`, 800 × 800), one per row so the section reads as one set:
   `tools/studio.html?model=merdiven|asmakat|depo|carport|bungalov|cati|yangin&size=1000x1250`,
   then cropped square around the structure. They stand on a seamless studio sweep (floor curving
