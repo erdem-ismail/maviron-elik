@@ -50,489 +50,8 @@
 <script>
   document.documentElement.classList.add('js');
 </script>
-<style>
-  :root {
-    --ink: #141b25;
-    --navy: #1f2a39;
-    --navy-2: #2a3749;
-    --steel: #b8c0ca;
-    --paper: #eeece7;
-    --paper-2: #dedad2;
-    --oak: #c88a4a;
-    --oak-deep: #9a5f2b;
-    --blue: #9cc3ea;
-    --muted: #8a95a3;
-    --muted-ink: #535c68;
-    --line: rgba(184, 192, 202, .18);
-    --line-ink: rgba(20, 27, 37, .16);
-    --display: "Archivo", "Arial", sans-serif;
-    --body: "Instrument Sans", system-ui, sans-serif;
-    --mono: "JetBrains Mono", ui-monospace, monospace;
-    --gutter: clamp(16px, 4vw, 56px);
-    --header-h: 72px;
-  }
-
-  *, *::before, *::after { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; scroll-padding-top: var(--header-h); overflow-x: clip; }
-  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
-  body {
-    margin: 0;
-    background: var(--ink);
-    color: var(--paper);
-    font: 400 1.0625rem/1.6 var(--body);
-    overflow-x: clip;
-  }
-  img { display: block; max-width: 100%; height: auto; }
-  a { color: inherit; }
-  h1, h2, h3 { margin: 0; font-weight: 400; }
-  p { margin: 0; }
-  :focus-visible { outline: 3px solid var(--oak); outline-offset: 3px; }
-  .skip { position: absolute; left: 12px; top: -60px; z-index: 100; background: var(--oak); color: var(--ink); padding: 10px 14px; font-weight: 600; }
-  .skip:focus { top: 12px; }
-
-  /* Display type: Archivo pushed wide, like the lettering in the Maviron logo */
-  .wide { font-family: var(--display); font-stretch: 125%; font-weight: 800; text-transform: uppercase; letter-spacing: -.01em; }
-  .mono { font: 500 .72rem/1.3 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
-  .eyebrow { font: 500 .72rem/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--oak); display: inline-flex; align-items: center; gap: 12px; }
-  .eyebrow::before { content: ""; width: 28px; height: 1px; background: currentColor; }
-
-  /* ---------- Header ---------- */
-  .site-header {
-    position: sticky; top: 0; z-index: 50;
-    display: flex; align-items: center; justify-content: space-between; gap: 24px;
-    height: var(--header-h); padding: 0 var(--gutter);
-    background: var(--navy); color: var(--paper);
-    border-bottom: 1px solid var(--line);
-  }
-  .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; }
-  .brand img { width: 44px; height: 44px; }
-  .brand span { white-space: nowrap; font: 700 1rem/1 var(--display); font-stretch: 125%; letter-spacing: .2em; text-transform: uppercase; color: var(--steel); }
-  .brand span b { font-weight: 700; color: var(--paper); }
-  .nav { display: flex; align-items: center; gap: clamp(16px, 2.4vw, 34px); }
-  .nav a:not(.btn) {
-    text-decoration: none; font-weight: 500; font-size: .95rem;
-    padding: 6px 0; border-bottom: 1px solid transparent;
-    transition: border-color .2s, color .2s;
-  }
-  .nav a:not(.btn):hover { border-color: var(--oak); }
-
-  .btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: .6em;
-    white-space: nowrap;
-    min-height: 48px; padding: 0 22px;
-    font: 600 .95rem/1 var(--body);
-    text-decoration: none; cursor: pointer;
-    background: var(--oak); color: var(--ink);
-    border: 1px solid var(--oak);
-    transition: transform .15s, background-color .2s, color .2s, border-color .2s;
-  }
-  .btn:hover { background: var(--paper); border-color: var(--paper); }
-  .btn:active { transform: translateY(1px); }
-  .btn svg { width: 18px; height: 18px; flex: none; }
-  .btn--ghost { background: transparent; color: inherit; border-color: currentColor; }
-  .btn--ghost:hover { background: var(--paper); border-color: var(--paper); color: var(--ink); }
-  .btn--ink { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-  .btn--ink:hover { background: var(--navy-2); border-color: var(--navy-2); }
-  .btn .arrow { transition: transform .2s; }
-  .btn:hover .arrow { transform: translateX(3px); }
-
-  .menu-toggle { display: none; }
-
-  /* ---------- Film: the staircase is drawn, fabricated and installed as you scroll ---------- */
-  .film { position: relative; height: 760vh; background: var(--ink); --fg: var(--paper); --fg-2: #c9cfd7; }
-  .film__stage {
-    position: sticky; top: var(--header-h);
-    height: calc(100svh - var(--header-h));
-    overflow: hidden; background: #18212d;
-  }
-  .film__poster, .film__canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .film__poster { object-fit: cover; }
-  .film__canvas { opacity: 0; transition: opacity .5s; }
-  .film.is-ready .film__canvas { opacity: 1; }
-  .film.is-ready .film__poster { visibility: hidden; transition: visibility 0s .5s; }
-  .film__stage::after { /* keeps copy legible over the scene, dark or light */
-    content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-    background: linear-gradient(90deg, rgba(20,27,37,.82) 0%, rgba(20,27,37,.35) 32%, rgba(20,27,37,0) 52%);
-    transition: opacity .6s;
-  }
-  .film__stage::before {
-    content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0;
-    background: linear-gradient(90deg, rgba(238,236,231,.9) 0%, rgba(238,236,231,.45) 32%, rgba(238,236,231,0) 52%);
-    transition: opacity .6s;
-  }
-  .film.is-light { --fg: var(--ink); --fg-2: #39424f; }
-  .film.is-light .film__stage::after { opacity: 0; }
-  .film.is-light .film__stage::before { opacity: 1; }
-
-  .film__scene {
-    position: absolute; z-index: 2;
-    left: var(--gutter); top: 50%; translate: 0 -50%;
-    width: min(600px, calc(100% - 2 * var(--gutter)));
-    color: var(--fg);
-    transition: color .6s;
-    will-change: opacity, transform, filter;
-  }
-  .js .film:not(.film--static) .film__scene { opacity: 0; visibility: hidden; }
-  .film__scene .eyebrow { color: var(--oak); }
-  .film.is-light .film__scene .eyebrow { color: var(--oak-deep); }
-  .film__h1 { font-size: clamp(2.6rem, 5.4vw, 5.6rem); line-height: .94; margin: .3em 0 .28em; }
-  .film__title { font-size: clamp(2.3rem, 5vw, 5rem); line-height: .96; margin: .3em 0 .3em; }
-  .film__h1 em, .film__title em { font-style: normal; color: transparent; -webkit-text-stroke: 1.5px var(--fg); }
-  .film__lede { max-width: 40ch; color: var(--fg-2); font-size: clamp(1rem, 1.25vw, 1.15rem); transition: color .6s; }
-  .film__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
-  .film__bio { margin-top: 22px; color: var(--fg-2); }
-
-  .film__hint {
-    position: absolute; z-index: 2; left: 50%; bottom: 22px; translate: -50% 0;
-    font: 500 .7rem/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--steel);
-    transition: opacity .3s;
-  }
-  .film__hint::after { content: ""; display: block; width: 1px; height: 28px; margin: 10px auto 0; background: currentColor; }
-  @media (prefers-reduced-motion: no-preference) {
-    .film__hint::after { animation: drop 1.6s ease-in-out infinite; transform-origin: top; }
-  }
-  @keyframes drop { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
-  .film.is-scrolled .film__hint { opacity: 0; }
-
-  /* Annotations, placed by projecting 3D points of the model each frame */
-  .film__notes { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
-  .film__dim, .film__label { position: absolute; left: 0; top: 0; margin: 0; opacity: 0; will-change: transform, opacity; }
-  .film__dim {
-    translate: -50% -50%;
-    padding: 6px 9px; background: #18212d; border: 1px solid var(--blue);
-    font: 500 .78rem/1.2 var(--mono); color: var(--blue); white-space: nowrap; text-align: center;
-  }
-  .film__dim small { display: block; font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: #7f9ab8; }
-  .film__label { width: 0; height: 0; }
-  .film__label::before { /* dot on the part */
-    content: ""; position: absolute; left: -5px; top: -5px; width: 10px; height: 10px; border-radius: 50%;
-    background: var(--oak); box-shadow: 0 0 0 4px rgba(200,138,74,.28);
-  }
-  .film__label::after { /* leader line */
-    content: ""; position: absolute; left: 8px; top: 0; width: 46px;
-    border-top: 1px solid currentColor;
-    transform-origin: left; transform: scaleX(var(--o, 0));
-  }
-  .film__label { color: var(--fg); }
-  .film__tag {
-    position: absolute; left: 62px; top: 0; transform: translateY(-50%);
-    white-space: nowrap; padding: 7px 10px;
-    background: rgba(238,236,231,.92); color: var(--ink);
-  }
-  .film__label b { display: block; font: 800 .95rem/1 var(--display); font-stretch: 125%; text-transform: uppercase; }
-  .film__label small { display: block; margin-top: 4px; font: 500 .64rem/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted-ink); }
-  .film__label--left::after { left: auto; right: 8px; transform-origin: right; }
-  .film__label--left .film__tag { left: auto; right: 62px; }
-
-  /* Reduced motion / no JS / no WebGL: a still hero, no pinned scroll */
-  .film--static { height: auto; }
-  .film--static .film__stage { position: relative; top: 0; height: calc(100svh - var(--header-h)); min-height: 560px; }
-  .film--static .film__scene:not(.film__scene--hero), .film--static .film__notes,
-  .film--static .film__hint, .film--static .film__canvas { display: none; }
-
-  /* ---------- Section scaffolding ---------- */
-  section { position: relative; }
-  .section-head {
-    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 34ch); align-items: end; gap: 24px 48px;
-    padding: 0 var(--gutter);
-    margin-bottom: clamp(32px, 4.5vw, 64px);
-  }
-  .section-title { font-size: clamp(2.2rem, 5.2vw, 5rem); line-height: .94; margin-top: .4em; }
-  .section-note { color: var(--muted); font-size: 1rem; }
-
-  /* ---------- Modeller (light, slides over the pinned film) ---------- */
-  .film:not(.film--static) + .models {
-    position: relative; z-index: 3;
-    margin-top: calc(var(--header-h) - 100svh);
-    box-shadow: 0 -28px 60px rgba(0, 0, 0, .4);
-  }
-  .models { padding: clamp(80px, 10vw, 140px) 0 clamp(70px, 9vw, 120px); background: var(--paper); color: var(--ink); }
-  .models .eyebrow { color: var(--oak-deep); }
-  .models .section-note { color: var(--muted-ink); }
-  .models__body { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: clamp(28px, 5vw, 80px); padding: 0 var(--gutter); }
-  .models__list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); position: sticky; top: calc(var(--header-h) + 24px); align-self: start; }
-  .model-tab {
-    width: 100%; display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; align-items: center; gap: 12px;
-    min-height: 68px; padding: 12px 4px;
-    background: none; border: 0; border-bottom: 1px solid var(--line-ink); color: var(--ink);
-    text-align: left; cursor: pointer; font: inherit;
-    transition: background-color .2s, padding .25s;
-  }
-  .model-tab span:first-child { font: 500 .72rem/1 var(--mono); color: var(--muted-ink); letter-spacing: .1em; }
-  .model-tab b { font: 800 clamp(1.15rem, 1.8vw, 1.6rem)/1 var(--display); font-stretch: 125%; text-transform: uppercase; }
-  .model-tab i { font-style: normal; font: 500 .66rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted-ink); }
-  .model-tab:hover { background: var(--paper-2); }
-  .model-tab[aria-selected="true"] { background: var(--ink); color: var(--paper); padding-left: 16px; }
-  .model-tab[aria-selected="true"] span:first-child, .model-tab[aria-selected="true"] i { color: var(--oak); }
-  .model-panel { display: grid; grid-template-rows: auto auto; gap: 22px; }
-  .model-panel[hidden] { display: none; }
-  .model-panel figure { margin: 0; position: relative; background: #e7e4de; overflow: hidden; }
-  .model-panel .render { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
-  .model-panel figcaption, .inset span { position: absolute; left: 14px; top: 12px; font: 500 .66rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted-ink); }
-  /* the technical drawing rides along as an inset, like a sheet pinned to the render */
-  .inset { position: absolute; right: 14px; bottom: 14px; width: min(34%, 230px); padding: 22px 8px 4px; background: rgba(246, 245, 241, .94); border: 1px solid var(--line-ink); }
-  .inset img { width: 100%; aspect-ratio: 3 / 2; }
-  .inset span { left: 8px; top: 7px; font-size: .58rem; }
-  .model-panel h3 { font-size: clamp(1.6rem, 2.6vw, 2.4rem); line-height: 1; margin-bottom: 12px; }
-  .model-panel p { max-width: 58ch; color: #3c4450; }
-  .model-panel dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 4px 0 0; border-top: 1px solid var(--line-ink); }
-  .model-panel dl div { padding: 14px 14px 0 0; }
-  .model-panel dt { font: 500 .66rem/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted-ink); }
-  .model-panel dd { margin: 4px 0 0; font-weight: 600; }
-  @media (prefers-reduced-motion: no-preference) {
-    .model-panel:not([hidden]) .render { animation: develop .6s ease; }
-    .model-panel:not([hidden]) .inset img { animation: plot .8s cubic-bezier(.2,.8,.2,1) .15s backwards; }
-  }
-  @keyframes plot { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
-  @keyframes develop { from { opacity: .3; transform: scale(1.02); } to { opacity: 1; transform: none; } }
-
-  /* ---------- Hizmetler ---------- */
-  .services { padding: clamp(90px, 12vw, 160px) 0 clamp(70px, 9vw, 120px); background: var(--ink); }
-  .services__body { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(28px, 5vw, 80px); padding: 0 var(--gutter); }
-  .services__visual { position: sticky; top: calc(var(--header-h) + 28px); align-self: start; margin: 0; }
-  .services__visual img { width: 100%; aspect-ratio: 1; object-fit: cover; object-position: 50% 60%; transition: opacity .35s ease; }
-  .services__visual img.is-swapping { opacity: 0; }
-  .services__visual figcaption { margin-top: 12px; color: var(--muted); }
-  /* room under the last row, so the sticky picture is still whole when that row reaches mid-screen:
-     picture height (5/12 column, square) + header − half the viewport */
-  .services__body > div { padding-bottom: max(0px, calc((100vw - 2 * var(--gutter) - clamp(28px, 5vw, 80px)) * 5 / 12 + var(--header-h) - 50svh + 20px)); }
-  .service { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 6px 18px; padding: clamp(22px, 2.6vw, 34px) 0; border-top: 1px solid var(--line); }
-  .service:last-child { border-bottom: 1px solid var(--line); }
-  .service__n { grid-row: 1 / span 3; font: 500 .78rem/2.4 var(--mono); color: var(--oak); }
-  .service h3 { font-size: clamp(1.4rem, 2.4vw, 2.2rem); line-height: 1; }
-  .service p { color: #c3c9d1; max-width: 54ch; }
-  .service ul { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 0; padding: 0; }
-  .service li { font: 500 .66rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--steel); border: 1px solid var(--line); padding: 7px 9px; }
-  .service > :not(.service__n) { grid-column: 2; }
-  .service__img { display: none; }
-  .service__cta { justify-self: start; display: inline-flex; align-items: center; gap: .5em; min-height: 44px; margin-top: 4px; font-weight: 600; color: var(--oak); text-decoration: none; }
-  .service__cta:hover span, .service__cta:focus-visible span { transform: translateX(3px); }
-  .service__cta span { transition: transform .2s; }
-
-  /* ---------- Projeler ---------- */
-  .work { padding: clamp(90px, 12vw, 160px) 0 clamp(70px, 9vw, 120px); background: var(--navy); }
-  .work__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(10px, 1.4vw, 20px); padding: 0 var(--gutter); }
-  .shot { position: relative; display: block; text-decoration: none; overflow: hidden; background: var(--ink); }
-  .shot:nth-child(4n + 2), .shot:nth-child(4n + 4) { transform: translateY(clamp(24px, 4vw, 64px)); }
-  .shot img { width: 100%; aspect-ratio: 9 / 14; object-fit: cover; object-position: 50% 78%; transition: transform .7s cubic-bezier(.2,.8,.2,1), filter .4s; filter: saturate(.85); }
-  .shot:hover img, .shot:focus-visible img { transform: scale(1.04); filter: none; }
-  .shot__cap {
-    position: absolute; left: 0; right: 0; bottom: 0; padding: 40px 14px 14px;
-    background: linear-gradient(0deg, rgba(20,27,37,.92), rgba(20,27,37,0));
-  }
-  .shot__cap b { display: block; font: 800 1.02rem/1.05 var(--display); font-stretch: 125%; text-transform: uppercase; }
-  .shot__cap span { display: block; margin-top: 6px; color: var(--steel); }
-  .places { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 26px; padding: clamp(70px, 9vw, 120px) var(--gutter) 0; }
-  .places > span { color: var(--muted); }
-  .places ul { display: contents; }
-  .places li { list-style: none; font: 800 clamp(1.3rem, 3vw, 2.4rem)/1.1 var(--display); font-stretch: 125%; text-transform: uppercase; color: var(--steel); }
-  .places li::after { content: "/"; margin-left: 26px; color: var(--oak); font-weight: 500; }
-  .places li:last-child::after { content: none; }
-
-  /* ---------- Süreç ---------- */
-  .process { padding: clamp(90px, 12vw, 160px) 0; background: var(--paper); color: var(--ink); }
-  .process .eyebrow { color: var(--oak-deep); }
-  .process .section-note { color: var(--muted-ink); }
-  .steps { list-style: none; margin: 0; padding: 0 var(--gutter); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: clamp(10px, 1.4vw, 20px); }
-  .step { display: flex; flex-direction: column; }
-  .step__img { width: 100%; aspect-ratio: 5 / 4; object-fit: cover; margin-bottom: 30px; background: #0b1622; }
-  .step__body { position: relative; flex: 1; padding: 30px clamp(14px, 2vw, 28px) 0 0; border-top: 2px solid var(--ink); }
-  .step__body::before { content: ""; position: absolute; left: 0; top: -7px; width: 12px; height: 12px; background: var(--oak); }
-  .step__n { font: 500 .72rem/1 var(--mono); letter-spacing: .12em; color: var(--muted-ink); }
-  .step h3 { font-size: clamp(1.3rem, 2.2vw, 2rem); line-height: 1; margin: 14px 0 12px; }
-  .step p { color: #3c4450; font-size: .98rem; max-width: 30ch; }
-
-  /* ---------- Tasarla (configurator) ---------- */
-  .config { padding: clamp(90px, 12vw, 160px) 0 clamp(70px, 9vw, 120px); background: var(--navy); }
-  .config__body { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(20px, 3vw, 40px); align-items: start; padding: 0 var(--gutter); }
-  .config__view { position: sticky; top: calc(var(--header-h) + 24px); z-index: 2; aspect-ratio: 4 / 3; overflow: hidden; background: #e7e4de; }
-  .config__view canvas, .config__still { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .config__still { object-fit: cover; }
-  .config__view canvas { opacity: 0; transition: opacity .5s; touch-action: pan-y; cursor: grab; }
-  .config__view canvas:active { cursor: grabbing; }
-  .config__view canvas:focus-visible { outline: 3px solid var(--oak); outline-offset: -3px; }
-  .config.is-3d canvas { opacity: 1; }
-  .config.is-3d .config__still { visibility: hidden; transition: visibility 0s .5s; }
-  .config__hint { position: absolute; left: 12px; bottom: 12px; padding: 7px 9px; background: rgba(246, 245, 241, .9); color: var(--ink); display: none; pointer-events: none; }
-  .config.is-3d .config__hint { display: block; }
-  .config .form { background: var(--ink); }
-  .config__height { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 6px 12px; }
-  .config__height label { margin: 0; }
-  .config__height output { font: 800 clamp(1.8rem, 3.4vw, 2.8rem)/1 var(--display); font-stretch: 125%; color: var(--paper); }
-  .config__height input { grid-column: 1 / -1; width: 100%; height: 32px; margin: 0; accent-color: var(--oak); cursor: pointer; }
-  .chip .sw { width: 14px; height: 14px; margin-right: 8px; border-radius: 50%; background: var(--c); box-shadow: inset 0 0 0 1px rgba(255,255,255,.25); }
-  .chip input:disabled + span { opacity: .35; cursor: not-allowed; }
-  .config__spec { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 18px; margin: 0; border-top: 1px solid var(--line); }
-  .config__spec div { padding: 14px 0 0; }
-  .config__spec dt { font: 500 .66rem/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
-  .config__spec dd { margin: 4px 0 0; font: 800 1.3rem/1.1 var(--display); font-stretch: 125%; color: var(--paper); }
-
-  /* ---------- Teklif ---------- */
-  .quote { padding: clamp(90px, 12vw, 160px) 0 clamp(70px, 9vw, 120px); }
-  .quote__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(32px, 6vw, 96px); padding: 0 var(--gutter); }
-  .quote__title { font-size: clamp(2.4rem, 5.6vw, 5.4rem); line-height: .95; margin: .4em 0 .4em; }
-  .quote__title em { font-style: normal; color: transparent; -webkit-text-stroke: 1.5px var(--paper); }
-  .quote dl { margin: 34px 0 0; }
-  .quote dl > div { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 12px; padding: 15px 0; border-top: 1px solid var(--line); }
-  .quote dt { font: 500 .72rem/1.9 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
-  .quote dd { margin: 0; }
-  .quote dd a { text-decoration-color: var(--oak); text-underline-offset: 4px; }
-  .form { display: grid; gap: 18px; padding: clamp(22px, 3vw, 40px); background: var(--navy); border: 1px solid var(--line); align-self: start; }
-  .form fieldset { border: 0; margin: 0; padding: 0; }
-  .form legend, .form label { display: block; font: 500 .72rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--steel); margin-bottom: 10px; }
-  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  .form .chip { display: block; position: relative; margin: 0; font: inherit; letter-spacing: 0; text-transform: none; }
-  .chip input { position: absolute; opacity: 0; pointer-events: none; }
-  .chip span {
-    display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px;
-    border: 1px solid var(--line); color: var(--paper); cursor: pointer;
-    font-weight: 500; font-size: .95rem; transition: background-color .2s, border-color .2s, color .2s;
-  }
-  .chip span:hover { border-color: var(--steel); }
-  .chip input:checked + span { background: var(--oak); border-color: var(--oak); color: var(--ink); }
-  .chip input:focus-visible + span { outline: 3px solid var(--oak); outline-offset: 3px; }
-  .form input[type="text"], .form textarea {
-    width: 100%; min-height: 48px; padding: 12px 14px;
-    background: var(--ink); color: var(--paper); border: 1px solid var(--line);
-    font: 400 1rem/1.4 var(--body);
-  }
-  .form textarea { min-height: 110px; resize: vertical; }
-  .form input:focus, .form textarea:focus { border-color: var(--oak); outline: none; }
-  .form .row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
-  .form__foot { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; }
-  .form__foot p { font-size: .85rem; color: var(--muted); max-width: 38ch; }
-
-  /* ---------- Footer ---------- */
-  .site-footer { border-top: 1px solid var(--line); padding: clamp(48px, 7vw, 90px) var(--gutter) 40px; overflow: hidden; }
-  .site-footer__mark { font: 900 clamp(3.2rem, 13.4vw, 13rem)/.8 var(--display); font-stretch: 125%; letter-spacing: -.02em; color: transparent; -webkit-text-stroke: 1.5px var(--steel); white-space: nowrap; }
-  .site-footer__row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 18px 40px; margin-top: 34px; font-size: .9rem; color: var(--muted); }
-  .site-footer__row nav { display: flex; flex-wrap: wrap; gap: 22px; }
-  .site-footer__row a { text-underline-offset: 4px; }
-  .demo-note { font: 500 .72rem/1.6 var(--mono); letter-spacing: .04em; color: var(--muted); max-width: 72ch; margin-top: 22px; }
-
-  .actionbar { display: none; }
-
-  /* ---------- Reveal ---------- */
-  @media (prefers-reduced-motion: no-preference) {
-    .js [data-reveal] { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); }
-    .js [data-reveal].is-in { opacity: 1; transform: none; }
-    .js .steps[data-reveal] .step__body::before { transform: scale(0); transition: transform .4s cubic-bezier(.2,.8,.2,1); }
-    .js .steps[data-reveal] .step__body { border-top-color: transparent; background: linear-gradient(var(--ink), var(--ink)) 0 0 / 0 2px no-repeat; transition: background-size .9s cubic-bezier(.2,.8,.2,1); }
-    .js .steps[data-reveal] .step__img { clip-path: inset(0 0 100% 0); transition: clip-path .9s cubic-bezier(.2,.8,.2,1); }
-    .js .steps.is-in .step__img { clip-path: inset(0); }
-    .js .steps.is-in .step__body { background-size: 100% 2px; }
-    .js .steps.is-in .step__body::before { transform: none; }
-    .js .steps.is-in .step:nth-child(2) .step__img, .js .steps.is-in .step:nth-child(2) .step__body, .js .steps.is-in .step:nth-child(2) .step__body::before { transition-delay: .15s; }
-    .js .steps.is-in .step:nth-child(3) .step__img, .js .steps.is-in .step:nth-child(3) .step__body, .js .steps.is-in .step:nth-child(3) .step__body::before { transition-delay: .3s; }
-    .js .steps.is-in .step:nth-child(4) .step__img, .js .steps.is-in .step:nth-child(4) .step__body, .js .steps.is-in .step:nth-child(4) .step__body::before { transition-delay: .45s; }
-  }
-
-  /* ---------- Tablet ---------- */
-  @media (max-width: 1024px) {
-    .nav .long { display: none; }
-    .services__body { grid-template-columns: minmax(0, 1fr); }
-    .services__visual { display: none; } /* each row carries its own picture instead */
-    .services__body > div { padding-bottom: 0; }
-    .service__img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; margin: 12px 0 6px; background: #e7e4de; }
-    .work__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .shot:nth-child(4n + 2), .shot:nth-child(4n + 4) { transform: none; }
-    .shot:nth-child(3n + 2) { transform: translateY(40px); }
-    .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 44px; }
-    .quote__grid { grid-template-columns: minmax(0, 1fr); }
-    .config__body { grid-template-columns: minmax(0, 1fr); }
-    .config__view { top: var(--header-h); margin: 0 calc(-1 * var(--gutter)); aspect-ratio: 16 / 10; max-height: 46vh; width: auto; }
-  }
-
-  /* ---------- Portrait film: the model sits in the upper part, copy below ---------- */
-  @media (orientation: portrait) {
-    .film__stage::after { background: linear-gradient(0deg, rgba(20,27,37,.96) 0%, rgba(20,27,37,.8) 30%, rgba(20,27,37,0) 50%); }
-    .film__stage::before { background: linear-gradient(0deg, rgba(238,236,231,.97) 0%, rgba(238,236,231,.82) 30%, rgba(238,236,231,0) 50%); }
-    .film__scene { top: auto; bottom: clamp(36px, 6vh, 72px); translate: none; }
-    .film__tag { padding: 5px 8px; }
-    .film__label b { font-size: .8rem; }
-    .film__label small { display: none; }
-    .film__label::after { width: 26px; }
-    .film__tag { left: 40px; }
-    .film__label--left .film__tag { right: 40px; }
-  }
-
-  /* ---------- Mobile ---------- */
-  @media (max-width: 760px) {
-    body { padding-bottom: 76px; }
-    :root { --header-h: 64px; }
-    .brand img { width: 38px; height: 38px; }
-    .brand span { font-size: .82rem; letter-spacing: .14em; }
-    .menu-toggle {
-      display: inline-grid; place-items: center;
-      width: 48px; height: 48px; margin-right: -8px;
-      background: none; border: 0; color: var(--paper); cursor: pointer;
-    }
-    .menu-toggle svg { width: 28px; height: 28px; }
-    .nav {
-      position: fixed; inset: var(--header-h) 0 auto 0;
-      flex-direction: column; align-items: stretch; gap: 0;
-      background: var(--navy); border-bottom: 2px solid var(--oak);
-      padding: 8px var(--gutter) 22px;
-      visibility: hidden; opacity: 0; transform: translateY(-8px);
-      transition: opacity .2s, transform .2s, visibility 0s .2s;
-    }
-    .nav.is-open { visibility: visible; opacity: 1; transform: none; transition: opacity .2s, transform .2s; }
-    .nav a:not(.btn) { font: 800 1.5rem/1 var(--display); font-stretch: 125%; text-transform: uppercase; padding: 16px 0; border-bottom: 1px solid var(--line); }
-    .nav .long { display: block; }
-    .nav .btn { margin-top: 18px; }
-
-    .film { height: 660vh; }
-    .film__scene { bottom: 92px; } /* clear the action bar */
-    .film__h1 { font-size: clamp(2.1rem, 10.4vw, 3.2rem); }
-    .film__title { font-size: clamp(2rem, 9.6vw, 3rem); }
-    .film__lede { font-size: .98rem; }
-    .film__scene--hero .film__actions, .film__bio { display: none; } /* the action bar carries the CTAs on phones */
-    .film__hint { display: none; }
-    .film--static .film__stage { min-height: 0; }
-    .film--static .film__scene--hero .film__actions { display: flex; }
-
-    .section-head { grid-template-columns: minmax(0, 1fr); }
-    .models__body { grid-template-columns: minmax(0, 1fr); }
-    .models__list { position: static; display: flex; overflow-x: auto; scrollbar-width: none; border-top: 0; gap: 6px; margin: 0 calc(-1 * var(--gutter)); padding: 0 var(--gutter) 4px; }
-    .models__list li { flex: none; }
-    .model-tab { grid-template-columns: auto auto; min-height: 48px; padding: 0 14px; border: 1px solid var(--ink); }
-    .model-tab[aria-selected="true"] { padding-left: 14px; }
-    .model-tab i { display: none; }
-    .inset { width: 34%; right: 8px; bottom: 8px; padding: 16px 4px 2px; }
-    .inset span { display: none; }
-    .model-tab b { font-size: .95rem; }
-    .model-panel dl { grid-template-columns: minmax(0, 1fr); }
-    .model-panel dl div { padding: 10px 0; border-bottom: 1px solid var(--line-ink); display: flex; justify-content: space-between; gap: 12px; }
-    .model-panel dd { margin: 0; text-align: right; }
-
-    .service { grid-template-columns: minmax(0, 1fr); }
-    .service__n { grid-row: auto; line-height: 1; }
-    .service > :not(.service__n) { grid-column: 1; }
-
-    .work__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .shot:nth-child(3n + 2) { transform: none; }
-    .shot:nth-child(even) { transform: translateY(32px); }
-    .shot__cap { padding: 30px 10px 10px; }
-    .shot__cap b { font-size: .84rem; }
-    .shot__cap span { font-size: .6rem; }
-    .places li::after { margin-left: 14px; }
-
-    .steps { grid-template-columns: minmax(0, 1fr); row-gap: 44px; }
-    .step__img { aspect-ratio: 16 / 10; margin-bottom: 22px; }
-    .form .row { grid-template-columns: minmax(0, 1fr); }
-    .quote dl > div { grid-template-columns: 92px minmax(0, 1fr); }
-
-    .actionbar {
-      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px;
-      position: fixed; z-index: 60; left: 0; right: 0; bottom: 0;
-      padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
-      background: rgba(20,27,37,.94); backdrop-filter: blur(10px);
-      border-top: 1px solid var(--line);
-    }
-    .actionbar .btn { min-height: 52px; padding: 0 8px; font-size: .86rem; gap: .4em; }
-    .actionbar .btn--ghost { color: var(--paper); }
-  }
-</style>
+<link rel="stylesheet" href="css/site.css">
+<script src="js/nav.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#ana">İçeriğe geç</a>
@@ -545,9 +64,10 @@
   <nav class="nav" id="nav" aria-label="Ana menü">
     <a href="#modeller">Merdivenler</a>
     <a class="long" href="#hizmetler">Hizmetler</a>
-    <a href="#projeler">Projeler</a>
+    <a class="long" href="#projeler">Projeler</a>
     <a class="long" href="#surec">Süreç</a>
     <a href="#tasarla">Tasarla</a>
+    <a href="#iletisim">İletişim</a>
     <a class="btn" href="#teklif">Teklif al</a>
   </nav>
 </header>
@@ -628,7 +148,7 @@
     <div class="section-head" data-reveal>
       <div>
         <p class="eyebrow">Merdiven modelleri</p>
-        <h2 class="section-title wide" id="models-title">Beş model,<br>tek ölçü: sizin.</h2>
+        <h2 class="section-title wide" id="models-title">Yedi model,<br>tek ölçü: sizin.</h2>
       </div>
       <p class="section-note">Her merdiven mekâna göre çizilir. Model sadece başlangıç noktası; basamak, korkuluk ve renk sizin seçiminiz.</p>
     </div>
@@ -636,10 +156,13 @@
     <div class="models__body" data-reveal>
       <ul class="models__list" role="tablist" aria-label="Merdiven modelleri">
         <li><button class="model-tab" role="tab" id="t-konsol" aria-controls="p-konsol" aria-selected="true"><span>01</span><b>Konsol</b><i>Duvardan</i></button></li>
-        <li><button class="model-tab" role="tab" id="t-duz" aria-controls="p-duz" aria-selected="false" tabindex="-1"><span>02</span><b>Düz omurgalı</b><i>Tek kol</i></button></li>
+        <li><button class="model-tab" role="tab" id="t-duz" aria-controls="p-duz" aria-selected="false" tabindex="-1"><span>02</span><b>Düz omurgalı</b><i>İki tip</i></button>
+          <ul class="model-sub" aria-label="Düz omurgalı tipleri"><li><button type="button" data-variant="ahsap" aria-pressed="true">Ahşap oturtmalı</button></li><li><button type="button" data-variant="kutu" aria-pressed="false">Profil kaplama</button></li></ul></li>
         <li><button class="model-tab" role="tab" id="t-l" aria-controls="p-l" aria-selected="false" tabindex="-1"><span>03</span><b>L merdiven</b><i>90° dönüş</i></button></li>
-        <li><button class="model-tab" role="tab" id="t-z" aria-controls="p-z" aria-selected="false" tabindex="-1"><span>04</span><b>Z merdiven</b><i>180° dönüş</i></button></li>
-        <li><button class="model-tab" role="tab" id="t-doner" aria-controls="p-doner" aria-selected="false" tabindex="-1"><span>05</span><b>Döner</b><i>Merkez dikme</i></button></li>
+        <li><button class="model-tab" role="tab" id="t-z" aria-controls="p-z" aria-selected="false" tabindex="-1"><span>04</span><b>Z merdiven</b><i>İki dönüş</i></button></li>
+        <li><button class="model-tab" role="tab" id="t-u" aria-controls="p-u" aria-selected="false" tabindex="-1"><span>05</span><b>U merdiven</b><i>180° dönüş</i></button></li>
+        <li><button class="model-tab" role="tab" id="t-celik" aria-controls="p-celik" aria-selected="false" tabindex="-1"><span>06</span><b>Çelik profilli</b><i>İki yan profil</i></button></li>
+        <li><button class="model-tab" role="tab" id="t-spiral" aria-controls="p-spiral" aria-selected="false" tabindex="-1"><span>07</span><b>Spiral</b><i>Merkez dikme</i></button></li>
       </ul>
 
       <div>
@@ -649,66 +172,153 @@
             <h3 class="wide">Konsol merdiven</h3>
             <p>Basamaklar gizli çelik ankrajlarla doğrudan duvara bağlanır, alttan hiçbir taşıyıcı görünmez. Merdiven havada asılı gibi durur; dar ve sade mekânların favorisi.</p>
           </div>
-          <dl>
-            <div><dt>Taşıyıcı</dt><dd>Duvar ankrajı</dd></div>
-            <div><dt>Gereken</dt><dd>Taşıyıcı duvar</dd></div>
-            <div><dt>Etki</dt><dd>En hafif görünüm</dd></div>
-          </dl>
+          <dl><div><dt>Taşıyıcı</dt><dd>Duvar ankrajı</dd></div><div><dt>Gereken</dt><dd>Taşıyıcı duvar</dd></div><div><dt>Etki</dt><dd>En hafif görünüm</dd></div></dl>
         </div>
-
         <div class="model-panel" role="tabpanel" id="p-duz" aria-labelledby="t-duz" tabindex="0" hidden>
-          <figure><img class="render" src="img/models/duz-omurgali.webp" width="1200" height="800" loading="lazy" alt="Düz omurgalı merdiven görselleştirmesi: siyah zikzak çelik omurga üzerinde meşe basamaklar ve cam korkuluk"><figcaption>Görselleştirme</figcaption><div class="inset"><img src="img/models/duz-omurgali.svg" width="480" height="320" loading="lazy" alt="Düz omurgalı merdiven yan görünüş: basamakların altında zikzak çelik omurga"><span>Yan görünüş</span></div></figure>
-          <div>
-            <h3 class="wide">Düz omurgalı</h3>
-            <p>Tek bir zikzak çelik omurga, basamakları ortadan taşır. Duvara ihtiyaç duymadan mekânın ortasında bile durabilir; çizgisi en net olan model.</p>
+          <div class="variant-switch" role="group" aria-label="Basamak tipi">
+            <button type="button" aria-pressed="true" data-variant="ahsap">Ahşap oturtmalı</button>
+            <button type="button" aria-pressed="false" data-variant="kutu">Profil kaplama</button>
           </div>
-          <dl>
-            <div><dt>Taşıyıcı</dt><dd>Merkez omurga</dd></div>
-            <div><dt>Gereken</dt><dd>Düz kol boyu</dd></div>
-            <div><dt>Etki</dt><dd>Grafik, güçlü</dd></div>
-          </dl>
+          <div class="variant" data-variant="ahsap">
+          <figure><img class="render" src="img/models/duz-omurgali.webp" width="1200" height="800" loading="lazy" alt="Ahşap oturtmalı düz omurgalı merdiven görselleştirmesi: tek, düz, eğimli çelik omurga üzerinde oturma plakalarına oturan meşe basamaklar ve cam korkuluk"><figcaption>Görselleştirme</figcaption><div class="inset"><img src="img/models/duz-omurgali.svg" width="480" height="320" loading="lazy" alt="Düz omurgalı merdiven yan görünüş: basamakların altında tek, düz, eğimli çelik omurga"><span>Yan görünüş</span></div></figure>
+          <div>
+            <h3 class="wide">Ahşap oturtmalı</h3>
+            <p>Tek bir düz çelik omurga basamakları ortadan taşır. Masif ahşap basamaklar omurganın üzerindeki çelik oturma plakalarına oturur; alttan bakınca tek ve temiz bir çizgi kalır.</p>
+          </div>
+          <dl><div><dt>Taşıyıcı</dt><dd>Düz merkez omurga</dd></div><div><dt>Basamak</dt><dd>4–5 cm masif ahşap</dd></div><div><dt>Etki</dt><dd>Hafif, grafik</dd></div></dl>
+          </div>
+          <div class="variant" data-variant="kutu" hidden>
+          <figure><img class="render" src="img/models/duz-kutu.webp" width="1200" height="800" loading="lazy" alt="Profil kaplama düz omurgalı merdiven görselleştirmesi: düz çelik omurga üzerinde kalın, ahşap kaplı kutu basamaklar"><figcaption>Görselleştirme</figcaption><div class="inset"><img src="img/models/duz-kutu.svg" width="480" height="320" loading="lazy" alt="Profil kaplama merdiven yan görünüş: düz omurga üzerinde kalın kutu basamaklar"><span>Yan görünüş</span></div></figure>
+          <div>
+            <h3 class="wide">Profil kaplama</h3>
+            <p>Her basamak çelik kutu profilden kaynaklı bir gövdedir; üstü ve alnı ahşapla kaplanır. Kalın, blok gibi basamaklar uzun açıklıklarda bile esnemez.</p>
+          </div>
+          <dl><div><dt>Taşıyıcı</dt><dd>Düz merkez omurga</dd></div><div><dt>Basamak</dt><dd>8–10 cm kutu profil + ahşap</dd></div><div><dt>Etki</dt><dd>Kalın, mimari</dd></div></dl>
+          </div>
         </div>
-
         <div class="model-panel" role="tabpanel" id="p-l" aria-labelledby="t-l" tabindex="0" hidden>
-          <figure><img class="render" src="img/models/l.webp" width="1200" height="800" loading="lazy" alt="L merdiven görselleştirmesi: çelik dikmeli sahanlıkta 90 derece dönen omurgalı merdiven"><figcaption>Görselleştirme</figcaption><div class="inset"><img src="img/models/l.svg" width="480" height="320" loading="lazy" alt="L merdiven plan görünüş: düz kol, kare sahanlık ve 90 derece dönen ikinci kol"><span>Plan</span></div></figure>
+          <figure><img class="render" src="img/models/l.webp" width="1200" height="800" loading="lazy" alt="L merdiven görselleştirmesi: düz çelik omurga sahanlığa çıkıyor, sahanlık bir dikmeye oturuyor ve ikinci kol 90 derece dönüyor"><figcaption>Görselleştirme</figcaption><div class="inset"><img src="img/models/l.svg" width="480" height="320" loading="lazy" alt="L merdiven plan görünüş: düz kol, kare sahanlık ve 90 derece dönen ikinci kol"><span>Plan</span></div></figure>
           <div>
             <h3 class="wide">L merdiven</h3>
-            <p>Bir sahanlıkla 90° döner. Köşeleri değerlendirir, uzun bir kolun sığmadığı yerde çözüm olur. Yukarıdaki filmde kurduğumuz model de bir L.</p>
+            <p>Bir sahanlıkla 90° döner. Her kolun kendi düz omurgası vardır, sahanlık tek bir çelik dikmeye oturur. Köşeleri değerlendirir; yukarıdaki filmde kurduğumuz model de bir L.</p>
           </div>
-          <dl>
-            <div><dt>Taşıyıcı</dt><dd>Omurga + sahanlık</dd></div>
-            <div><dt>Gereken</dt><dd>Köşe</dd></div>
-            <div><dt>Etki</dt><dd>Kompakt</dd></div>
-          </dl>
+          <dl><div><dt>Taşıyıcı</dt><dd>İki omurga + sahanlık</dd></div><div><dt>Gereken</dt><dd>Köşe</dd></div><div><dt>Etki</dt><dd>Kompakt</dd></div></dl>
         </div>
-
         <div class="model-panel" role="tabpanel" id="p-z" aria-labelledby="t-z" tabindex="0" hidden>
-          <figure><img class="render" src="img/models/z.webp" width="1200" height="800" loading="lazy" alt="Z merdiven görselleştirmesi: ilk kol sahanlığa çıkıyor, ikinci kol duvar boyunca ters yönde devam ediyor"><figcaption>Görselleştirme</figcaption><div class="inset"><img src="img/models/z.svg" width="480" height="320" loading="lazy" alt="Z merdiven yan görünüş: ilk kol sahanlığa çıkıyor, ikinci kol ters yönde devam ediyor"><span>Yan görünüş</span></div></figure>
+          <figure><img class="render" src="img/models/z.webp" width="1200" height="800" loading="lazy" alt="Z merdiven görselleştirmesi: üç düz kol ve dikmelere oturan iki sahanlıkla iki kez 90 derece dönen merdiven"><figcaption>Görselleştirme</figcaption><div class="inset"><img src="img/models/z.svg" width="480" height="320" loading="lazy" alt="Z merdiven plan görünüş: üç kol ve iki sahanlıkla iki kez dönen merdiven"><span>Plan</span></div></figure>
           <div>
             <h3 class="wide">Z merdiven</h3>
-            <p>Sahanlıkta tam geri döner, iki kol üst üste biner. Yüksek tavanlarda ve dar ama derin alanlarda yükseklik kazanmanın en verimli yolu.</p>
+            <p>İki sahanlıkla iki kez 90° döner, planda bir Z çizer. Kollar duvarlara yaslanır, merdiven odanın bir ucundan ötekine yürür.</p>
           </div>
-          <dl>
-            <div><dt>Taşıyıcı</dt><dd>İki omurga</dd></div>
-            <div><dt>Gereken</dt><dd>Derin alan</dd></div>
-            <div><dt>Etki</dt><dd>Katmanlı</dd></div>
-          </dl>
+          <dl><div><dt>Taşıyıcı</dt><dd>Üç omurga + iki dikme</dd></div><div><dt>Gereken</dt><dd>Geniş, köşeli alan</dd></div><div><dt>Etki</dt><dd>Dinamik</dd></div></dl>
         </div>
-
-        <div class="model-panel" role="tabpanel" id="p-doner" aria-labelledby="t-doner" tabindex="0" hidden>
-          <figure><img class="render" src="img/models/doner.webp" width="1200" height="800" loading="lazy" alt="Döner merdiven görselleştirmesi: siyah merkez dikme etrafında meşe yelpaze basamaklar ve sarmal küpeşte"><figcaption>Görselleştirme</figcaption><div class="inset"><img src="img/models/doner.svg" width="480" height="320" loading="lazy" alt="Döner merdiven plan görünüş: merkez dikme etrafında yelpaze basamaklar"><span>Plan</span></div></figure>
+        <div class="model-panel" role="tabpanel" id="p-u" aria-labelledby="t-u" tabindex="0" hidden>
+          <figure><img class="render" src="img/models/u.webp" width="1200" height="800" loading="lazy" alt="U merdiven görselleştirmesi: ilk kol geniş bir sahanlığa çıkıyor, ikinci kol yanından ters yönde geri dönüyor"><figcaption>Görselleştirme</figcaption><div class="inset"><img src="img/models/u.svg" width="480" height="320" loading="lazy" alt="U merdiven plan görünüş: yan yana iki kol ve aralarında geniş sahanlık"><span>Plan</span></div></figure>
           <div>
-            <h3 class="wide">Döner merdiven</h3>
+            <h3 class="wide">U merdiven</h3>
+            <p>Sahanlıkta 180° döner; ikinci kol birincinin yanından geri gelir. Dar ama derin merdiven boşluklarında yüksekliği en az alanda kazanır.</p>
+          </div>
+          <dl><div><dt>Taşıyıcı</dt><dd>İki omurga + sahanlık</dd></div><div><dt>Gereken</dt><dd>Derin alan</dd></div><div><dt>Etki</dt><dd>Kompakt, katmanlı</dd></div></dl>
+        </div>
+        <div class="model-panel" role="tabpanel" id="p-celik" aria-labelledby="t-celik" tabindex="0" hidden>
+          <figure><img class="render" src="img/models/celik.webp" width="1200" height="800" loading="lazy" alt="Çelik profilli merdiven görselleştirmesi: iki yandaki çelik profil limonların arasına oturan basamaklar ve metal korkuluk"><figcaption>Görselleştirme</figcaption><div class="inset"><img src="img/models/celik.svg" width="480" height="320" loading="lazy" alt="Çelik profilli merdiven yan görünüş: yan profil limon, basamaklar ve metal korkuluk"><span>Yan görünüş</span></div></figure>
+          <div>
+            <h3 class="wide">Çelik profilli merdiven</h3>
+            <p>Basamaklar iki yandaki çelik profil limonların arasına oturur. Omurgasız, sağlam ve endüstriyel; ofis, dükkân ve atölyelerde iyi durur.</p>
+          </div>
+          <dl><div><dt>Taşıyıcı</dt><dd>İki yan profil</dd></div><div><dt>Gereken</dt><dd>Düz kol boyu</dd></div><div><dt>Etki</dt><dd>Endüstriyel</dd></div></dl>
+        </div>
+        <div class="model-panel" role="tabpanel" id="p-spiral" aria-labelledby="t-spiral" tabindex="0" hidden>
+          <figure><img class="render" src="img/models/spiral.webp" width="1200" height="800" loading="lazy" alt="Spiral merdiven görselleştirmesi: siyah merkez dikme etrafında meşe yelpaze basamaklar ve sarmal küpeşte"><figcaption>Görselleştirme</figcaption><div class="inset"><img src="img/models/spiral.svg" width="480" height="320" loading="lazy" alt="Spiral merdiven plan görünüş: merkez dikme etrafında yelpaze basamaklar"><span>Plan</span></div></figure>
+          <div>
+            <h3 class="wide">Spiral merdiven</h3>
             <p>Basamaklar merkezdeki çelik dikmenin etrafında yelpaze gibi açılır. En az alanı kaplar; asma kat, çatı katı ve bahçe çıkışları için ideal.</p>
           </div>
-          <dl>
-            <div><dt>Taşıyıcı</dt><dd>Merkez dikme</dd></div>
-            <div><dt>Gereken</dt><dd>Küçük bir daire</dd></div>
-            <div><dt>Etki</dt><dd>Heykelsi</dd></div>
-          </dl>
+          <dl><div><dt>Taşıyıcı</dt><dd>Merkez dikme</dd></div><div><dt>Gereken</dt><dd>Küçük bir daire</dd></div><div><dt>Etki</dt><dd>Heykelsi</dd></div></dl>
         </div>
       </div>
     </div>
+  </section>
+
+  <!-- MERDİVEN KATALOĞU — Maviron's own work from Instagram; sizes and prices come from the client later -->
+  <section class="catalog" id="katalog" aria-labelledby="catalog-title">
+    <div class="section-head" data-reveal>
+      <div>
+        <p class="eyebrow">Yaptıklarımızdan seçmeler</p>
+        <h2 class="section-title wide" id="catalog-title">Merdiven<br>kataloğu.</h2>
+      </div>
+      <p class="section-note">Her biri sahada kurduğumuz bir merdiven. Ölçü ve malzeme bilgileri yakında eklenecek; PDF katalog da hazırlanıyor.</p>
+    </div>
+    <div class="catalog__wrap" data-reveal>
+      <ol class="catalog__track" tabindex="0" aria-label="Merdiven kataloğu, yana kaydırılabilir">
+        <li class="catalog__item">
+          <a href="https://www.instagram.com/p/DeWg4hGjsza/" target="_blank" rel="noopener"><img src="img/omurga-cam.webp" width="480" height="640" loading="lazy" alt="Siyah çelik omurga, meşe basamak ve cam korkuluklu L merdiven"><span class="visually-hidden"> (Instagram'da aç)</span></a>
+          <p class="catalog__code mono">MK-01</p>
+          <h3>L merdiven</h3>
+          <p>Düz omurga · meşe basamak · cam korkuluk</p>
+          <dl><div><dt>Ölçü</dt><dd>Yakında</dd></div><div><dt>Fiyat</dt><dd>Teklifle</dd></div></dl>
+        </li>
+        <li class="catalog__item">
+          <a href="https://www.instagram.com/reel/Db1ECBFsX2Z/" target="_blank" rel="noopener"><img src="img/klasik-omurga.webp" width="361" height="640" loading="lazy" alt="Duvar boyunca yükselen siyah omurgalı, meşe basamaklı merdiven"><span class="visually-hidden"> (Instagram'da aç)</span></a>
+          <p class="catalog__code mono">MK-02</p>
+          <h3>Düz omurgalı</h3>
+          <p>Ahşap oturtmalı · duvar boyunca</p>
+          <dl><div><dt>Ölçü</dt><dd>Yakında</dd></div><div><dt>Fiyat</dt><dd>Teklifle</dd></div></dl>
+        </li>
+        <li class="catalog__item">
+          <a href="https://www.instagram.com/reel/DcUDFhCsNu6/" target="_blank" rel="noopener"><img src="img/omurga-dikme.webp" width="360" height="640" loading="lazy" alt="Dikme korkuluklu, ahşap basamaklı omurgalı merdiven"><span class="visually-hidden"> (Instagram'da aç)</span></a>
+          <p class="catalog__code mono">MK-03</p>
+          <h3>Omurgalı merdiven</h3>
+          <p>Ahşap basamak · metal dikme korkuluk</p>
+          <dl><div><dt>Ölçü</dt><dd>Yakında</dd></div><div><dt>Fiyat</dt><dd>Teklifle</dd></div></dl>
+        </li>
+        <li class="catalog__item">
+          <a href="https://www.instagram.com/reel/DWKJnw2jNcX/" target="_blank" rel="noopener"><img src="img/koyu-basamak.webp" width="361" height="640" loading="lazy" alt="Yukarıdan bakış: koyu çelik basamaklar ve ortadaki omurga"><span class="visually-hidden"> (Instagram'da aç)</span></a>
+          <p class="catalog__code mono">MK-04</p>
+          <h3>Omurgalı merdiven</h3>
+          <p>Çelik basamak · koyu boya</p>
+          <dl><div><dt>Ölçü</dt><dd>Yakında</dd></div><div><dt>Fiyat</dt><dd>Teklifle</dd></div></dl>
+        </li>
+        <li class="catalog__item">
+          <a href="https://www.instagram.com/reel/Dd_-rQCOQEm/" target="_blank" rel="noopener"><img src="img/konsol-montaj.webp" width="360" height="640" loading="lazy" alt="Montaj sırasında gri çelik plaka basamaklar"><span class="visually-hidden"> (Instagram'da aç)</span></a>
+          <p class="catalog__code mono">MK-05</p>
+          <h3>Çelik basamaklı</h3>
+          <p>Çelik plaka basamak · montaj aşaması</p>
+          <dl><div><dt>Ölçü</dt><dd>Yakında</dd></div><div><dt>Fiyat</dt><dd>Teklifle</dd></div></dl>
+        </li>
+        <li class="catalog__item">
+          <a href="https://www.instagram.com/reel/Dbf6mxpMWjC/" target="_blank" rel="noopener"><img src="img/saha-yangin.webp" width="360" height="640" loading="lazy" alt="Şantiyede yeni kurulmuş dış cephe çelik merdiven"><span class="visually-hidden"> (Instagram'da aç)</span></a>
+          <p class="catalog__code mono">MK-06</p>
+          <h3>Dış cephe merdiveni</h3>
+          <p>Galvaniz çelik · sahanlıklı</p>
+          <dl><div><dt>Ölçü</dt><dd>Yakında</dd></div><div><dt>Fiyat</dt><dd>Teklifle</dd></div></dl>
+        </li>
+      </ol>
+      <div class="catalog__foot">
+        <div class="pager" data-track=".catalog__track">
+          <button type="button" class="pager__btn" data-dir="-1" aria-label="Önceki"><span aria-hidden="true">←</span></button>
+          <button type="button" class="pager__btn" data-dir="1" aria-label="Sonraki"><span aria-hidden="true">→</span></button>
+        </div>
+        <span class="btn btn--ghost is-disabled" aria-disabled="true">PDF katalog · yakında</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- KORKULUKLAR — renders from tools/studio.html?model=kork-cam|kork-metal|kork-separator|kork-lama -->
+  <section class="rails" id="korkuluklar" aria-labelledby="rails-title">
+    <div class="section-head" data-reveal>
+      <div>
+        <p class="eyebrow">Korkuluklar</p>
+        <h2 class="section-title wide" id="rails-title">Merdivenin<br>yüzü.</h2>
+      </div>
+      <p class="section-note">Korkuluk merdivenin karakterini belirler. Her modelle birleşir; merdiven, galeri boşluğu ve asma kat kenarında kullanılır.</p>
+    </div>
+    <ol class="rails__list" data-reveal>
+      <li class="rail"><span class="rail__n mono">01</span><div><h3 class="wide">Cam korkuluk</h3><p>17,52 mm temperli lamine cam, paslanmaz noktasal bağlantılarla omurgaya ya da döşeme alnına tutturulur. Mekânı kapatmaz, ışığı keser.</p><ul><li>Temperli lamine</li><li>Noktasal bağlantı</li></ul></div><img src="img/korkuluk/cam.webp" width="1200" height="800" loading="lazy" alt="Düz omurgalı merdivende çerçevesiz, noktasal bağlantılı cam korkuluk görselleştirmesi"></li>
+      <li class="rail"><span class="rail__n mono">02</span><div><h3 class="wide">Metal korkuluk</h3><p>20 × 20 mm dikmeler ve yassı lama küpeşte. Klasik, sağlam ve ekonomik; her rengine boyanır.</p><ul><li>Kare dikme</li><li>Lama küpeşte</li></ul></div><img src="img/korkuluk/metal.webp" width="1200" height="800" loading="lazy" alt="Her basamakta iki ince kare dikme ve eğimli küpeşteli metal korkuluk görselleştirmesi"></li>
+      <li class="rail"><span class="rail__n mono">03</span><div><h3 class="wide">Separatör metal korkuluk</h3><p>Yerden tavana uzanan dikey çelik çubuklar merdiveni mekândan ayırır ama görüşü kesmez. Hem korkuluk hem de bölücü duvar.</p><ul><li>Yerden tavana</li><li>Bölücü</li></ul></div><img src="img/korkuluk/separator.webp" width="1200" height="800" loading="lazy" alt="Merdiven boyunca yerden yükselen sık dikey çelik çubuklardan separatör korkuluk görselleştirmesi"></li>
+      <li class="rail"><span class="rail__n mono">04</span><div><h3 class="wide">Yatay lama korkuluk</h3><p>Seyrek dikmeler arasında yatay çelik lamalar. Modern ve hafif bir görünüm; dış merdiven ve terasta da kullanılır.</p><ul><li>Yatay lama</li><li>İç ve dış mekân</li></ul></div><img src="img/korkuluk/lama.webp" width="1200" height="800" loading="lazy" alt="Seyrek dikmeler arasında dört sıra yatay lamalı metal korkuluk görselleştirmesi"></li>
+    </ol>
   </section>
 
   <!-- HİZMETLER — from the Instagram bio: endüstriyel çelik yapılar, asma kat, villa, bungalov, çatı, merdiven -->
@@ -723,23 +333,46 @@
 
     <div class="services__body">
       <figure class="services__visual" data-reveal>
-        <img id="svc-photo" src="img/services/merdiven.webp?v=3" width="800" height="800" loading="lazy" alt="Siyah zikzak çelik omurgalı, meşe basamaklı, cam korkuluklu L merdiven görselleştirmesi">
+        <img id="svc-photo" src="img/services/merdiven.webp?v=4" width="800" height="800" loading="lazy" alt="Düz çelik omurgalı, meşe basamaklı, cam korkuluklu L merdiven görselleştirmesi">
         <figcaption class="mono" id="svc-caption">Görselleştirme · omurgalı L merdiven</figcaption>
       </figure>
 
       <div>
-        <article class="service" data-reveal data-photo="img/services/merdiven.webp?v=3" data-caption="Görselleştirme · omurgalı L merdiven" data-alt="Siyah zikzak çelik omurgalı, meşe basamaklı, cam korkuluklu L merdiven görselleştirmesi">
+        <article class="service" data-reveal data-photo="img/services/merdiven.webp?v=4" data-caption="Görselleştirme · omurgalı L merdiven" data-alt="Düz çelik omurgalı, meşe basamaklı, cam korkuluklu L merdiven görselleştirmesi">
           <span class="service__n">01</span>
           <h3 class="wide">Çelik merdiven</h3>
-          <img class="service__img" src="img/services/merdiven.webp?v=3" width="800" height="800" loading="lazy" alt="Siyah zikzak çelik omurgalı, meşe basamaklı, cam korkuluklu L merdiven görselleştirmesi">
-          <p>Omurgalı, konsol, L, Z ve döner modeller. Ahşap, çelik ya da taş basamak; cam, dikme veya çelik korkuluk.</p>
+          <div class="slides">
+            <ul class="slides__track" tabindex="0" aria-label="Çelik merdiven görselleri, yana kaydırılabilir">
+              <li><img src="img/services/merdiven.webp?v=4" width="800" height="800" loading="lazy" alt="Düz çelik omurgalı, meşe basamaklı, cam korkuluklu L merdiven görselleştirmesi"><span class="mono">L merdiven</span></li>
+              <li><img src="img/models/u.webp" width="1200" height="800" loading="lazy" alt="U merdiven görselleştirmesi"><span class="mono">U merdiven</span></li>
+              <li><img src="img/models/z.webp" width="1200" height="800" loading="lazy" alt="Z merdiven görselleştirmesi"><span class="mono">Z merdiven</span></li>
+              <li><img src="img/models/duz-kutu.webp" width="1200" height="800" loading="lazy" alt="Profil kaplama basamaklı düz omurgalı merdiven görselleştirmesi"><span class="mono">Profil kaplama</span></li>
+              <li><img src="img/models/celik.webp" width="1200" height="800" loading="lazy" alt="Çelik profilli merdiven görselleştirmesi"><span class="mono">Çelik profilli</span></li>
+              <li><img src="img/models/spiral.webp" width="1200" height="800" loading="lazy" alt="Spiral merdiven görselleştirmesi"><span class="mono">Spiral</span></li>
+            </ul>
+            <div class="pager" data-track=".slides__track">
+              <button type="button" class="pager__btn" data-dir="-1" aria-label="Önceki görsel"><span aria-hidden="true">←</span></button>
+              <button type="button" class="pager__btn" data-dir="1" aria-label="Sonraki görsel"><span aria-hidden="true">→</span></button>
+            </div>
+          </div>
+          <p>Omurgalı, konsol, L, Z, U, çelik profilli ve spiral modeller. Ahşap, çelik ya da mermer basamak; cam, metal veya separatör korkuluk.</p>
           <ul><li>Villa</li><li>Ofis</li><li>Mağaza</li><li>Dubleks</li></ul>
           <a class="service__cta" href="#teklif" data-quote="Çelik merdiven">Teklif iste <span aria-hidden="true">→</span></a>
         </article>
-        <article class="service" data-reveal data-photo="img/services/asmakat.webp?v=3" data-caption="Görselleştirme · çelik asma kat" data-alt="Dört kolon ve I profil kirişler üzerinde meşe döşemeli, cam korkuluklu asma kat ve ona çıkan omurgalı merdiven görselleştirmesi">
+        <article class="service" data-reveal data-photo="img/services/asmakat.webp?v=4" data-caption="Görselleştirme · çelik asma kat" data-alt="Dört kolon ve I profil kirişler üzerinde meşe döşemeli, cam korkuluklu asma kat ve ona çıkan omurgalı merdiven görselleştirmesi">
           <span class="service__n">02</span>
           <h3 class="wide">Asma kat</h3>
-          <img class="service__img" src="img/services/asmakat.webp?v=3" width="800" height="800" loading="lazy" alt="Dört kolon ve I profil kirişler üzerinde meşe döşemeli, cam korkuluklu asma kat ve ona çıkan omurgalı merdiven görselleştirmesi">
+          <div class="flip">
+            <button type="button" class="flip__card" aria-pressed="false" aria-label="Asma kat kartını çevir">
+              <span class="flip__face flip__front"><img src="img/services/asmakat.webp?v=4" width="800" height="800" loading="lazy" alt=""><span class="flip__hint mono">Çevir ↻</span></span>
+              <span class="flip__face flip__back">
+                <b>Çelik asma kat</b>
+                <span>I profil kiriş ve kolonlardan çelik iskelet, üzerine ahşap, OSB ya da trapez sac üstü beton döşeme. Kenarları cam veya metal korkulukla kapanır, çıkışı bir çelik merdivenle verilir.</span>
+                <span class="flip__spec mono">Kiriş · kolon · döşeme · korkuluk · merdiven</span>
+                <span class="flip__hint mono">Geri çevir ↺</span>
+              </span>
+            </button>
+          </div>
           <p>Yüksek tavanı kullanılabilir metrekareye çevirir. Çelik kiriş ve kolonla, mevcut yapıya dokunmadan.</p>
           <ul><li>Depo</li><li>Dükkân</li><li>Atölye</li></ul>
           <a class="service__cta" href="#teklif" data-quote="Asma kat">Teklif iste <span aria-hidden="true">→</span></a>
@@ -774,7 +407,7 @@
           <img class="service__img" src="img/services/cati.webp?v=3" width="800" height="800" loading="lazy" alt="Kolonlar üzerinde kafes çelik çatı makasları ve yarısı sacla kaplanmış çatı görselleştirmesi">
           <p>Çelik çatı makası ve aşıklar: yeni yapı, çatı katı ve eski çatının yenilenmesi.</p>
           <ul><li>Çatı makası</li><li>Çatı katı</li><li>Yenileme</li></ul>
-          <a class="service__cta" href="#teklif" data-quote="Çatı">Teklif iste <span aria-hidden="true">→</span></a>
+          <div class="service__links"><a class="service__cta" href="catilar.html">Çatıları incele <span aria-hidden="true">→</span></a><a class="service__cta" href="#teklif" data-quote="Çatı">Teklif iste <span aria-hidden="true">→</span></a></div>
         </article>
         <article class="service" data-reveal data-photo="img/services/yangin.webp?v=3" data-caption="Görselleştirme · iki katlı dış cephe yangın merdiveni" data-alt="Bina cephesine bağlı, ızgara basamaklı ve sahanlıklı iki katlı çelik yangın merdiveni görselleştirmesi">
           <span class="service__n">07</span>
@@ -782,7 +415,7 @@
           <img class="service__img" src="img/services/yangin.webp?v=3" width="800" height="800" loading="lazy" alt="Bina cephesine bağlı, ızgara basamaklı ve sahanlıklı iki katlı çelik yangın merdiveni görselleştirmesi">
           <p>Hastane, ofis ve siteler için dış cephe kaçış merdivenleri. Projeden sahaya, yönetmeliğe uygun.</p>
           <ul><li>Hastane</li><li>Ofis</li><li>Site</li></ul>
-          <a class="service__cta" href="#teklif" data-quote="Yangın merdiveni">Teklif iste <span aria-hidden="true">→</span></a>
+          <div class="service__links"><a class="service__cta" href="yangin-merdiveni.html">İncele <span aria-hidden="true">→</span></a><a class="service__cta" href="#teklif" data-quote="Yangın merdiveni">Teklif iste <span aria-hidden="true">→</span></a></div>
         </article>
       </div>
     </div>
@@ -881,21 +514,23 @@
         </div>
         <fieldset>
           <legend>Model</legend>
-          <div class="chips"><label class="chip"><input type="radio" name="model" value="konsol"><span>Konsol</span></label><label class="chip"><input type="radio" name="model" value="duz"><span>Düz omurgalı</span></label><label class="chip"><input type="radio" name="model" value="l" checked><span>L</span></label><label class="chip"><input type="radio" name="model" value="z"><span>Z</span></label><label class="chip"><input type="radio" name="model" value="doner"><span>Döner</span></label></div>
+          <div class="chips"><label class="chip"><input type="radio" name="model" value="konsol"><span>Konsol</span></label><label class="chip"><input type="radio" name="model" value="duz"><span>Düz omurgalı</span></label><label class="chip"><input type="radio" name="model" value="l" checked><span>L</span></label><label class="chip"><input type="radio" name="model" value="z"><span>Z</span></label><label class="chip"><input type="radio" name="model" value="u"><span>U</span></label><label class="chip"><input type="radio" name="model" value="spiral"><span>Spiral</span></label></div>
         </fieldset>
         <fieldset>
           <legend>Basamak</legend>
-          <div class="chips"><label class="chip"><input type="radio" name="tread" value="mese" checked><span><i class="sw" style="--c:#c3935f"></i>Meşe</span></label><label class="chip"><input type="radio" name="tread" value="ceviz"><span><i class="sw" style="--c:#6e4a31"></i>Ceviz</span></label><label class="chip"><input type="radio" name="tread" value="celik"><span><i class="sw" style="--c:#2a2d31"></i>Çelik</span></label><label class="chip"><input type="radio" name="tread" value="beton"><span><i class="sw" style="--c:#b9b6b0"></i>Beton</span></label></div>
+          <div class="chips"><label class="chip"><input type="radio" name="tread" value="mese" checked><span><i class="sw" style="--c:#c3935f"></i>Meşe</span></label><label class="chip"><input type="radio" name="tread" value="ceviz"><span><i class="sw" style="--c:#6e4a31"></i>Ceviz</span></label><label class="chip"><input type="radio" name="tread" value="celik"><span><i class="sw" style="--c:#2a2d31"></i>Çelik</span></label><label class="chip"><input type="radio" name="tread" value="mermer"><span><i class="sw" style="--c:#ebe8e2"></i>Mermer</span></label></div>
         </fieldset>
         <fieldset>
           <legend>Korkuluk</legend>
-          <div class="chips"><label class="chip"><input type="radio" name="rail" value="cam" checked><span>Cam</span></label><label class="chip"><input type="radio" name="rail" value="dikme"><span>Dikme</span></label></div>
+          <div class="chips"><label class="chip"><input type="radio" name="rail" value="cam" checked><span>Cam</span></label><label class="chip"><input type="radio" name="rail" value="metal"><span>Metal</span></label><label class="chip"><input type="radio" name="rail" value="separator"><span>Separatör</span></label></div>
         </fieldset>
         <fieldset>
           <legend>Çelik rengi</legend>
           <div class="chips"><label class="chip"><input type="radio" name="color" value="siyah" checked><span><i class="sw" style="--c:#1c1e21"></i>Siyah</span></label><label class="chip"><input type="radio" name="color" value="antrasit"><span><i class="sw" style="--c:#3b4047"></i>Antrasit</span></label><label class="chip"><input type="radio" name="color" value="beyaz"><span><i class="sw" style="--c:#e8e8e5"></i>Beyaz</span></label></div>
         </fieldset>
         <dl class="config__spec" aria-live="polite">
+          <div><dt><span class="sym">H<sub>max</sub></span> · platform üstü</dt><dd data-out="hmax">300 cm</dd></div>
+          <div><dt><span class="sym">h</span> · platform altı</dt><dd data-out="hlow">278 cm</dd></div>
           <div><dt>Rıht</dt><dd data-out="risers">16</dd></div>
           <div><dt>Rıht yüksekliği</dt><dd data-out="rise">18,8 cm</dd></div>
           <div><dt>Basamak derinliği</dt><dd data-out="going">25,5 cm</dd></div>
@@ -912,12 +547,13 @@
   <!-- TEKLİF — the form writes a WhatsApp message; nothing is stored or sent anywhere else -->
   <section class="quote" id="teklif" aria-labelledby="quote-title">
     <div class="quote__grid">
-      <div data-reveal>
-        <p class="eyebrow">Teklif</p>
+      <div id="iletisim" data-reveal>
+        <p class="eyebrow">İletişim · Teklif</p>
         <h2 class="quote__title wide" id="quote-title">Ölçüyü<br>alalım<em>.</em></h2>
         <p style="max-width:44ch;color:#c3c9d1">Ne yaptırmak istediğinizi ve nerede olduğunu yazın; keşif için sizi arayalım. Fotoğraf veya ölçünüz varsa WhatsApp'tan ekleyebilirsiniz.</p>
         <dl>
           <div><dt>Telefon</dt><dd><a href="tel:+905363773370">0536 377 33 70</a></dd></div>
+          <div><dt>WhatsApp</dt><dd><a href="https://wa.me/905363773370" target="_blank" rel="noopener">0536 377 33 70</a></dd></div>
           <div><dt>E-posta</dt><dd><a href="mailto:info@mavironcelik.com">info@mavironcelik.com</a></dd></div>
           <div><dt>Instagram</dt><dd><a href="https://www.instagram.com/mavironcelik/" target="_blank" rel="noopener">@mavironcelik</a></dd></div>
           <div><dt>Bölge</dt><dd>İstanbul ve Kocaeli</dd></div>
@@ -929,6 +565,7 @@
           <legend>Ne yaptırmak istiyorsunuz?</legend>
           <div class="chips">
             <label class="chip"><input type="radio" name="is" value="Çelik merdiven" checked><span>Merdiven</span></label>
+            <label class="chip"><input type="radio" name="is" value="Korkuluk"><span>Korkuluk</span></label>
             <label class="chip"><input type="radio" name="is" value="Asma kat"><span>Asma kat</span></label>
             <label class="chip"><input type="radio" name="is" value="Endüstriyel çelik yapı"><span>Çelik yapı</span></label>
             <label class="chip"><input type="radio" name="is" value="Villa / bungalov"><span>Villa / bungalov</span></label>
@@ -964,12 +601,25 @@
     <nav aria-label="Alt menü">
       <a href="#modeller">Merdivenler</a>
       <a href="#hizmetler">Hizmetler</a>
-      <a href="#projeler">Projeler</a>
-      <a href="https://www.instagram.com/mavironcelik/" target="_blank" rel="noopener">Instagram</a>
+      <a href="#korkuluklar">Korkuluklar</a>
+      <a href="catilar.html">Çatılar</a>
+      <a href="yangin-merdiveni.html">Yangın merdiveni</a>
+      <a href="#iletisim">İletişim</a>
     </nav>
   </div>
   <p class="demo-note">Tanıtım amaçlı demo. Açılıştaki film, model ve süreç görselleri kodla oluşturulmuş 3D görselleştirmelerdir; proje fotoğrafları Maviron Çelik'in Instagram paylaşımlarından alınmıştır.</p>
 </footer>
+
+<!-- quick contact, bottom right; Facebook is a placeholder until the page exists -->
+<div class="fab" aria-label="Hızlı iletişim" role="group">
+  <button type="button" class="fab__toggle" aria-expanded="false" aria-controls="fab-list" aria-label="Hızlı iletişimi aç"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.6L3 21l1.4-5.4A8.5 8.5 0 1 1 21 12z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01" stroke-width="2.6"/></svg></button>
+  <div class="fab__list" id="fab-list">
+  <a class="fab__btn fab__btn--wa" href="https://wa.me/905363773370" target="_blank" rel="noopener" aria-label="WhatsApp'tan yazın"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.6-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.5-.3z"/></svg></a>
+  <a class="fab__btn" href="https://www.instagram.com/mavironcelik/" target="_blank" rel="noopener" aria-label="Instagram: @mavironcelik"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+  <a class="fab__btn" href="tel:+905363773370" aria-label="Telefonla arayın: 0536 377 33 70"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></a>
+  <span class="fab__btn is-disabled" aria-disabled="true" role="img" aria-label="Facebook (yakında)" title="Facebook · yakında"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7.5h2.5l.4-3h-2.9V8.6c0-.9.25-1.5 1.5-1.5h1.5V4.4a20 20 0 0 0-2.2-.1c-2.2 0-3.7 1.3-3.7 3.8v2.4H8.1v3h2.5V21z"/></svg></span>
+  </div>
+</div>
 
 <div class="actionbar">
   <a class="btn btn--ghost" href="tel:+905363773370">Ara</a>
@@ -978,20 +628,6 @@
 </div>
 
 <script>
-  // Mobile nav
-  const nav = document.getElementById('nav');
-  const toggle = document.querySelector('.menu-toggle');
-  const iconPath = toggle.querySelector('path');
-  const setNav = open => {
-    nav.classList.toggle('is-open', open);
-    toggle.setAttribute('aria-expanded', open);
-    toggle.setAttribute('aria-label', open ? 'Menüyü kapat' : 'Menüyü aç');
-    iconPath.setAttribute('d', open ? 'M5 5l14 14M19 5L5 19' : 'M3 7h18M3 12h18M3 17h12');
-  };
-  toggle.addEventListener('click', () => setNav(!nav.classList.contains('is-open')));
-  nav.addEventListener('click', e => { if (e.target.closest('a')) setNav(false); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && nav.classList.contains('is-open')) { setNav(false); toggle.focus(); } });
-
   // Stair model tabs (WAI-ARIA tabs pattern; arrows move across)
   const tabs = [...document.querySelectorAll('.model-tab')];
   const select = tab => tabs.forEach(t => {
@@ -1013,6 +649,39 @@
       select(next);
     });
   });
+
+  // Düz omurgalı: two tread types share one tab
+  // (the switch above the picture, and on wide screens the two sub-items under the tab)
+  const duzPanel = document.getElementById('p-duz'), duzButtons = document.querySelectorAll('.variant-switch button, .model-sub button');
+  duzButtons.forEach(btn => btn.addEventListener('click', () => {
+    if (btn.closest('.model-sub')) select(document.getElementById('t-duz'));
+    duzButtons.forEach(b => b.setAttribute('aria-pressed', b.dataset.variant === btn.dataset.variant));
+    duzPanel.querySelectorAll('.variant').forEach(v => { v.hidden = v.dataset.variant !== btn.dataset.variant; });
+  }));
+
+  // Side-scrolling strips (catalogue, stair pictures): the arrows move one item
+  document.querySelectorAll('.pager').forEach(pager => {
+    const track = pager.parentElement.closest('section, .slides').querySelector(pager.dataset.track);
+    const sync = () => {
+      const [prev, next] = pager.querySelectorAll('button');
+      prev.disabled = track.scrollLeft < 4;
+      next.disabled = track.scrollLeft + track.clientWidth > track.scrollWidth - 4;
+    };
+    pager.addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      const item = track.firstElementChild, gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+      track.scrollBy({ left: +btn.dataset.dir * (item.offsetWidth + gap), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    });
+    track.addEventListener('scroll', sync, { passive: true });
+    addEventListener('resize', sync);
+    sync();
+  });
+
+  // Asma kat card: tap or press to turn it over
+  document.querySelectorAll('.flip__card').forEach(card => card.addEventListener('click', () => {
+    card.setAttribute('aria-pressed', card.getAttribute('aria-pressed') !== 'true');
+  }));
 
   // Services: the sticky picture follows whichever row is closest to the middle of the screen
   const svcPhoto = document.getElementById('svc-photo'), svcCaption = document.getElementById('svc-caption');
@@ -1057,6 +726,10 @@
     if (chip) chip.checked = true;
   }));
 
+  // ?is=… (links from the sub-pages) picks that job in the quote form
+  const wantedJob = new URLSearchParams(location.search).get('is');
+  if (wantedJob) document.querySelectorAll('#quote-form input[name="is"]').forEach(i => { if (i.value === wantedJob) i.checked = true; });
+
   // Quote form → a ready-to-send WhatsApp message
   document.getElementById('quote-form').addEventListener('submit', e => {
     e.preventDefault();
@@ -1085,7 +758,7 @@
 </script>
 
 <script type="module">
-  // FILM — an L-shaped spine staircase with a mezzanine, modelled in three.js and scrubbed by
+  // FILM — an L-shaped straight-spine staircase with a mezzanine, modelled in three.js and scrubbed by
   // page scroll: blueprint lines (Proje) → steel spine (Üretim) → oak treads, glass, room (Uygulama).
   const film = document.getElementById('film');
   if (!film.classList.contains('film--static')) {
@@ -1176,7 +849,8 @@
     };
 
     // ---- the model (metres): 18 risers of 18.9 cm over 340 cm, 27 cm going, 1 m wide ----
-    // Spine: 140 × 120 box section in a zigzag, an 8 mm saddle plate under each 45 mm oak tread.
+    // Spine: one straight, sloped 180 × 140 box beam per flight; a short bracket and an 8 mm saddle
+    // plate under each 45 mm oak tread. The landing sits on a 100 × 100 post.
     const R = 3.4 / 18, G = .27, W = 1, T = .045, P = .008, S = .12, B = .14;
     const X2 = 9 * G + W / 2;      // axis of the second flight
     const Z0 = -W / 2;             // where the second flight leaves the landing
@@ -1205,37 +879,55 @@
         add(new THREE.CylinderGeometry(.011, .011, .014, 6), null, steelMat(), 'steel', x + sx * dx, .019, z + sz * dz);
     };
 
-    // flight 1, rising along +x
-    steel(.26, .012, .26, S / 2, .006, 0);
-    nuts(S / 2, 0, .095, .095);
-    for (let i = 0; i < 9; i++) {
-      const n = i + 1, top = n * R - T - P, bottom = i ? i * R - T - P - S : .012;
-      steel(S, top - bottom, B, i * G + S / 2, (top + bottom) / 2, 0);
-      steel(G + S, S, B, i * G + (G + S) / 2, top - S / 2, 0);
-      steel(G * .8, P, W * .5, i * G + G / 2, top + P / 2, 0, 'steel', false);
-      tread(G + .03, W, i * G + G / 2 - .015, n * R - T / 2, 0);
-    }
-    // landing: the spine turns on a 100 × 100 post
+    // a sloped box beam from a to b ([x, y, z]); dir 'x' rises along +x, 'z' rises along -z
+    const SB = .18, slope = R / G, ang = Math.atan(slope), half = SB / 2 / Math.cos(ang);
+    const beam = (a, b, dir) => {
+      const len = Math.hypot(b[0] - a[0], b[1] - a[1], b[2] - a[2]);
+      const geo = dir === 'x' ? rbox(len, SB, B, .006).rotateZ(ang) : rbox(B, SB, len, .006).rotateX(ang);
+      const line = dir === 'x' ? new THREE.BoxGeometry(len, SB, B).rotateZ(ang) : new THREE.BoxGeometry(B, SB, len).rotateX(ang);
+      return add(geo, line, steelMat(), 'steel', (a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2);
+    };
+    // centre line of a flight's beam, sd metres along it, first tread on riser k0 + 1
+    const axis = (k0, sd) => (k0 + .5) * R + sd * slope - T - P - .05 - half;
+
+    // flight 1, rising along +x from the floor to the landing
     {
-      const top = 10 * R - T - P;
-      steel(S, S + R, B, 9 * G + S / 2, top - (S + R) / 2, 0);
-      steel(W / 2 + S / 2, S, B, 9 * G + (W / 2 + S / 2) / 2, top - S / 2, 0);
-      steel(B, S, W / 2 + B / 2, X2, top - S / 2, (B / 2 + Z0) / 2);
-      steel(.1, top - S - .012, .1, X2, (top - S + .012) / 2, 0);
+      const s0 = (SB / 2 - axis(0, 0)) / slope, s1 = 9 * G + .06;
+      beam([s0, axis(0, s0), 0], [s1, axis(0, s1), 0], 'x');
+      steel(.26, .012, .26, s0 + .08, .006, 0);
+      nuts(s0 + .08, 0, .095, .095);
+      for (let i = 0; i < 9; i++) {
+        const n = i + 1, sd = (i + .5) * G, under = n * R - T - P, beamTop = axis(0, sd) + half - .02;
+        steel(G * .45, under - beamTop, B * .9, sd, (under + beamTop) / 2, 0);
+        steel(G * .8, P, W * .5, sd, under + P / 2, 0, 'steel', false);
+        tread(G + .03, W, sd - .015, n * R - T / 2, 0);
+      }
+    }
+    // landing: a level frame on a 100 × 100 post; flight 1's beam hangs from its edge
+    {
+      const top = 10 * R, y = top - T - P - .06, x0 = 9 * G, x1 = 9 * G + W;
+      for (const z of [-W / 2 + .05, W / 2 - .05]) steel(W, .12, .1, X2, y, z);
+      for (const x of [x0 + .05, x1 - .05]) steel(.1, .12, W - .2, x, y, 0);
+      const hy = axis(0, 9 * G + .06) + half;
+      steel(B, y - .06 - hy + .02, .1, x0 + .06, (y - .06 + hy) / 2, 0);
+      steel(.1, y - .06 - .012, .1, X2, (y - .06 + .012) / 2, 0);
       steel(.22, .012, .22, X2, .006, 0);
       nuts(X2, 0, .08, .08);
-      steel(W * .6, P, W * .6, X2, top + P / 2, 0, 'steel', false);
-      tread(W, W, X2, 10 * R - T / 2, 0);
+      steel(W * .6, P, W * .6, X2, top - T - P / 2, 0, 'steel', false);
+      tread(W, W, X2, top - T / 2, 0);
     }
-    // flight 2, rising along -z; its last spine segment bolts to the mezzanine beam
-    for (let j = 0; j < 7; j++) {
-      const n = 11 + j, zs = Z0 - j * G, top = n * R - T - P, len = j < 6 ? G + S : G - .012;
-      steel(B, S + R, S, X2, top - (S + R) / 2, zs - S / 2);
-      steel(B, S, len, X2, top - S / 2, zs - len / 2);
-      steel(W * .5, P, G * .8, X2, top + P / 2, zs - G / 2, 'steel', false);
-      tread(G + .03, W, X2, n * R - T / 2, zs - G / 2 + .015, Math.PI / 2);
+    // flight 2, rising along -z from the landing; its beam bolts to the mezzanine beam
+    {
+      const k0 = 10, s1 = 7 * G;
+      beam([X2, axis(k0, -.04), Z0 + .04], [X2, axis(k0, s1), Z0 - s1], 'z');
+      for (let j = 0; j < 7; j++) {
+        const n = 11 + j, sd = (j + .5) * G, zs = Z0 - sd, under = n * R - T - P, beamTop = axis(k0, sd) + half - .02;
+        steel(B * .9, under - beamTop, G * .45, X2, (under + beamTop) / 2, zs);
+        steel(W * .5, P, G * .8, X2, under + P / 2, zs, 'steel', false);
+        tread(G + .03, W, X2, n * R - T / 2, zs + .015, Math.PI / 2);
+      }
+      steel(B + .08, SB + .1, .012, X2, axis(k0, s1), ZF + .006);
     }
-    steel(B + .08, S + .1, .012, X2, 17 * R - T - P - S / 2, ZF + .006);
 
     // mezzanine: IPE 270 edge beam on two 120 × 120 columns under a concrete slab
     const ipe = (h, b, tw, tf) => {

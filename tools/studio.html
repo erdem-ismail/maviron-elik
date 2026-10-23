@@ -28,7 +28,7 @@ import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 
 const model = new URLSearchParams(location.search).get('model') || 'duz';
 // everything shown in the services section stands on the same seamless sweep
-const structure = ['bungalov', 'cati', 'carport', 'depo', 'merdiven', 'asmakat', 'yangin'].includes(model);
+const structure = ['bungalov', 'cati', 'carport', 'depo', 'merdiven', 'asmakat', 'yangin', 'cati-tek', 'cati-besik'].includes(model) || model.startsWith('kork-');
 const canvas = document.querySelector('canvas');
 const [WIDTH, HEIGHT] = (new URLSearchParams(location.search).get('size') || '1500x1000').split('x').map(Number); // ?size=1000x1250 for portrait
 canvas.style.width = `${WIDTH}px`;
@@ -70,7 +70,7 @@ const inoxMat = new THREE.MeshStandardMaterial({ color: '#dfe3e8', metalness: 1,
 const slabMat = new THREE.MeshStandardMaterial({ color: '#d9d6cf', roughness: .92 });
 const wallMat = new THREE.MeshStandardMaterial({ color: '#e4e3e0', roughness: .94 });
 const darkMat = new THREE.MeshStandardMaterial({ color: '#141517', roughness: .55, envMapIntensity: .4 });
-if (structure) Object.assign(glassFace, { opacity: .08, envMapIntensity: 1 });
+if (structure) Object.assign(glassFace, model === 'kork-cam' ? { opacity: .16, color: new THREE.Color('#bcd8cc'), envMapIntensity: 0, clearcoat: 0 } : { opacity: .08, envMapIntensity: 1 });
 // concrete for footings, from the floor maps at a 1:1 scale
 const footMaps = { map: tex('floor-diff', true), roughnessMap: tex('floor-rough'), normalMap: tex('floor-nor') };
 const footMat = new THREE.MeshStandardMaterial({ ...footMaps, color: '#ece9e3', roughness: 1 });
@@ -129,21 +129,63 @@ const slopedGlass = (n, perPanel, base, x, z, rotY, out) => {
 };
 const slab = (x0, x1, z0, z1, top) => mesh(new THREE.BoxGeometry(x1 - x0, .22, z1 - z0), slabMat, (x0 + x1) / 2, top - .11, (z0 + z1) / 2);
 
-// ---- the five models (metres) ----
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+// a straight member from a to b; 'box' w × h section or an I-section of height h, flange w
+const member = (a, b, w, h, kind = 'box', mat = steelMat) => {
+  const len = a.distanceTo(b);
+  let geo;
+  if (kind === 'I') {
+    const s = new THREE.Shape(), x = w / 2, y = h / 2, t = Math.max(.006, h * .025), f = Math.max(.008, h * .04);
+    [[-x, -y], [x, -y], [x, -y + f], [t, -y + f], [t, y - f], [x, y - f], [x, y], [-x, y], [-x, y - f], [-t, y - f], [-t, -y + f], [-x, -y + f]]
+      .forEach(([u, v], k) => k ? s.lineTo(u, v) : s.moveTo(u, v));
+    geo = new THREE.ExtrudeGeometry(s, { depth: len, bevelEnabled: false });
+  } else {
+    geo = rbox(w, h, len, .004);
+    geo.translate(0, 0, len / 2);
+  }
+  const m = new THREE.Mesh(geo, mat);
+  m.position.copy(a);
+  m.lookAt(b);
+  m.castShadow = m.receiveShadow = true;
+  scene.add(m);
+  return m;
+};
+// ---- the stair models (metres) ----
 const R = 3.2 / 17, G = .27, W = .95, T = .045, P = .008, S = .12, B = .14;
 let shot; // [camera position, look-at, fov]
 
-// zigzag spine along +x (dir 1) or -x (dir -1) from x0, steps n, first tread top at (k0 + 1) * R, at depth z
-const spineRun = (x0, z, n, k0, dir, withTreads = true) => {
+// straight spine: one sloped box beam under the tread centres, with a short bracket and an 8 mm
+// saddle plate under every tread. o = where the first riser starts, d = horizontal unit direction,
+// n treads, the first one landing on riser k0 + 1. Returns the beam's top end.
+const SB = .18, ROT = d => d.x ? (d.x > 0 ? 0 : Math.PI) : (d.z < 0 ? Math.PI / 2 : -Math.PI / 2);
+const along = (o, d, sd, y) => V(o.x + d.x * sd, y, o.z + d.z * sd);
+const straightRun = (o, d, n, k0, { thick = T, mat = null, toFloor = k0 === 0, end = n * G + .02, treads = true } = {}) => {
+  const slope = R / G, half = SB / 2 / Math.cos(Math.atan(slope)), gap = .05;
+  const yb = sd => (k0 + .5) * R + sd * slope - thick - P - gap - half;
+  const s0 = toFloor ? (SB / 2 - yb(0)) / slope : -.04;
+  member(along(o, d, s0, yb(s0)), along(o, d, end, yb(end)), B, SB);
+  if (toFloor) plate(o.x + d.x * (s0 + .08), o.z + d.z * (s0 + .08));
   for (let i = 0; i < n; i++) {
-    const k = k0 + i + 1, top = k * R - T - P, bottom = i || k0 ? (k - 1) * R - T - P - S : .012;
-    const xa = x0 + dir * i * G;
-    steel(S, top - bottom, B, xa + dir * S / 2, (top + bottom) / 2, z);
-    steel(G + S, S, B, xa + dir * (G + S) / 2, top - S / 2, z);
-    steel(G * .8, P, W * .5, xa + dir * G / 2, top + P / 2, z);
-    if (withTreads) tread(G + .03, T, W, xa + dir * (G / 2 - .015), k * R - T / 2, z);
+    const k = k0 + i + 1, sd = (i + .5) * G, under = k * R - thick - P, beamTop = yb(sd) + half - .02;
+    const c = along(o, d, sd, 0);
+    mesh(rbox(G * .45, under - beamTop, B * .9, .004), steelMat, c.x, (under + beamTop) / 2, c.z, ROT(d));
+    mesh(rbox(G * .8, P, W * .5, .002), steelMat, c.x, under + P / 2, c.z, ROT(d));
+    if (treads) {
+      const t = along(o, d, sd - .015, 0);
+      const m = tread(G + .03, thick, W, t.x, k * R - thick / 2, t.z, ROT(d));
+      if (mat) m.material = mat;
+    }
   }
+  return along(o, d, end, yb(end) + half);
 };
+// level frame under a landing: four edge beams and a post to the floor
+const landingFrame = (x0, x1, z0, z1, top, post) => {
+  const y = top - P - .06;
+  for (const z of [z0 + .06, z1 - .06]) member(V(x0, y, z), V(x1, y, z), .1, .12);
+  for (const x of [x0 + .06, x1 - .06]) member(V(x, y, z0), V(x, y, z1), .1, .12);
+  if (post) { const [px, pz] = post; member(V(px, .012, pz), V(px, y - .06, pz), .1, .1); plate(px, pz, .22); }
+};
+const hanger = (pt, top) => member(pt, V(pt.x, top - P - .12, pt.z), B, .1);
 
 const back = (z, w = 30) => {
   if (structure) return;
@@ -161,57 +203,96 @@ if (model === 'konsol') {
   slab(n * G, n * G + 2.5, -W / 2, 2.2, (n + 1) * R);
   slopedGlass(n, 4, R, 0, W / 2 + GAP, 0, 1);
   shot = [[7.6, 1.6, 7.6], [2.3, 1.5, -.2], 34];
-} else if (model === 'duz') {
+} else if (model === 'duz' || model === 'duz-kutu') {
   const n = 15;
   back(-1.6);
-  plate(S / 2, 0);
-  spineRun(0, 0, n, 0, 1);
+  straightRun(V(0, 0, 0), V(1, 0, 0), n, 0, model === 'duz-kutu' ? { thick: .085 } : {});
   slab(n * G, n * G + 2.5, -1.6, 1.4, (n + 1) * R);
   slopedGlass(n, 5, R, 0, W / 2 + GAP, 0, 1);
   shot = [[7.4, 1.6, 7.8], [2.1, 1.45, -.3], 34];
 } else if (model === 'l' || model === 'merdiven') {
   const X2 = 8 * G + W / 2, Z0 = -W / 2;
   back(Z0 - 6 * G - 1.4);
-  plate(S / 2, 0);
-  spineRun(0, 0, 8, 0, 1);
-  const top = 9 * R - T - P;
-  steel(S, S + R, B, 8 * G + S / 2, top - (S + R) / 2, 0);
-  steel(W / 2 + S / 2, S, B, 8 * G + (W / 2 + S / 2) / 2, top - S / 2, 0);
-  steel(B, S, W / 2 + B / 2, X2, top - S / 2, (B / 2 + Z0) / 2);
-  steel(.1, top - S - .012, .1, X2, (top - S + .012) / 2, 0);
-  plate(X2, 0, .22);
+  hanger(straightRun(V(0, 0, 0), V(1, 0, 0), 8, 0, { end: 8 * G + .06 }), 9 * R);
+  landingFrame(8 * G, 8 * G + W, -W / 2, W / 2, 9 * R, [X2, 0]);
   tread(W, T, W, X2, 9 * R - T / 2, 0);
-  for (let j = 0; j < 7; j++) {
-    const k = 10 + j, zs = Z0 - j * G, t2 = k * R - T - P;
-    steel(B, S + R, S, X2, t2 - (S + R) / 2, zs - S / 2);
-    steel(B, S, G + S, X2, t2 - S / 2, zs - (G + S) / 2);
-    steel(W * .5, P, G * .8, X2, t2 + P / 2, zs - G / 2);
-    tread(G + .03, T, W, X2, k * R - T / 2, zs - G / 2 + .015, Math.PI / 2);
-  }
+  straightRun(V(X2, 0, Z0), V(0, 0, -1), 7, 9, { end: 7 * G });
   slab(-1.5, 8 * G + W, Z0 - 7 * G - 1.4, Z0 - 7 * G, 17 * R);
   slopedGlass(8, 4, R, 0, W / 2 + GAP, 0, 1);
   pane([[8 * G + .01, 9 * R - .2], [8 * G + W - .01, 9 * R - .2], [8 * G + W - .01, 9 * R + .95], [8 * G + .01, 9 * R + .95]], 0, W / 2 + GAP, 0, 1,
     [[8 * G + .13, 9 * R - .07], [8 * G + W - .13, 9 * R - .07]]);
   slopedGlass(7, 4, 10 * R, 8 * G - GAP - GT, Z0, Math.PI / 2, -1);
   shot = model === 'merdiven' ? [[6.8, 4.6, 7.2], [1.6, 1.5, -1.1], 36] : [[6.2, 1.6, 5.4], [1.5, 1.5, -1.0], 38];
-} else if (model === 'z') {
-  // up along +x to a landing, then back along -x on a second spine behind the first
+} else if (model === 'u') {
+  // up along +x to a wide landing, then back along -x beside the first flight
   const n1 = 8, n2 = 8, zb = -(W + .06), XL = n1 * G;
   back(zb - W / 2 - .9);
-  plate(S / 2, 0);
-  spineRun(0, 0, n1, 0, 1);
-  const top = (n1 + 1) * R - T - P;
-  steel(S, S + R, B, XL + S / 2, top - (S + R) / 2, 0);
-  steel(W * .55, S, B, XL + W * .55 / 2, top - S / 2, 0);
-  steel(B, S, W + .06 + B, XL + W / 2, top - S / 2, zb / 2);
-  steel(W * .55, S, B, XL + W * .55 / 2, top - S / 2, zb);
-  for (const z of [0, zb]) { steel(.1, top - S - .012, .1, XL + W - .1, (top - S + .012) / 2, z); plate(XL + W - .1, z, .22); }
+  hanger(straightRun(V(0, 0, 0), V(1, 0, 0), n1, 0, { end: XL + .06 }), (n1 + 1) * R);
+  landingFrame(XL, XL + W, zb - W / 2, W / 2, (n1 + 1) * R, [XL + W - .1, W / 2 - .1]);
+  plate(XL + W - .1, zb - W / 2 + .1, .22); member(V(XL + W - .1, .012, zb - W / 2 + .1), V(XL + W - .1, (n1 + 1) * R - P - .12, zb - W / 2 + .1), .1, .1);
   tread(W, T, 2 * W + .06, XL + W / 2, (n1 + 1) * R - T / 2, zb / 2);
-  spineRun(XL, zb, n2, n1 + 1, -1);
+  straightRun(V(XL, 0, zb), V(-1, 0, 0), n2, n1 + 1, { end: n2 * G });
   slab(-2.2, 0, zb - W / 2 - .9, zb + W / 2, (n1 + n2 + 2) * R);
   slopedGlass(n1, 4, R, 0, W / 2 + GAP, 0, 1);
   pane([[XL + .01, (n1 + 1) * R - .2], [XL + W, (n1 + 1) * R - .2], [XL + W, (n1 + 1) * R + .95], [XL + .01, (n1 + 1) * R + .95]], 0, W / 2 + GAP, 0, 1, [[XL + .13, (n1 + 1) * R - .07], [XL + W - .13, (n1 + 1) * R - .07]]);
   shot = [[-2.2, 2.5, 6.6], [1.5, 1.7, -.6], 38];
+} else if (model === 'z') {
+  // two quarter turns: +x, landing, -z, landing, +x again — a Z in plan
+  const n1 = 5, n2 = 4, n3 = 5, X2 = n1 * G + W / 2, Zl = -W / 2 - n2 * G - W / 2;
+  back(Zl - W / 2 - 1.2);
+  hanger(straightRun(V(0, 0, 0), V(1, 0, 0), n1, 0, { end: n1 * G + .06 }), (n1 + 1) * R);
+  landingFrame(n1 * G, n1 * G + W, -W / 2, W / 2, (n1 + 1) * R, [X2, 0]);
+  tread(W, T, W, X2, (n1 + 1) * R - T / 2, 0);
+  const k2 = n1 + 1;
+  hanger(straightRun(V(X2, 0, -W / 2), V(0, 0, -1), n2, k2, { end: n2 * G + .06 }), (k2 + n2 + 1) * R);
+  const k3 = k2 + n2 + 1;
+  landingFrame(X2 - W / 2, X2 + W / 2, Zl - W / 2, Zl + W / 2, k3 * R, [X2, Zl]);
+  tread(W, T, W, X2, k3 * R - T / 2, Zl);
+  straightRun(V(X2 + W / 2, 0, Zl), V(1, 0, 0), n3, k3, { end: n3 * G });
+  slab(X2 + W / 2 + n3 * G, X2 + W / 2 + n3 * G + 2.2, Zl - W / 2 - 1.2, Zl + W / 2 + .2, (k3 + n3 + 1) * R);
+  slopedGlass(n1, 5, R, 0, W / 2 + GAP, 0, 1);
+  shot = [[7.2, 3.4, 6.4], [2.4, 1.5, -1.4], 38];
+} else if (model === 'celik') {
+  // steel profile stair: two side stringers (channel sections) with the treads between them
+  const n = 15, len = n * G, ang = Math.atan2(R, G);
+  back(-1.6);
+  for (const z of [-W / 2 - .03, W / 2 + .03]) {
+    member(V(-.12, .12, z), V(len + .05, (n + .5) * R - .1, z), .06, .26);
+    plate(-.02, z, .2);
+  }
+  for (let i = 0; i < n; i++) {
+    const k = i + 1;
+    tread(G + .02, T, W, (i + .5) * G, k * R - T / 2, 0);
+    for (const z of [-W / 2 + .02, W / 2 - .02]) mesh(rbox(G * .7, .05, .04, .004), steelMat, (i + .5) * G, k * R - T - .025, z);
+  }
+  // metal railing on the open side: posts every third tread, a top rail and a mid rail
+  for (let i = 0; i <= n; i += 3) member(V(i * G, i * R + .12, W / 2 + .07), V(i * G, i * R + 1.05, W / 2 + .07), .04, .04);
+  member(V(0, .12 + .93, W / 2 + .07), V(len, n * R + 1.05, W / 2 + .07), .05, .05);
+  member(V(0, .12 + .45, W / 2 + .07), V(len, n * R + .57, W / 2 + .07), .025, .025);
+  slab(len, len + 2.5, -1.6, 1.4, (n + 1) * R);
+  shot = [[7.4, 1.6, 7.8], [2.1, 1.45, -.3], 34];
+} else if (model.startsWith('kork-')) {
+  // one railing type on a short straight stair, seen close
+  const n = 10, type = model.slice(5);
+  straightRun(V(0, 0, 0), V(1, 0, 0), n, 0);
+  slab(n * G, n * G + 2, -1.2, 1, (n + 1) * R);
+  const zr = W / 2 + .05;
+  if (type === 'cam') slopedGlass(n, 5, R, 0, W / 2 + GAP, 0, 1);
+  if (type === 'metal') {
+    for (let i = 0; i < n; i++) for (const f of [.25, .75]) { const x = (i + f) * G; member(V(x, (i + 1) * R, zr), V(x, (i + 1) * R + .95, zr), .02, .02); }
+    member(V(0, R + .95, zr), V(n * G, (n + 1) * R + .95, zr), .05, .012);
+  }
+  if (type === 'lama') {
+    for (let i = 0; i <= n; i += 2) member(V(i * G, (i + .5) * R, zr), V(i * G, (i + .5) * R + .95, zr), .04, .04);
+    for (const h of [.25, .5, .75, .97]) member(V(0, .5 * R + h, zr), V(n * G, (n + .5) * R + h, zr), .04, .01);
+  }
+  if (type === 'separator') {
+    // floor-to-ceiling bars along the open side, a flat bar ties them at the top
+    const top = (n + 1) * R + .25;
+    for (let x = .1; x < n * G; x += .12) member(V(x, .012, zr + .04), V(x, top, zr + .04), .025, .025);
+    member(V(.05, top + .02, zr + .04), V(n * G, top + .02, zr + .04), .05, .04);
+  }
+  shot = type === 'separator' ? [[3.6, 2.1, 6.0], [1.45, 1.25, 0], 36] : [[3.2, 2.2, 5.4], [1.4, 1.2, 0], 36];
 } else if (model === 'doner') {
   // wedge treads around a central column, steel balusters and a helical handrail
   const n = 15, step = Math.PI * 2 / 12.5, r0 = .07, r1 = .85, cx = 0, cz = 0;
@@ -240,27 +321,6 @@ if (model === 'konsol') {
 let shadowSize = 6;
 
 // ---- steel structures for the services section: bungalov, çatı makası, carport, depo ----
-const V = (x, y, z) => new THREE.Vector3(x, y, z);
-// a straight member from a to b; 'box' w × h section or an I-section of height h, flange w
-const member = (a, b, w, h, kind = 'box', mat = steelMat) => {
-  const len = a.distanceTo(b);
-  let geo;
-  if (kind === 'I') {
-    const s = new THREE.Shape(), x = w / 2, y = h / 2, t = Math.max(.006, h * .025), f = Math.max(.008, h * .04);
-    [[-x, -y], [x, -y], [x, -y + f], [t, -y + f], [t, y - f], [x, y - f], [x, y], [-x, y], [-x, y - f], [-t, y - f], [-t, -y + f], [-x, -y + f]]
-      .forEach(([u, v], k) => k ? s.lineTo(u, v) : s.moveTo(u, v));
-    geo = new THREE.ExtrudeGeometry(s, { depth: len, bevelEnabled: false });
-  } else {
-    geo = rbox(w, h, len, .004);
-    geo.translate(0, 0, len / 2);
-  }
-  const m = new THREE.Mesh(geo, mat);
-  m.position.copy(a);
-  m.lookAt(b);
-  m.castShadow = m.receiveShadow = true;
-  scene.add(m);
-  return m;
-};
 // trapezoidal sheet from corner o, across U (ribs repeat along U) and along V (ribs run along V)
 const sheetMat = new THREE.MeshStandardMaterial({ color: '#3d4248', metalness: .15, roughness: .62, envMapIntensity: .45, side: THREE.DoubleSide });  // RAL 7016-ish
 const sheetLight = new THREE.MeshStandardMaterial({ color: '#aeb3b8', metalness: .5, roughness: .42, envMapIntensity: .6, side: THREE.DoubleSide }); // galvanised
@@ -342,6 +402,22 @@ if (model === 'bungalov') {
   sheet(V(SPAN / 2, chordY(SPAN / 2) + .16, .3), V(0, 0, -BAYS * BAY - .6), V(SPAN / 2 + .3, -RISE - .3 * RISE / (SPAN / 2), 0));
   mesh(new THREE.BoxGeometry(SPAN + 1.6, .04, BAYS * BAY + 1.6), footMat, SPAN / 2, -.016, -BAYS * BAY / 2).castShadow = false;
   shot = [[-6.5, 8.5, 11.5], [4, 2.3, -2.6], 38];
+} else if (model === 'cati-tek' || model === 'cati-besik') {
+  // mono-pitch or gable roof frame on IPE columns, purlins, part sheeted
+  const SPAN = 7, H0 = 3.2, BAYS = 3, BAY = 2.4, gable = model === 'cati-besik';
+  const rise = gable ? 1.4 : 1, roofY = x => gable ? H0 + rise * (1 - Math.abs(x - SPAN / 2) / (SPAN / 2)) : H0 + rise * (1 - x / SPAN);
+  for (let b = 0; b <= BAYS; b++) {
+    const z = -b * BAY;
+    for (const x of [0, SPAN]) column(x, z, roofY(x), .14, 'I');
+    if (gable) { member(V(0, roofY(0), z), V(SPAN / 2, roofY(SPAN / 2), z), .12, .22, 'I'); member(V(SPAN / 2, roofY(SPAN / 2), z), V(SPAN, roofY(SPAN), z), .12, .22, 'I'); }
+    else member(V(-.2, roofY(-.2), z), V(SPAN + .2, roofY(SPAN + .2), z), .12, .22, 'I');
+  }
+  for (let i = 0; i <= 7; i++) { const x = i * SPAN / 7; member(V(x, roofY(x) + .15, .3), V(x, roofY(x) + .15, -BAYS * BAY - .3), .05, .1); }
+  const zc = -BAYS * BAY - .3, L2 = BAYS * BAY + .6;
+  if (gable) sheet(V(SPAN / 2, roofY(SPAN / 2) + .23, .3), V(0, 0, -L2), V(SPAN / 2 + .3, -rise - .3 * rise / (SPAN / 2), 0));
+  else sheet(V(-.3, roofY(-.3) + .23, .3), V(0, 0, -L2 * .6), V(SPAN + .6, -rise - .6 * rise / SPAN, 0));
+  mesh(new THREE.BoxGeometry(SPAN + 1.6, .04, BAYS * BAY + 1.6), footMat, SPAN / 2, -.016, -BAYS * BAY / 2).castShadow = false;
+  shot = [[-6.5, 7.5, 9.5], [3.5, 2.2, -3.6], 38];
 } else if (model === 'carport') {
   // 3 × 6 m single-car carport, 100 × 100 posts, mono-pitch roof
   const L = 6, D = 3.2, HF = 2.55, HB = 2.3;
@@ -428,8 +504,7 @@ if (model === 'bungalov') {
 } else if (model === 'asmakat') {
   // steel mezzanine: IPE frame on four columns, oak deck, glass guard, straight spine stair up to it
   const n = 15, X0 = n * G, LX = 5.6, LZ = 4, TOP = (n + 1) * R, Z1 = 1.4;
-  plate(S / 2, 0);
-  spineRun(0, 0, n, 0, 1);
+  straightRun(V(0, 0, 0), V(1, 0, 0), n, 0);
   slopedGlass(n, 5, R, 0, W / 2 + GAP, 0, 1);
   const yb = TOP - .06 - .135;
   for (const x of [X0 + .12, X0 + LX - .12]) for (const z of [Z1 - .12, Z1 - LZ + .12]) column(x, z, yb - .135, .12);
@@ -505,7 +580,7 @@ composer.addPass(new RenderPass(scene, camera));
 const gtao = new GTAOPass(scene, camera, WIDTH, HEIGHT);
 gtao.updateGtaoMaterial({ radius: .3, distanceExponent: 1.5, thickness: 1, scale: 1.2, samples: 24 });
 gtao.updatePdMaterial({ lumaPhi: 10, depthPhi: 2, normalPhi: 3, radius: 6, rings: 2, samples: 16 });
-composer.addPass(gtao);
+if (!/[?&]noao/.test(location.search)) composer.addPass(gtao); // ?noao to compare without ambient occlusion
 composer.addPass(new OutputPass());
 
 composer.setSize(WIDTH, HEIGHT);

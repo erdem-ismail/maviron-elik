@@ -2,21 +2,30 @@
 
 Static one-page demo for Maviron Çelik Mühendislik (@mavironcelik: çelik merdiven, asma kat,
 villa, bungalov, çatı, endüstriyel çelik yapılar). Same idea as the Oha Burger site: the hero is
-a film scrubbed by page scroll, followed by stair models, services, projects, process and a quote
-form. No build step: `index.html` + `img/` is the whole site.
+a film scrubbed by page scroll, followed by stair models, a stair catalogue, railings, services,
+projects, process, the configurator and a contact / quote form. No build step: `index.html`,
+`catilar.html`, `yangin-merdiveni.html`, `css/site.css`, `js/` and `img/` are the whole site.
+
+- `css/site.css` is shared by all pages; `js/nav.js` (mobile menu, quick-contact buttons) too.
+- The sub-pages reuse the home page's header, footer and quick-contact buttons:
+  after changing those in `index.html`, run `python _src/make_pages.py` (kept out of git with `_src/`)
+  or copy the blocks by hand.
+- Quick contact, bottom right: WhatsApp, Instagram and phone are live; Facebook is a disabled
+  placeholder until the page exists. Up to 1024 px they fold behind one button.
+- `index.html?is=Çatı#teklif` (any job name from the form) preselects that job in the quote form.
 
 ## The film
 
 Unlike Oha Burger (a frame sequence of AI video), this film is a live three.js model of an
-L-shaped spine staircase with a mezzanine, built in code inside `index.html`:
+L-shaped straight-spine staircase with a mezzanine, built in code inside `index.html`:
 
 1. blueprint lines plot in on load, dimension callouts appear (Keşif & proje)
-2. the zigzag steel spine arrives piece by piece, glowing like fresh welds and cooling (Üretim)
+2. the straight steel spine (one sloped beam per flight) arrives piece by piece, glowing like fresh welds and cooling (Üretim)
 3. oak treads drop in, the room switches from blueprint navy to daylight, glass goes in (Uygulama)
 4. labelled anatomy, then a wide closing shot with the CTA
 
 - three.js 0.180 comes from jsDelivr via the import map; it is only downloaded when the film runs.
-- Realism: rounded-edge parts, 140 × 120 spine with 8 mm saddle plates under 45 mm oak treads,
+- Realism: rounded-edge parts, a 180 × 140 sloped box spine with a bracket and an 8 mm saddle plate under each 45 mm oak tread,
   base plates with nuts, an IPE 270 mezzanine beam, 17.52 mm glass (green edges) on stainless point
   fixings, a steel-framed window as the light source, soft shadows and, on screens wider than 760 px,
   ground-truth ambient occlusion (GTAO). Render resolution is capped at 1.5× for performance.
@@ -34,13 +43,16 @@ L-shaped spine staircase with a mezzanine, built in code inside `index.html`:
 
 ## Tasarla (configurator)
 
-`js/configurator.js`, loaded when the section is ~600 px away. Floor height (240–420 cm), model,
-tread (meşe, ceviz, çelik, beton), railing (cam, dikme) and steel colour rebuild the stair in 3D with
-the film's materials. Risers: n = round(H / 18 cm), kept between 16.5 and 19 cm; going from
+`js/configurator.js`, loaded when the section is ~600 px away. Floor height (240–420 cm), model
+(konsol, düz omurgalı, L, Z, U, spiral), tread (meşe, ceviz, çelik, mermer), railing (cam, metal,
+separatör) and steel colour rebuild the stair in 3D with the film's materials. Every model arrives on
+a 22 cm platform; two dimension lines run from it to the floor, Hmax (platform top = floor height)
+and h (platform underside), with HTML tags placed on the 3D points. Spines are straight sloped beams;
+landings sit on posts. Risers: n = round(H / 18 cm), kept between 16.5 and 19 cm; going from
 2h + g ≈ 63 cm, clamped to 25–30 cm. The plan size is the built model's bounding box. "Teklif al"
 opens WhatsApp with the whole configuration. Drag (or arrow keys on the focused view) turns it;
 it sways slowly until touched (not with reduced motion). Without WebGL2 a still render shows and
-the numbers and message still work. A spiral always gets steel balusters.
+the numbers and message still work. A spiral always gets metal balusters (cam and separatör are disabled for it).
 
 The film also has weld sparks during Üretim (each spark is a function of film time, so scrubbing
 backwards works) and a warmer, lower sun over the closing shots.
@@ -53,9 +65,16 @@ backwards works) and a warmer, lower sun over the closing shots.
 - Project photos in `img/` (Projeler only; the services section uses renders): thumbnails of their own Instagram posts (360–640 px). Each tile links
   to the original post. `img/mark.webp` and the icons come from the 150 px profile picture.
 - Stair model diagrams: `python tools/make_models.py` writes `img/models/*.svg` (shown as insets).
-- Stair model renders (`img/models/*.webp`): `tools/studio.html?model=konsol|duz|l|z|doner` builds
+- Stair model renders (`img/models/*.webp`): `tools/studio.html?model=konsol|duz|duz-kutu|l|z|u|celik|doner`
+  (doner is saved as `spiral.webp`) builds
   each model with the film's materials and light; serve the project root, wait for `window.ready`,
   screenshot the 1500 × 1000 canvas, save at 1200 × 800 WebP.
+- Railing renders (`img/korkuluk/`): `?model=kork-cam|kork-metal|kork-separator|kork-lama`; roof
+  renders for `catilar.html` (`img/catilar/`): `?model=cati-tek|cati-besik`. Both stand on the sweep.
+  `&noao` renders without ambient occlusion.
+- Merdiven kataloğu: their own Instagram projects (MK-01…06); sizes say "Yakında" until Maviron
+  sends them, and the PDF button is a disabled placeholder. The Çelik merdiven service row has a
+  side-scrolling picture strip (model renders for now; swap in their photos when they arrive).
 - Process images (`img/steps/`) are frames of the film (t = 2.7, 0.4, 5.0 and 9.8), captured with
   the copy overlays hidden.
 - Service renders (`img/services/*.webp`, 800 × 800), one per row so the section reads as one set:
@@ -70,6 +89,8 @@ backwards works) and a warmer, lower sun over the closing shots.
 ## Before going live
 
 - Ask Maviron for full-resolution photos and a vector logo; the Instagram thumbnails are small.
+- Waiting on Maviron: Çelik merdiven strip photos, catalogue sizes / PDF, the yangın merdiveni page
+  text, roof photos and the Facebook page address.
 - Confirm: service area (İstanbul ve Kocaeli is inferred from project locations), "own workshop /
   own installation team" wording, and the example dimensions in the film (illustrative, 340 cm).
 - Live demo: https://erdemakkas1-ops.github.io/maviron-elik/ (GitHub Pages, served from the

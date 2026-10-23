@@ -1,7 +1,7 @@
-"""Draws the five stair-model diagrams in img/models/ (run: python tools/make_models.py).
+"""Draws the stair-model diagrams in img/models/ (run: python tools/make_models.py).
 
-Line drawings in the site's ink/oak/steel palette: elevations for konsol, düz omurgalı and Z,
-plans for L and döner. No text inside the SVGs — captions live in index.html.
+Line drawings in the site's ink/oak/steel palette: elevations for konsol, düz omurgalı (both
+tread types) and çelik profilli, plans for L, Z, U and spiral. No text inside the SVGs — captions live in index.html.
 """
 import math
 from pathlib import Path
@@ -32,15 +32,14 @@ def treads_elev(x0, y0, n, go, rise, depth=8, nose=0):
     return "".join(out), rects
 
 
-def spine(x0, y0, n, go, rise, depth=8, sx=1):
-    """Zigzag steel spine under the treads (sx=-1 runs right-to-left)."""
-    pts = [(x0, y0)]
-    for i in range(n):
-        x = x0 + sx * i * go
-        top = y0 - (i + 1) * rise + depth
-        pts += [(x, top), (x + sx * go, top)]
-    d = "M" + " L".join(f"{x:.1f} {y:.1f}" for x, y in pts)
-    return f'<path d="{d}" stroke="{STEEL}" stroke-width="9" stroke-linejoin="miter"/>'
+def spine(x0, y0, n, go, rise, depth=8):
+    """Straight sloped steel spine under the tread centres, with a short bracket to each tread."""
+    y = lambda x: y0 - (x - x0) / go * rise + depth + 6 - rise / 2
+    xa, xb = x0 + 4, x0 + n * go
+    brackets = "".join(
+        f'<path d="M{x0 + (i + .5) * go:.1f} {y0 - (i + 1) * rise + depth:.1f}V{y(x0 + (i + .5) * go):.1f}" stroke="{STEEL}" stroke-width="5"/>'
+        for i in range(n))
+    return brackets + f'<path d="M{xa:.1f} {y0:.1f}L{xb:.1f} {y(xb):.1f}" stroke="{STEEL}" stroke-width="11"/>'
 
 
 def konsol():
@@ -52,35 +51,71 @@ def konsol():
     return svg(wall + floor() + anchors + t)
 
 
-def duz():
-    s = spine(96, 292, 12, 26, 20)
-    t, _ = treads_elev(96, 292, 12, 26, 20, nose=6)
+def duz(depth=8):
+    s = spine(96, 292, 12, 26, 20, depth)
+    t, _ = treads_elev(96, 292, 12, 26, 20, depth, nose=6)
     plate = f'<rect x="84" y="286" width="26" height="6" fill="{STEEL}"/>'
     top = f'<path d="M408 52H456" stroke="{INK}" stroke-width="2"/>'
     return svg(floor() + top + s + plate + t)
 
 
+def plan(runs, go=28, wid=64):
+    """Plan of straight flights joined by square landings. runs: list of (steps, dx, dy) unit steps."""
+    out = [f'<rect x="24" y="24" width="432" height="272" fill="{WALL}" stroke="none"/>']
+    x, y = runs[0][3], runs[0][4]
+    path = []
+    for k, (n, dx, dy, *_rest) in enumerate(runs):
+        for i in range(n):
+            if dx: out.append(f'<rect x="{x + (i * go if dx > 0 else -(i + 1) * go)}" y="{y - wid / 2}" width="{go}" height="{wid}" fill="{OAK}" stroke="{INK}" stroke-width="1.5"/>')
+            else: out.append(f'<rect x="{x - wid / 2}" y="{y + (i * go if dy > 0 else -(i + 1) * go)}" width="{wid}" height="{go}" fill="{OAK}" stroke="{INK}" stroke-width="1.5"/>')
+        path.append((x, y))
+        x, y = x + dx * n * go, y + dy * n * go
+        if k < len(runs) - 1:
+            ndx, ndy = runs[k + 1][1], runs[k + 1][2]
+            lx = x if dx > 0 else x - wid if dx < 0 else x - wid / 2
+            ly = y if dy > 0 else y - wid if dy < 0 else y - wid / 2
+            out.append(f'<rect x="{lx}" y="{ly}" width="{wid}" height="{wid}" fill="{OAK}" stroke="{INK}" stroke-width="1.5"/>')
+            cx, cy = lx + wid / 2, ly + wid / 2
+            path.append((cx, cy))
+            x, y = cx + ndx * wid / 2, cy + ndy * wid / 2
+            if ndx and dx: y = cy
+    path.append((x, y))
+    d = "M" + " L".join(f"{a:.0f} {b:.0f}" for a, b in path)
+    out.append(f'<path d="{d}" stroke="{STEEL}" stroke-width="3" stroke-dasharray="10 6"/>')
+    out.append(f'<circle cx="{path[0][0]:.0f}" cy="{path[0][1]:.0f}" r="5" fill="{STEEL}"/>')
+    return svg("".join(out))
+
+
 def zmodel():
-    # first flight up-right to a landing, second flight back up-left above it
-    r = 17
-    s1 = spine(70, 292, 7, 26, r)
-    t1, _ = treads_elev(70, 292, 7, 26, r, nose=6)
-    ly = 292 - 8 * r
-    landing = f'<rect x="252" y="{ly}" width="84" height="8" fill="{OAK}" stroke="{INK}" stroke-width="1.5"/>'
-    post = f'<path d="M318 {ly + 8}V292" stroke="{STEEL}" stroke-width="8"/>'
-    t2 = []
-    for i in range(7):
-        x = 226 - i * 26
-        y = ly - (i + 1) * r
-        t2.append(f'<rect x="{x}" y="{y}" width="32" height="8" fill="{OAK}" stroke="{INK}" stroke-width="1.5" opacity=".72"/>')
-    pts = [(260, ly)]
-    for i in range(7):
-        x = 252 - i * 26
-        top = ly - (i + 1) * r + 8
-        pts += [(x, top), (x - 26, top)]
-    s2 = '<path d="M' + " L".join(f"{x} {y}" for x, y in pts) + f'" stroke="{STEEL}" stroke-width="9" stroke-linejoin="miter" opacity=".72"/>'
-    top = f'<path d="M24 {ly - 7 * r}H70" stroke="{INK}" stroke-width="2"/>'
-    return svg(floor() + top + s2 + "".join(t2) + post + s1 + landing + t1)
+    # right, quarter turn up (away), quarter turn right again
+    return plan([(5, 1, 0, 40, 240), (3, 0, -1), (5, 1, 0)])
+
+
+def umodel():
+    # right to a wide landing, then back left beside the first flight
+    out = [f'<rect x="24" y="24" width="432" height="272" fill="{WALL}" stroke="none"/>']
+    go, wid, x0 = 28, 64, 80
+    for i in range(9):
+        out.append(f'<rect x="{x0 + i * go}" y="190" width="{go}" height="{wid}" fill="{OAK}" stroke="{INK}" stroke-width="1.5"/>')
+        out.append(f'<rect x="{x0 + (8 - i) * go}" y="{190 - wid - 6}" width="{go}" height="{wid}" fill="{OAK}" stroke="{INK}" stroke-width="1.5" opacity=".75"/>')
+    lx = x0 + 9 * go
+    out.append(f'<rect x="{lx}" y="{190 - wid - 6}" width="{wid}" height="{2 * wid + 6}" fill="{OAK}" stroke="{INK}" stroke-width="1.5"/>')
+    cy1, cy2, cx = 190 + wid / 2, 190 - 6 - wid / 2, lx + wid / 2
+    out.append(f'<path d="M{x0 + 8} {cy1}H{cx}V{cy2}H{x0 + 10}" stroke="{STEEL}" stroke-width="3" stroke-dasharray="10 6"/>')
+    out.append(f'<path d="M{x0 + 24} {cy2 - 8}L{x0 + 10} {cy2}L{x0 + 24} {cy2 + 8}" stroke="{STEEL}" stroke-width="3"/>')
+    out.append(f'<circle cx="{x0 + 8}" cy="{cy1}" r="5" fill="{STEEL}"/>')
+    return svg("".join(out))
+
+
+def celik():
+    # side channel stringer, treads between, metal railing
+    n, go, rise, x0 = 12, 26, 20, 96
+    t, _ = treads_elev(x0, 292, n, go, rise)
+    str_ = f'<path d="M{x0 - 6} 292L{x0 + n * go + 4} {292 - n * rise - 14}L{x0 + n * go + 4} {292 - n * rise + 8}L{x0 + 18} 292Z" fill="{STEEL}" stroke="{STEEL}" stroke-width="2"/>'
+    posts = "".join(f'<path d="M{x0 + i * go} {292 - i * rise - 10}v-62" stroke="{INK}" stroke-width="3"/>' for i in range(0, n + 1, 3))
+    rail = f'<path d="M{x0} {292 - 72}L{x0 + n * go} {292 - n * rise - 72}M{x0} {292 - 42}L{x0 + n * go} {292 - n * rise - 42}" stroke="{INK}" stroke-width="3"/>'
+    top = f'<path d="M408 52H456" stroke="{INK}" stroke-width="2"/>'
+    return svg(floor() + top + t + str_ + posts + rail)
 
 
 def lmodel():
@@ -101,7 +136,7 @@ def lmodel():
     return svg("".join(out))
 
 
-def doner():
+def spiral():
     cx, cy, r, r0 = 240, 162, 132, 14
     out = [f'<circle cx="{cx}" cy="{cy}" r="{r + 10}" stroke="{LINE}" stroke-width="1.5" stroke-dasharray="4 5"/>']
     n, sweep = 13, 330
@@ -120,6 +155,8 @@ def doner():
 
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
-    for name, fn in {"konsol": konsol, "duz-omurgali": duz, "l": lmodel, "z": zmodel, "doner": doner}.items():
+    models = {"konsol": konsol, "duz-omurgali": duz, "duz-kutu": lambda: duz(16), "l": lmodel, "z": zmodel,
+              "u": umodel, "celik": celik, "spiral": spiral}
+    for name, fn in models.items():
         (OUT / f"{name}.svg").write_text(fn(), encoding="utf-8")
         print(name)
