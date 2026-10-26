@@ -488,7 +488,6 @@ a.fab__btn:hover { transform: translateY(-2px); }
 .site-footer__row a { text-underline-offset: 4px; }
 .demo-note { font: 500 .72rem/1.6 var(--mono); letter-spacing: .04em; color: var(--muted); max-width: 72ch; margin-top: 22px; }
 
-.actionbar { display: none; }
 
 /* ---------- Reveal ---------- */
 @media (prefers-reduced-motion: no-preference) {
@@ -541,7 +540,6 @@ a.fab__btn:hover { transform: translateY(-2px); }
 
 /* ---------- Mobile ---------- */
 @media (max-width: 760px) {
-  body { padding-bottom: 76px; }
   :root { --header-h: 64px; }
   .brand img { width: 38px; height: 38px; }
   .brand span { font-size: .82rem; letter-spacing: .14em; }
@@ -605,17 +603,7 @@ a.fab__btn:hover { transform: translateY(-2px); }
   .form .row { grid-template-columns: minmax(0, 1fr); }
   .quote dl > div { grid-template-columns: 92px minmax(0, 1fr); }
 
-  .actionbar {
-    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px;
-    position: fixed; z-index: 60; left: 0; right: 0; bottom: 0;
-    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
-    background: rgba(20,27,37,.94); backdrop-filter: blur(10px);
-    border-top: 1px solid var(--line);
-  }
-  .actionbar .btn { min-height: 52px; padding: 0 8px; font-size: .86rem; gap: .4em; }
-  .actionbar .btn--ghost { color: var(--paper); }
-
-  .fab { right: 12px; bottom: calc(84px + env(safe-area-inset-bottom)); }
+  .fab { right: 12px; bottom: calc(14px + env(safe-area-inset-bottom)); }
   .page-hero--split, .page-cta, .soon { grid-template-columns: minmax(0, 1fr); }
   .soon__photo { justify-self: start; max-width: 260px; }
   .fab__btn { width: 44px; height: 44px; }
