@@ -358,10 +358,10 @@ section { position: relative; }
 
 /* ---------- Services: picture strip, turning card, extra links ---------- */
 .slides { margin: 12px 0 6px; }
-.slides__track { list-style: none; margin: 0; padding: 0; display: grid; grid-auto-flow: column; grid-auto-columns: 78%; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.slides__track { list-style: none; margin: 0; padding: 0; display: grid; grid-auto-flow: column; grid-auto-columns: 46%; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
 .slides__track::-webkit-scrollbar { display: none; }
 .slides__track li { position: relative; scroll-snap-align: start; background: #e7e4de; }
-.slides__track img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
+.slides__track img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
 .slides__track span { position: absolute; left: 10px; bottom: 10px; padding: 6px 8px; background: var(--ink); color: var(--paper); font-size: .64rem; letter-spacing: .1em; text-transform: uppercase; }
 .slides .pager { margin-top: 10px; }
 .flip { perspective: 1400px; margin: 12px 0 6px; max-width: 560px; }
@@ -629,6 +629,6 @@ a.fab__btn:hover { transform: translateY(-2px); }
   .catalog__item:nth-child(even) { padding-top: 0; }
   .rail, .rail:nth-child(even) { grid-template-columns: minmax(0, 1fr); grid-template-areas: "n" "img" "text"; gap: 12px; }
   .rail__n { padding-top: 0; }
-  .slides__track { grid-auto-columns: 88%; }
+  .slides__track { grid-auto-columns: 68%; }
   .flip__card { aspect-ratio: 4 / 5; }
 }
