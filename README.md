@@ -94,7 +94,7 @@ backwards works) and a warmer, lower sun over the closing shots.
   text, roof photos and the Facebook page address.
 - Confirm: service area (İstanbul ve Kocaeli is inferred from project locations), "own workshop /
   own installation team" wording, and the example dimensions in the film (illustrative, 340 cm).
-- Live demo: https://erdemakkas1-ops.github.io/maviron-elik/ (GitHub Pages, served from the
+- Live demo: https://erdem-ismail.github.io/maviron-elik/ (GitHub Pages, served from the
   `gh-pages` branch: after committing, `git push origin main main:gh-pages`). The Vercel copy
   (https://maviron-celik-scroll.vercel.app) works but `*.vercel.app` is blocked on some Turkish
   networks. Update the canonical, `og:` and JSON-LD URLs in `index.html` if it moves to a real domain.
