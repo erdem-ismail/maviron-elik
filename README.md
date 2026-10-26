@@ -72,7 +72,8 @@ backwards works) and a warmer, lower sun over the closing shots.
 - Railing renders (`img/korkuluk/`): `?model=kork-cam|kork-metal|kork-separator|kork-lama`; roof
   renders for `catilar.html` (`img/catilar/`): `?model=cati-tek|cati-besik`. Both stand on the sweep.
   `&noao` renders without ambient occlusion.
-- Merdiven kataloğu: their own Instagram projects (MK-01…06); sizes say "Yakında" until Maviron
+- Merdiven kataloğu: their own photos (MK-01…06, `img/foto/`); the Projeler grid and the Montaj step use their
+  site photos too; sizes say "Yakında" until Maviron
   sends them, and the PDF button is a disabled placeholder. The Çelik merdiven service row has a
   side-scrolling strip of their own photos (`img/foto/`, 900 × 1200 WebP). The cam, metal and
   separatör railings and the yangın merdiveni hero are their photos too; yatay lama is still a render.
