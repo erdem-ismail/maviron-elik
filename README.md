@@ -24,7 +24,14 @@ L-shaped straight-spine staircase with a mezzanine, built in code inside `index.
 3. oak treads drop in, the room switches from blueprint navy to daylight, glass goes in (Uygulama)
 4. labelled anatomy, then a wide closing shot with the CTA
 
-- three.js 0.180 comes from jsDelivr via the import map; it is only downloaded when the film runs.
+- three.js 0.180 (core, RoomEnvironment, RoundedBoxGeometry) is served from `js/vendor/` and
+  modulepreloaded, so it loads with the page; the desktop-only post-processing addons still come from
+  jsDelivr via the import map.
+- Speed: every shader is compiled before the film shows (opaque and fading variants, into the AO
+  target on desktop), the scene build yields between stages, and the sun's shadow map is redrawn only
+  in daylight when the film moves. Phones (≤ 760 px) get pixel ratio 1.25, PCF shadows and no clearcoat.
+- Fonts are self-hosted in `fonts/` (SIL OFL, latin + latin-ext for Turkish): Archivo only at 125 %
+  width, 700–900; Instrument Sans 400–600; JetBrains Mono 500. `python _src/fonts.py` re-downloads them.
 - Realism: rounded-edge parts, a 180 × 140 sloped box spine with a bracket and an 8 mm saddle plate under each 45 mm oak tread,
   base plates with nuts, an IPE 270 mezzanine beam, 17.52 mm glass (green edges) on stainless point
   fixings, a steel-framed window as the light source, soft shadows and, on screens wider than 760 px,
