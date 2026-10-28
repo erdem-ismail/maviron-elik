@@ -583,7 +583,8 @@ a.fab__btn:hover { transform: translateY(-2px); }
   .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 44px; }
   .quote__grid { grid-template-columns: minmax(0, 1fr); }
   .config__body { grid-template-columns: minmax(0, 1fr); }
-  .config__view { top: var(--header-h); margin: 0 calc(-1 * var(--gutter)); aspect-ratio: 16 / 10; max-height: 46vh; width: auto; }
+  /* stacked: the preview scrolls away with the page instead of riding over the controls */
+  .config__view { position: relative; top: auto; margin: 0 calc(-1 * var(--gutter)); aspect-ratio: 16 / 10; max-height: 46vh; width: auto; }
 }
 
 /* ---------- Portrait film: the model sits in the upper part, copy below ---------- */
