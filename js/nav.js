@@ -12,7 +12,7 @@ toggle.addEventListener('click', () => setNav(!nav.classList.contains('is-open')
 nav.addEventListener('click', e => { if (e.target.closest('a')) setNav(false); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && nav.classList.contains('is-open')) { setNav(false); toggle.focus(); } });
 
-// Quick contact: on phones the four buttons fold behind one
+// Quick contact: the four buttons fold behind one chat bubble
 const fab = document.querySelector('.fab');
 if (fab) {
   const fabToggle = fab.querySelector('.fab__toggle');

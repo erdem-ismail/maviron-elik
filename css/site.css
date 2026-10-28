@@ -445,13 +445,21 @@ section { position: relative; }
 
 /* ---------- Quick contact buttons, bottom right ---------- */
 .fab { position: fixed; z-index: 55; right: 18px; bottom: 18px; }
-.fab__list { display: flex; flex-direction: column; gap: 10px; }
-.fab__toggle { display: none; }
-.fab__btn { width: 50px; height: 50px; display: grid; place-items: center; border-radius: 50%; background: var(--paper); color: var(--ink); box-shadow: 0 8px 22px rgba(10, 14, 20, .28); transition: transform .2s; }
-.fab__btn svg { width: 22px; height: 22px; }
+.fab__toggle { position: relative; display: grid; place-items: center; width: 56px; height: 56px; padding: 0; border: 0; border-radius: 50%; background: var(--oak); color: var(--ink); box-shadow: 0 8px 22px rgba(10, 14, 20, .32); cursor: pointer; }
+.fab__toggle svg { position: absolute; width: 26px; height: 26px; transition: opacity .2s, transform .2s; }
+.fab__x, .fab.is-open .fab__chat { opacity: 0; transform: rotate(-45deg) scale(.6); }
+.fab.is-open .fab__x { opacity: 1; transform: none; }
+.fab__toggle:focus-visible, .fab__btn:focus-visible { outline: 3px solid var(--oak); outline-offset: 3px; }
+/* the four buttons sit together in one dark capsule above the bubble */
+.fab__list { position: absolute; right: 0; bottom: 68px; display: flex; flex-direction: column; gap: 6px; padding: 6px; border-radius: 34px; background: var(--ink); box-shadow: 0 10px 28px rgba(10, 14, 20, .34); visibility: hidden; opacity: 0; transform: translateY(10px) scale(.96); transform-origin: bottom center; transition: opacity .2s, transform .2s, visibility 0s .2s; }
+.fab.is-open .fab__list { visibility: visible; opacity: 1; transform: none; transition: opacity .2s, transform .2s; }
+.fab__btn { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; background: rgba(255, 255, 255, .08); color: var(--paper); transition: background-color .2s; }
+.fab__btn svg { width: 21px; height: 21px; }
 .fab__btn--wa { background: #25d366; color: #fff; }
-a.fab__btn:hover { transform: translateY(-2px); }
-.fab__btn.is-disabled { background: var(--paper-2); color: #7d838c; cursor: not-allowed; box-shadow: none; border: 1px dashed #9aa0a8; }
+a.fab__btn:hover { background: rgba(255, 255, 255, .18); }
+a.fab__btn--wa:hover { background: #1fb957; }
+.fab__btn.is-disabled { background: none; color: rgba(255, 255, 255, .32); cursor: not-allowed; }
+@media (prefers-reduced-motion: reduce) { .fab__toggle svg, .fab__list { transition: none; } }
 
 /* ---------- Sub-pages (catilar.html, yangin-merdiveni.html) ---------- */
 .page-hero { padding: calc(var(--header-h) + clamp(56px, 9vw, 120px)) var(--gutter) clamp(60px, 8vw, 110px); background: var(--ink); }
@@ -568,11 +576,6 @@ a.fab__btn:hover { transform: translateY(-2px); }
 /* ---------- Tablet ---------- */
 @media (max-width: 1024px) {
   .nav .long { display: none; }
-  /* the four quick-contact buttons fold behind one */
-  .fab__toggle { display: grid; place-items: center; width: 50px; height: 50px; padding: 0; border: 0; border-radius: 50%; background: var(--oak); color: var(--ink); box-shadow: 0 8px 22px rgba(10, 14, 20, .32); cursor: pointer; }
-  .fab__toggle svg { width: 24px; height: 24px; }
-  .fab__list { position: absolute; right: 3px; bottom: 60px; gap: 8px; visibility: hidden; opacity: 0; transform: translateY(8px); transition: opacity .2s, transform .2s, visibility 0s .2s; }
-  .fab.is-open .fab__list { visibility: visible; opacity: 1; transform: none; transition: opacity .2s, transform .2s; }
   .services__body { grid-template-columns: minmax(0, 1fr); }
   .services__visual { display: none; } /* each row carries its own picture instead */
   .services__body > div { padding-bottom: 0; }
@@ -668,8 +671,8 @@ a.fab__btn:hover { transform: translateY(-2px); }
   .fab { right: 12px; bottom: calc(14px + env(safe-area-inset-bottom)); }
   .page-hero--split, .page-cta, .soon { grid-template-columns: minmax(0, 1fr); }
   .soon__photo { justify-self: start; max-width: 260px; }
-  .fab__btn { width: 44px; height: 44px; }
-  .fab__btn svg { width: 20px; height: 20px; }
+  .fab__toggle { width: 52px; height: 52px; }
+  .fab__list { bottom: 62px; }
 
   .variant-switch { display: flex; width: 100%; }
   .variant-switch button { font-size: .86rem; white-space: nowrap; }
