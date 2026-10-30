@@ -25,8 +25,8 @@ L-shaped straight-spine staircase with a mezzanine, built in code inside `index.
 4. labelled anatomy, then a wide closing shot with the CTA
 
 - three.js 0.180 (core, RoomEnvironment, RoundedBoxGeometry) is served from `js/vendor/` and
-  modulepreloaded, so it loads with the page; the desktop-only post-processing addons still come from
-  jsDelivr via the import map.
+  modulepreloaded, so it loads with the page; the desktop-only post-processing addons (r180
+  `examples/jsm`, with their imports) sit in `js/vendor/addons/`, so the site makes no third-party requests.
 - Speed: every shader is compiled before the film shows (opaque and fading variants, into the AO
   target on desktop), the scene build yields between stages, and the sun's shadow map is redrawn only
   in daylight when the film moves. Phones (≤ 760 px) get pixel ratio 1.25, PCF shadows and no clearcoat.
@@ -81,7 +81,7 @@ backwards works) and a warmer, lower sun over the closing shots.
   `&noao` renders without ambient occlusion.
 - Merdiven kataloğu: their own photos (MK-01…06, `img/foto/`); the Projeler grid and the Montaj step use their
   site photos too; sizes say "Yakında" until Maviron
-  sends them, and the PDF button opens `katalog/Maviron-Celik-Katalog-2026.pdf` (built from `_katalog/katalog.html`, kept out of git, with headless Chrome `--print-to-pdf`). The Çelik merdiven service row has a
+  sends them, and the PDF button opens `katalog/Maviron-Celik-Katalog-2026.pdf` (built from `_katalog/katalog.html`, kept out of git, with headless Chrome `--print-to-pdf`; the site copy is the web build from `_src/katalog_web.py`, photos resampled to 150 dpi at their printed size, about 4 MB against 10.5 MB for the print file). The Çelik merdiven service row has a
   side-scrolling strip of their own photos (`img/foto/`, 900 × 1200 WebP). The cam, metal and
   separatör railings and the yangın merdiveni hero are their photos too; yatay lama is still a render.
 - Process images (`img/steps/`) are frames of the film (t = 2.7, 0.4, 5.0 and 9.8), captured with

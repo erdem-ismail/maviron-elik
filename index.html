@@ -44,11 +44,11 @@
     "three": "./js/vendor/three.module.min.js",
     "three/addons/environments/RoomEnvironment.js": "./js/vendor/RoomEnvironment.js",
     "three/addons/geometries/RoundedBoxGeometry.js": "./js/vendor/RoundedBoxGeometry.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+    "three/addons/": "./js/vendor/addons/"
   }
 }
 </script>
-<!-- three.js r180 is served from js/vendor so the film's code starts loading with the page -->
+<!-- three.js r180 and the post-processing addons (r180 examples/jsm) are served from js/vendor so the film's code starts loading with the page -->
 <link rel="modulepreload" href="js/vendor/three.module.min.js">
 <link rel="modulepreload" href="js/vendor/three.core.min.js">
 <script>
@@ -296,7 +296,7 @@
           <button type="button" class="pager__btn" data-dir="-1" aria-label="Önceki"><span aria-hidden="true">←</span></button>
           <button type="button" class="pager__btn" data-dir="1" aria-label="Sonraki"><span aria-hidden="true">→</span></button>
         </div>
-        <a class="btn btn--ghost" href="katalog/Maviron-Celik-Katalog-2026.pdf" target="_blank" rel="noopener" type="application/pdf">PDF katalog <span class="mono">· 24 sayfa, 10 MB</span></a>
+        <a class="btn btn--ghost" href="katalog/Maviron-Celik-Katalog-2026.pdf" target="_blank" rel="noopener" type="application/pdf">PDF katalog <span class="mono">· 24 sayfa, 4 MB</span></a>
       </div>
     </div>
   </section>
