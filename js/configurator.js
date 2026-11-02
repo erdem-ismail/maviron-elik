@@ -359,14 +359,14 @@ async function mount3D(root, view) {
       railing(n2, (k + 1) * h, XL, zb - W / 2 - GAP, Math.PI, 1);
       dimsAt(xa - 1.15, zb + W / 2);
     } else if (s.model === 'z') {
-      // two quarter turns: +x, landing, -z, landing, +x again
+      // two quarter turns: +x, landing, -z, landing, +x again; the landings hang off the spines, no posts
       const rest = N - 2, n2 = Math.max(2, Math.round(rest * .3)), n1 = Math.ceil((rest - n2) / 2), n3 = rest - n2 - n1;
       const X2 = n1 * g + W / 2, Zl = -W / 2 - n2 * g - W / 2, k1 = n1 + 1, k2 = k1 + n2 + 1, xe = X2 + W / 2 + n3 * g;
       wall(Zl - W / 2 - 1);
       const top1 = run(V(0, 0, 0), V(1, 0, 0), n1, 0, n1 * g + .06);
-      landing(X2, 0, W, W, k1, [[X2, 0]], [top1]);
+      landing(X2, 0, W, W, k1, [], [top1]);
       const top2 = run(V(X2, 0, -W / 2), V(0, 0, -1), n2, k1, n2 * g + .06);
-      landing(X2, Zl, W, W, k2, [[X2, Zl]], [top2]);
+      landing(X2, Zl, W, W, k2, [], [top2]);
       run(V(X2 + W / 2, 0, Zl), V(1, 0, 0), n3, k2);
       slab(xe, xe + 2.6, Zl - W / 2 - 1, Zl + W / 2 + .3);
       railing(n1, h, 0, W / 2 + GAP, 0);
