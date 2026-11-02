@@ -557,6 +557,22 @@ a.fab__btn--wa:hover { background: #1fb957; }
 .site-footer__row a { text-underline-offset: 4px; }
 .demo-note { font: 500 .72rem/1.6 var(--mono); letter-spacing: .04em; color: var(--muted); max-width: 72ch; margin-top: 22px; }
 
+/* ---------- Legal text (kvkk.html) ---------- */
+.legal { padding: clamp(60px, 8vw, 110px) var(--gutter) clamp(80px, 10vw, 140px); background: var(--paper); color: var(--ink); }
+.legal > * { max-width: 42rem; margin-left: auto; margin-right: auto; }
+.legal__date { font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-ink); }
+.legal section { margin-top: clamp(36px, 5vw, 56px); padding-top: 20px; border-top: 1px solid var(--line-ink); }
+.legal h2 { display: flex; align-items: baseline; gap: 14px; font-size: clamp(1.25rem, 2vw, 1.6rem); line-height: 1.15; }
+.legal h2 .mono { font-size: .7rem; font-weight: 500; letter-spacing: .1em; color: var(--oak-deep); }
+.legal p, .legal li { color: #3c4450; line-height: 1.65; }
+.legal p { margin-top: 14px; }
+.legal ul { margin: 14px 0 0; padding-left: 1.2em; }
+.legal li + li { margin-top: 6px; }
+.legal b { color: var(--ink); }
+.legal a { color: var(--oak-deep); text-underline-offset: 3px; }
+.form__foot .form__kvkk { flex-basis: 100%; max-width: 60ch; font-size: .78rem; }
+.form__kvkk a { color: var(--steel); text-underline-offset: 3px; }
+
 
 /* ---------- Reveal ---------- */
 @media (prefers-reduced-motion: no-preference) {
