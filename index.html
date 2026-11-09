@@ -36,8 +36,8 @@
 </script>
 <link rel="preload" href="fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/instrument-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" as="image" href="img/film-poster.webp?v=2" media="(orientation: landscape)">
-<link rel="preload" as="image" href="img/film-poster-m.webp?v=2" media="(orientation: portrait)">
+<link rel="preload" as="image" href="img/film-poster.webp?v=3" media="(orientation: landscape)">
+<link rel="preload" as="image" href="img/film-poster-m.webp?v=3" media="(orientation: portrait)">
 <script type="importmap">
 {
   "imports": {
@@ -82,7 +82,7 @@
        seconds. Timings of each build step live in the script (phase table). -->
   <section class="film film--static" id="film" data-map="0:0,0.04:0.7,0.14:3.2,0.25:5.6,0.33:7.4,0.38:8,0.4234:8.7,0.504:10.9,0.5908:12.6,0.69:14.6,0.7644:16,0.8388:17.1,0.9132:18.4,1:20" aria-labelledby="hero-title">
     <div class="film__stage">
-      <picture><source media="(orientation: portrait)" srcset="img/film-poster-m.webp?v=2" width="415" height="868"><img class="film__poster" src="img/film-poster.webp?v=2" width="1600" height="909" alt="" fetchpriority="high"></picture>
+      <picture><source media="(orientation: portrait)" srcset="img/film-poster-m.webp?v=3" width="415" height="868"><img class="film__poster" src="img/film-poster.webp?v=3" width="1600" height="909" alt="" fetchpriority="high"></picture>
       <canvas class="film__canvas" aria-hidden="true"></canvas>
 
       <div class="film__scene film__scene--hero" data-from="0" data-to="1.1">
@@ -149,8 +149,8 @@
       <!-- Annotations. data-at: a point on the 3D model (metres), projected every frame. -->
       <div class="film__notes" aria-hidden="true">
         <p class="film__label" data-from="2" data-to="5.9" data-at="3.6,1.6,5"><span class="film__tag"><b>Kolon</b><small>HEA profil</small></span></p>
-        <p class="film__label" data-from="2.9" data-to="5.9" data-at="3.6,3.07,3.1"><span class="film__tag"><b>Ana kiriş</b><small>IPE 270</small></span></p>
-        <p class="film__label" data-from="3.9" data-to="5.9" data-at="-2.15,1.6,-3.6"><span class="film__tag"><b>Çapraz</b><small>Rüzgâr bağlantısı</small></span></p>
+        <p class="film__label" data-from="2.9" data-to="5.9" data-at="3.6,3.07,6.9"><span class="film__tag"><b>Ana kiriş</b><small>IPE 270</small></span></p>
+        <p class="film__label" data-from="3.9" data-to="5.9" data-at="3.6,4.9,-3.6"><span class="film__tag"><b>Çapraz</b><small>Rüzgâr bağlantısı</small></span></p>
         <p class="film__label" data-from="4" data-to="5.9" data-at=".4,3.15,-3.5"><span class="film__tag"><b>Trapez sac</b><small>Asma kat döşemesi</small></span></p>
         <p class="film__label" data-from="5" data-to="5.9" data-at=".725,7,8.8"><span class="film__tag"><b>Çatı makası</b><small>Beşik çatı</small></span></p>
 
@@ -834,7 +834,7 @@
     const scene = new THREE.Scene();
     const pmrem = new THREE.PMREMGenerator(renderer);
     scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-    const DARK = new THREE.Color('#18212d'), LIGHT = new THREE.Color('#e7e4de');
+    const DARK = new THREE.Color('#18212d'), LIGHT = new THREE.Color('#e7e4de'), SKY = new THREE.Color('#cdd5dc');
     scene.background = DARK.clone();
 
     const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 80);
@@ -1061,23 +1061,73 @@
 
     // ---- the building: a primed two-storey steel frame around the stair hall, two bays across (x)
     // and four along the depth (z). The mezzanine slab is its first floor; gable trusses on top. ----
-    const primeMat = () => new THREE.MeshStandardMaterial({ color: '#7e3526', roughness: .6, metalness: .2 });
+    // site steel: red-oxide primer with the blotches and dust it picks up on the way, from one canvas of soft noise
+    const blotch = (() => {
+      const c = document.createElement('canvas');
+      c.width = c.height = 256;
+      const g = c.getContext('2d');
+      g.fillStyle = '#c4c4c4';
+      g.fillRect(0, 0, 256, 256);
+      for (let i = 0; i < 900; i++) {
+        const r = 2 + Math.random() * 14, v = Math.round(140 + Math.random() * 115);
+        g.fillStyle = `rgba(${v},${v},${v},${(.1 + Math.random() * .25).toFixed(2)})`;
+        g.beginPath();
+        g.ellipse(Math.random() * 256, Math.random() * 256, r, r * (.3 + Math.random()), Math.random() * 3, 0, 7);
+        g.fill();
+      }
+      return srgb => {
+        const t = new THREE.CanvasTexture(c);
+        t.wrapS = t.wrapT = THREE.RepeatWrapping;
+        t.anisotropy = aniso;
+        if (srgb) t.colorSpace = THREE.SRGBColorSpace;
+        return t;
+      };
+    })();
+    const primeMaps = { map: blotch(true), roughnessMap: blotch(false) };
+    for (const t of Object.values(primeMaps)) t.repeat.set(2, 2);
+    const primeMat = () => new THREE.MeshStandardMaterial({ ...primeMaps, color: '#93402c', roughness: .9, metalness: .15 });
+    // several small geometries as one (end plates and bolts ride on their member as a single mesh)
+    const merge = geos => {
+      const flat = geos.map(g => g.index ? g.toNonIndexed() : g), out = new THREE.BufferGeometry();
+      for (const name of ['position', 'normal', 'uv']) {
+        const size = flat[0].attributes[name].itemSize, arr = new Float32Array(flat.reduce((n, g) => n + g.attributes[name].array.length, 0));
+        let o = 0;
+        for (const g of flat) { arr.set(g.attributes[name].array, o); o += g.attributes[name].array.length; }
+        out.setAttribute(name, new THREE.BufferAttribute(arr, size));
+      }
+      return out;
+    };
     const BX = [-2.15, .725, 3.6], BZ = [-4.75, ZF - .0675, 1.2, 5, 8.8], EAVE = 6.6, RIDGE = 7.45, LV = SLAB - .2;
     const FRONT = BZ[BZ.length - 1];
     const bpart = (geo, x, y, z, o = {}) => {
-      const p = add(geo, geo, primeMat(), 'bld', x, y, z);
-      p.mesh.castShadow = false;
-      return Object.assign(p, o);
+      return Object.assign(add(geo, geo, primeMat(), 'bld', x, y, z), o);
     };
     const qt = new THREE.Quaternion(), ZA = new V3(0, 0, 1), YA = new V3(0, 1, 0);
-    // an I section (h × b) along the line a → b; columns keep their origin at the foot so they can grow
+    // an I section (h × b) along the line a → b; columns keep their origin at the foot. Beams that frame
+    // into columns get an end plate with four bolts at each end, set back by the column's half depth.
     const member = (a, b, h, w, o = {}) => {
       const A = new V3(...a), D = new V3(...b).sub(A), len = D.length();
       const geo = new THREE.ExtrudeGeometry(ipe(h, w, Math.max(.005, w * .045), Math.max(.007, h * .055)), { depth: len, bevelEnabled: false });
-      if (!o.grow) geo.translate(0, 0, -len / 2);
+      if (!o.foot) geo.translate(0, 0, -len / 2);
       geo.applyQuaternion(qt.setFromUnitVectors(ZA, D.normalize()));
-      const at = o.grow ? A : A.clone().addScaledVector(D, len / 2);
-      return bpart(geo, at.x, at.y, at.z, o);
+      const at = o.foot ? A : A.clone().addScaledVector(D, len / 2);
+      const p = bpart(geo, at.x, at.y, at.z, o);
+      if (o.ends) {
+        const ux = new V3(1, 0, 0).applyQuaternion(qt), uy = new V3(0, 1, 0).applyQuaternion(qt), along = new THREE.Quaternion().setFromUnitVectors(YA, D);
+        const bits = [];
+        for (const sgn of [-1, 1]) {
+          const e = D.clone().multiplyScalar(sgn * (len / 2 - o.ends));
+          bits.push(new THREE.BoxGeometry(w + .04, h + .04, .016).applyQuaternion(qt).translate(e.x, e.y, e.z));
+          for (const [bx, by] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+            const c = e.clone().addScaledVector(D, -sgn * .02).addScaledVector(ux, bx * w * .3).addScaledVector(uy, by * h * .36);
+            bits.push(new THREE.CylinderGeometry(.011, .011, .04, 6).applyQuaternion(along).translate(c.x, c.y, c.z));
+          }
+        }
+        const m = new THREE.Mesh(merge(bits), p.mesh.material);
+        m.castShadow = m.receiveShadow = true;
+        p.mesh.add(m);
+      }
+      return p;
     };
     const rod = (a, b) => {
       const A = new V3(...a), D = new V3(...b).sub(A), len = D.length();
@@ -1089,14 +1139,20 @@
     for (const z of BZ) for (const x of BX) {
       if (x === BX[1] && z !== BZ[0] && z !== FRONT) continue; // mid columns only in the end walls
       const front = z === FRONT, keep = z === BZ[0];
-      plates.push(bpart(new THREE.BoxGeometry(.34, .02, .34), x, .01, z, { front, keep }));
-      cols.push(member([x, 0, z], [x, EAVE, z], .19, .2, { grow: true, front, keep }));
+      // base plate on four anchor bolts with nuts
+      const base = [new THREE.BoxGeometry(.34, .02, .34)];
+      for (const [bx, bz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+        base.push(new THREE.CylinderGeometry(.012, .012, .07, 6).translate(bx * .12, .035, bz * .12));
+        base.push(new THREE.CylinderGeometry(.022, .022, .018, 6).translate(bx * .12, .019, bz * .12));
+      }
+      plates.push(bpart(merge(base), x, .01, z, { front, keep }));
+      cols.push(member([x, 0, z], [x, EAVE, z], .19, .2, { foot: true, front, keep }));
     }
     for (const y of [LV - .135, EAVE - .135]) {
       for (const x of [BX[0], BX[2]]) for (let k = 1; k < BZ.length; k++)
-        (y < EAVE - 1 ? beams1 : beams2).push(member([x, y, BZ[k - 1]], [x, y, BZ[k]], .27, .135));
+        (y < EAVE - 1 ? beams1 : beams2).push(member([x, y, BZ[k - 1]], [x, y, BZ[k]], .27, .135, { ends: .105 }));
       for (const z of [BZ[0], FRONT]) for (let k = 1; k < BX.length; k++)
-        (y < EAVE - 1 ? beams1 : beams2).push(member([BX[k - 1], y, z], [BX[k], y, z], .27, .135, { front: z === FRONT, keep: z === BZ[0] }));
+        (y < EAVE - 1 ? beams1 : beams2).push(member([BX[k - 1], y, z], [BX[k], y, z], .27, .135, { ends: .105, front: z === FRONT, keep: z === BZ[0] }));
     }
     for (const x of [-1.3, -.45, .4, 1.25, 2.1, 2.95]) joists.push(member([x, LV - .14, BZ[0]], [x, LV - .14, BZ[1]], .18, .09, { keep: true }));
     // trapezoidal steel deck under the mezzanine slab, ribs running across the joists
@@ -1125,10 +1181,33 @@
     }
     for (const x of [-1.45, -.35, BX[1], 1.8, 2.9]) purlins.push(member([x, roofY(x) + .07, BZ[0] - .2], [x, roofY(x) + .07, FRONT + .2], .12, .05));
 
+    const site = new THREE.Group(), siteMats = [];
+    {
+      const raftMaps = Object.fromEntries(Object.entries(floorMaps).map(([k, t]) => {
+        const c = t.clone();
+        c.repeat.set(6.4 / 2.2, 14.2 / 2.2);
+        return [k, c];
+      }));
+      const raftMat = new THREE.MeshStandardMaterial({ ...raftMaps, color: '#e4e0d8', roughness: 1, normalScale: new THREE.Vector2(.6, .6) });
+      const raft = new THREE.Mesh(new THREE.BoxGeometry(6.4, .3, 14.2), raftMat);
+      raft.position.set(BX[1], -.153, (BZ[0] + FRONT) / 2);
+      const groundMaps = { map: blotch(true), roughnessMap: blotch(false) };
+      for (const t of Object.values(groundMaps)) t.repeat.set(3, 3); // metres-wide patches, no visible tiling
+      const groundMat = new THREE.MeshStandardMaterial({ ...groundMaps, color: '#857c6e', roughness: 1 });
+      const ground = new THREE.Mesh(new THREE.PlaneGeometry(160, 160), groundMat);
+      ground.rotation.x = -Math.PI / 2;
+      ground.position.set(BX[1], -.3, 2);
+      raft.receiveShadow = ground.receiveShadow = true;
+      site.add(raft, ground);
+      siteMats.push(raftMat, groundMat);
+    }
+    scene.add(site);
+    scene.fog = new THREE.Fog(SKY.clone(), 1e4, 2e4);
+
     // erection order (film seconds): plates, columns, floor beams, joists and deck, bracing, eaves, trusses, purlins
     const order = (list, t0, t1, dur, dy) => list.forEach((p, k) => Object.assign(p, { t0: t0 + (t1 - t0) * k / Math.max(1, list.length - 1), dur, dy }));
     order(plates, .9, 1.3, .3, 0);
-    order(cols, 1.2, 2.5, .55, 0);
+    order(cols, 1.2, 2.5, .6, 1.8);
     order(beams1, 2.4, 3.3, .45, .9);
     order(joists, 3.2, 3.6, .4, .6);
     Object.assign(deck, { t0: 3.7, dur: .5, dy: .5 });
@@ -1194,6 +1273,13 @@
     sun.shadow.bias = -.0003;
     sun.shadow.normalBias = .015;
     scene.add(sun, sun.target);
+    let box = 6;
+    const shadowBox = b => {
+      if (b === box) return;
+      box = b;
+      Object.assign(sun.shadow.camera, { left: -b, right: b, top: b, bottom: -b, far: b * 4 });
+      sun.shadow.camera.updateProjectionMatrix();
+    };
     const GOLD = new THREE.Color('#ffdcb4');
     const rim = new THREE.DirectionalLight('#8fb6e8', 1.6);
     rim.position.set(-4, 5, -6);
@@ -1291,13 +1377,14 @@
 
       // the building's plan, plotted by the intro, gives way to the steel; inside, the stair is drawn by the scroll
       const day = span(t, 14.8, 16.4), walkIn = 1 - span(t, 6.8, 7.5), inside = 1 - span(t, 7.2, 8);
+      const ext = span(t, 1.3, 3) * (1 - span(t, 6.9, 8)); // daylight on the site, dark again inside the shell
       bldPrint.geometry.setDrawRange(0, Math.floor(bldCount * intro / 2) * 2);
-      bldPrint.material.opacity = 1 - span(t, 1.2, 5.6);
+      bldPrint.material.opacity = 1 - span(t, 1.2, 3.2);
       bldPrint.visible = t < 5.6;
       blueGeo.setDrawRange(0, Math.floor(blueCount * span(t, 7.4, 9.8) / 2) * 2);
       blueMat.opacity = 1 - .88 * span(t, 11.6, 14.4) - .12 * span(t, 15, 16.4);
       blueprint.visible = t > 7.4;
-      grid.material.opacity = (1 - span(t, 14.6, 16)) * smooth(intro * 1.5);
+      grid.material.opacity = (1 - span(t, 14.6, 16)) * (1 - ext) * smooth(intro * 1.5);
       dimMat.opacity = span(t, 9.3, 9.9) * (1 - span(t, 11.3, 11.8));
 
       for (const p of parts) {
@@ -1310,7 +1397,6 @@
         fade(p.mesh.material.length ? p.mesh.material[0] : p.mesh.material, k);
         for (const m of p.extra) fade(m, k);
         p.mesh.position.y = p.mesh.userData.home.y + p.dy * (1 - b);
-        if (p.grow) p.mesh.scale.y = Math.max(.001, b);
         // fresh welds glow, then cool to black
         if (p.kind === 'steel') p.mesh.material.emissiveIntensity = 1.15 * b * (1 - span(t, p.t0 + p.dur, p.t0 + p.dur + 1.3));
       }
@@ -1332,24 +1418,41 @@
       weldLight.intensity = lit * (4 + Math.sin(t * 90) * 1.5);
 
       // the room switches on: blueprint navy → daylight
-      scene.background.copy(DARK).lerp(LIGHT, day);
+      scene.background.copy(DARK).lerp(SKY, ext).lerp(LIGHT, day);
+      for (const m of siteMats) fade(m, ext);
+      site.visible = ext > 0;
+      scene.fog.color.copy(scene.background);
+      scene.fog.near = ext > .01 ? 30 : 1e4;
+      scene.fog.far = ext > .01 ? 90 : 2e4;
       for (const m of roomMats) fade(m, day);
       room.visible = day > 0;
       const dusk = span(t, 17.8, 20);
-      sun.position.set(-6.5 + .8 * dusk, 6 - 1.5 * dusk, 2.6 + 1.6 * dusk);
-      sun.color.set('#fff0db').lerp(GOLD, dusk);
-      sun.intensity = (4.6 - .6 * dusk) * day;
-      hemi.intensity = 1.1 - .8 * day;
-      rim.intensity = 3.2 * (1 - day);
-      scene.environmentIntensity = 1.1 - .5 * day;
-      film.classList.toggle('is-light', day > .55);
+      if (ext > 0) {
+        // high afternoon sun over the site, its shadow box opened up to the whole frame
+        sun.position.set(-8, 15, 14);
+        sun.target.position.set(BX[1], 0, 2);
+        sun.color.set('#fff4e6');
+        sun.intensity = 3.8 * ext;
+        shadowBox(11);
+      } else {
+        sun.position.set(-6.5 + .8 * dusk, 6 - 1.5 * dusk, 2.6 + 1.6 * dusk);
+        sun.target.position.set(1.4, .6, -1);
+        sun.color.set('#fff0db').lerp(GOLD, dusk);
+        sun.intensity = (4.6 - .6 * dusk) * day;
+        shadowBox(6);
+      }
+      const bright = Math.max(day, ext);
+      hemi.intensity = 1.1 - .8 * day - .3 * ext;
+      rim.intensity = 3.2 * (1 - bright);
+      scene.environmentIntensity = 1.1 - .5 * day - .3 * ext;
+      film.classList.toggle('is-light', bright > .55);
 
-      renderer.shadowMap.needsUpdate = day > 0 && t !== shadowT;
+      renderer.shadowMap.needsUpdate = bright > 0 && t !== shadowT;
       if (renderer.shadowMap.needsUpdate) shadowT = t;
 
       if (composer) {
-        gtao.enabled = day > .02;
-        gtao.blendIntensity = day;
+        gtao.enabled = bright > .02;
+        gtao.blendIntensity = bright;
         composer.render();
       } else renderer.render(scene, camera);
     }
