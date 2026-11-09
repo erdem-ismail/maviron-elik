@@ -149,7 +149,7 @@ p { margin: 0; }
 .menu-toggle { display: none; }
 
 /* ---------- Film: the staircase is drawn, fabricated and installed as you scroll ---------- */
-.film { position: relative; height: 1220vh; background: var(--ink); --fg: var(--paper); --fg-2: #c9cfd7; }
+.film { position: relative; height: 800vh; background: var(--ink); --fg: var(--paper); --fg-2: #c9cfd7; }
 .film__stage {
   position: sticky; top: var(--header-h);
   height: calc(100svh - var(--header-h));
@@ -646,7 +646,7 @@ a.fab__btn--wa:hover { background: #1fb957; }
   .nav .long { display: block; }
   .nav .btn { margin-top: 18px; }
 
-  .film { height: 1060vh; }
+  .film { height: 700vh; }
   .film__scene { bottom: 92px; } /* clear the action bar */
   .film__h1 { font-size: clamp(2.1rem, 10.4vw, 3.2rem); }
   .film__title { font-size: clamp(2rem, 9.6vw, 3rem); }
