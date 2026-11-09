@@ -16,10 +16,14 @@ projects, process, the configurator and a contact / quote form. No build step: `
 
 ## The film
 
-Unlike Oha Burger (a frame sequence of AI video), this film is a live three.js model of an
-L-shaped straight-spine staircase with a mezzanine, built in code inside `index.html`:
+Unlike Oha Burger (a frame sequence of AI video), this film is a live three.js model, built in code
+inside `index.html`: a two-storey primed steel building, then the L-shaped straight-spine staircase
+with a mezzanine inside it. Film seconds 0–8 are the building, 8–20 the stair:
 
-1. blueprint lines plot in on load, dimension callouts appear (Keşif & proje)
+0. the building's plan plots in on load; base plates, HEA columns, IPE beams, joists and trapezoidal
+   deck, bracing, gable trusses and purlins go up; the camera walks in through the front frame, which
+   clears, then all but the back wall frame and the mezzanine floor (those go when the walls come in)
+1. inside, the stair's blueprint is drawn by the scroll, dimension callouts appear (Keşif & proje)
 2. the straight steel spine (one sloped beam per flight) arrives piece by piece, glowing like fresh welds and cooling (Üretim)
 3. oak treads drop in, the room switches from blueprint navy to daylight, glass goes in (Uygulama)
 4. labelled anatomy, then a wide closing shot with the CTA
@@ -45,7 +49,7 @@ L-shaped straight-spine staircase with a mezzanine, built in code inside `index.
 - `prefers-reduced-motion`, no WebGL2, or `?still` in the URL show a still hero (no pinned scroll,
   three.js not loaded).
 - `img/film-poster.webp` / `film-poster-m.webp` show until the model is ready. They are renders of
-  the film at t=0; re-capture them (and `img/og.jpg`, t=12) after changing the model. Open the
+  the film at t=0; re-capture them (and `img/og.jpg`, t=20) after changing the model. Open the
   page with `?capture` and `__film.seek(t)` in the console jumps the film to any second.
 
 ## Tasarla (configurator)

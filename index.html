@@ -36,8 +36,8 @@
 </script>
 <link rel="preload" href="fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/instrument-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" as="image" href="img/film-poster.webp" media="(orientation: landscape)">
-<link rel="preload" as="image" href="img/film-poster-m.webp" media="(orientation: portrait)">
+<link rel="preload" as="image" href="img/film-poster.webp?v=2" media="(orientation: landscape)">
+<link rel="preload" as="image" href="img/film-poster-m.webp?v=2" media="(orientation: portrait)">
 <script type="importmap">
 {
   "imports": {
@@ -54,7 +54,7 @@
 <script>
   document.documentElement.classList.add('js');
 </script>
-<link rel="stylesheet" href="css/site.css?v=9">
+<link rel="stylesheet" href="css/site.css?v=10">
 <script src="js/nav.js" defer></script>
 </head>
 <body>
@@ -80,9 +80,9 @@
   <!-- FILM — a three.js model of an L-shaped spine staircase with a mezzanine, built from code
        (no video). data-map: scroll progress → film seconds; scene data-from/data-to are film
        seconds. Timings of each build step live in the script (phase table). -->
-  <section class="film film--static" id="film" data-map="0:0,.07:.7,.2:2.9,.34:4.6,.5:6.6,.62:8,.74:9.1,.86:10.4,1:12" aria-labelledby="hero-title">
+  <section class="film film--static" id="film" data-map="0:0,0.04:0.7,0.14:3.2,0.25:5.6,0.33:7.4,0.38:8,0.4234:8.7,0.504:10.9,0.5908:12.6,0.69:14.6,0.7644:16,0.8388:17.1,0.9132:18.4,1:20" aria-labelledby="hero-title">
     <div class="film__stage">
-      <picture><source media="(orientation: portrait)" srcset="img/film-poster-m.webp" width="415" height="868"><img class="film__poster" src="img/film-poster.webp" width="1600" height="909" alt="" fetchpriority="high"></picture>
+      <picture><source media="(orientation: portrait)" srcset="img/film-poster-m.webp?v=2" width="415" height="868"><img class="film__poster" src="img/film-poster.webp?v=2" width="1600" height="909" alt="" fetchpriority="high"></picture>
       <canvas class="film__canvas" aria-hidden="true"></canvas>
 
       <div class="film__scene film__scene--hero" data-from="0" data-to="1.1">
@@ -96,30 +96,47 @@
         <p class="film__bio mono">Tasarım · Proje · Uygulama</p>
       </div>
 
-      <div class="film__scene" data-from="1.4" data-to="3.3" aria-hidden="true">
+      <div class="film__scene" data-from="1.3" data-to="3.5" aria-hidden="true">
+        <p class="eyebrow">Çelik konstrüksiyon</p>
+        <p class="film__title wide">Önce<br><em>iskelet.</em></p>
+        <p class="film__lede">Kolonlar ankraj plakalarına oturur, kirişler cıvatayla bağlanır. Taşıyıcı sistemi statik hesabıyla birlikte projelendiriyoruz.</p>
+      </div>
+
+      <div class="film__scene" data-from="3.8" data-to="6.3" aria-hidden="true">
+        <p class="eyebrow">Asma kat · Çatı</p>
+        <p class="film__title wide">Kat kat<br><em>yükselir.</em></p>
+        <p class="film__lede">Trapez sac döşeme, çaprazlar ve çatı makasları aynı çelik iskelette birleşir. Depo, villa, ofis ya da atölye.</p>
+      </div>
+
+      <div class="film__scene" data-from="6.6" data-to="7.8" aria-hidden="true">
+        <p class="eyebrow">İçeride</p>
+        <p class="film__title wide">Ve bir<br><em>merdiven.</em></p>
+      </div>
+
+      <div class="film__scene" data-from="9.4" data-to="11.3" aria-hidden="true">
         <p class="eyebrow">01 · Keşif &amp; proje</p>
         <p class="film__title wide">Önce<br><em>çizgi.</em></p>
         <p class="film__lede">Yerinde ölçüyoruz, her rıhtı ve sahanlığı milimetresine kadar projeye döküyoruz.</p>
       </div>
 
-      <div class="film__scene" data-from="3.6" data-to="5.7" aria-hidden="true">
+      <div class="film__scene" data-from="11.6" data-to="13.7" aria-hidden="true">
         <p class="eyebrow">02 · Üretim</p>
         <p class="film__title wide">Sonra<br><em>çelik.</em></p>
         <p class="film__lede">Omurga atölyede kesilir, kaynaklanır ve boyanır. Sahaya montaja hazır gelir.</p>
       </div>
 
-      <div class="film__scene" data-from="6" data-to="8.2" aria-hidden="true">
+      <div class="film__scene" data-from="14" data-to="16.2" aria-hidden="true">
         <p class="eyebrow">03 · Uygulama</p>
         <p class="film__title wide">Basamak<br><em>basamak.</em></p>
         <p class="film__lede">Montajı kendi ekibimiz yapar. Basamaklar omurgaya tek tek oturur, cam korkuluk en son gelir.</p>
       </div>
 
-      <div class="film__scene" data-from="8.5" data-to="10.2" aria-hidden="true">
+      <div class="film__scene" data-from="16.5" data-to="18.2" aria-hidden="true">
         <p class="eyebrow">Anatomi</p>
         <p class="film__title wide">Omurgalı<br><em>merdiven.</em></p>
       </div>
 
-      <div class="film__scene" data-from="10.5" data-to="99">
+      <div class="film__scene" data-from="18.5" data-to="99">
         <p class="eyebrow">Sıra sizin mekânınızda</p>
         <p class="film__title wide">Mekânın<br><em>karakteri.</em></p>
         <p class="film__lede">Merdivenden çatıya: ölçüyü alalım, projeyi çizelim, çeliği kuralım.</p>
@@ -131,16 +148,22 @@
 
       <!-- Annotations. data-at: a point on the 3D model (metres), projected every frame. -->
       <div class="film__notes" aria-hidden="true">
-        <p class="film__dim" data-from="1.5" data-to="3.4" data-at="-.75,1.7,.5">340 cm<small>kat yüksekliği</small></p>
-        <p class="film__dim" data-from="1.65" data-to="3.4" data-at="1.215,0,1.05">9 × 27 cm<small>basamak genişliği</small></p>
-        <p class="film__dim" data-from="1.8" data-to="3.4" data-at="2.93,0,1.05">100 cm<small>sahanlık</small></p>
-        <p class="film__dim" data-from="1.95" data-to="3.4" data-at="2.93,3.6,-1.45">18 rıht<small>18,9 cm</small></p>
+        <p class="film__label" data-from="2" data-to="5.9" data-at="3.6,1.6,5"><span class="film__tag"><b>Kolon</b><small>HEA profil</small></span></p>
+        <p class="film__label" data-from="2.9" data-to="5.9" data-at="3.6,3.07,3.1"><span class="film__tag"><b>Ana kiriş</b><small>IPE 270</small></span></p>
+        <p class="film__label" data-from="3.9" data-to="5.9" data-at="-2.15,1.6,-3.6"><span class="film__tag"><b>Çapraz</b><small>Rüzgâr bağlantısı</small></span></p>
+        <p class="film__label" data-from="4" data-to="5.9" data-at=".4,3.15,-3.5"><span class="film__tag"><b>Trapez sac</b><small>Asma kat döşemesi</small></span></p>
+        <p class="film__label" data-from="5" data-to="5.9" data-at=".725,7,8.8"><span class="film__tag"><b>Çatı makası</b><small>Beşik çatı</small></span></p>
 
-        <p class="film__label" data-from="8.6" data-to="10.3" data-at="1.0,.62,.06"><span class="film__tag"><b>Omurga</b><small>Kaynaklı kutu profil</small></span></p>
-        <p class="film__label" data-from="8.72" data-to="10.3" data-at="1.755,1.32,.5"><span class="film__tag"><b>Basamak</b><small>Masif meşe</small></span></p>
-        <p class="film__label" data-from="8.84" data-to="10.3" data-at="3.2,1.889,.4"><span class="film__tag"><b>Sahanlık</b><small>Ara dinlenme</small></span></p>
-        <p class="film__label" data-from="8.96" data-to="10.3" data-at="2.4,3.4,-1.5"><span class="film__tag"><b>Cam korkuluk</b><small>Temperli, çerçevesiz</small></span></p>
-        <p class="film__label" data-from="9.08" data-to="10.3" data-at="-.6,3.06,-2.4"><span class="film__tag"><b>Asma kat</b><small>Çelik kiriş ve kolon</small></span></p>
+        <p class="film__dim" data-from="9.5" data-to="11.4" data-at="-.75,1.7,.5">340 cm<small>kat yüksekliği</small></p>
+        <p class="film__dim" data-from="9.65" data-to="11.4" data-at="1.215,0,1.05">9 × 27 cm<small>basamak genişliği</small></p>
+        <p class="film__dim" data-from="9.8" data-to="11.4" data-at="2.93,0,1.05">100 cm<small>sahanlık</small></p>
+        <p class="film__dim" data-from="9.95" data-to="11.4" data-at="2.93,3.6,-1.45">18 rıht<small>18,9 cm</small></p>
+
+        <p class="film__label" data-from="16.6" data-to="18.3" data-at="1.0,.62,.06"><span class="film__tag"><b>Omurga</b><small>Kaynaklı kutu profil</small></span></p>
+        <p class="film__label" data-from="16.72" data-to="18.3" data-at="1.755,1.32,.5"><span class="film__tag"><b>Basamak</b><small>Masif meşe</small></span></p>
+        <p class="film__label" data-from="16.84" data-to="18.3" data-at="3.2,1.889,.4"><span class="film__tag"><b>Sahanlık</b><small>Ara dinlenme</small></span></p>
+        <p class="film__label" data-from="16.96" data-to="18.3" data-at="2.4,3.4,-1.5"><span class="film__tag"><b>Cam korkuluk</b><small>Temperli, çerçevesiz</small></span></p>
+        <p class="film__label" data-from="17.08" data-to="18.3" data-at="-.6,3.06,-2.4"><span class="film__tag"><b>Asma kat</b><small>Çelik kiriş ve kolon</small></span></p>
       </div>
 
       <p class="film__hint" aria-hidden="true">Kaydır</p>
@@ -761,8 +784,9 @@
 </script>
 
 <script type="module">
-  // FILM — an L-shaped straight-spine staircase with a mezzanine, modelled in three.js and scrubbed by
-  // page scroll: blueprint lines (Proje) → steel spine (Üretim) → oak treads, glass, room (Uygulama).
+  // FILM — modelled in three.js and scrubbed by page scroll. 0-8 s: a two-storey steel building goes
+  // up on its plotted plan, then the camera walks in through the front frame. 8-20 s: inside, an
+  // L-shaped straight-spine stair: blueprint lines (Proje) → steel spine (Üretim) → oak, glass, room.
   const film = document.getElementById('film');
   if (!film.classList.contains('film--static')) {
     const THREE = await import('three');
@@ -1035,26 +1059,110 @@
     roomMats.push(floorMat, wallMat, darkMat, glowMat);
     scene.add(room);
 
+    // ---- the building: a primed two-storey steel frame around the stair hall, two bays across (x)
+    // and four along the depth (z). The mezzanine slab is its first floor; gable trusses on top. ----
+    const primeMat = () => new THREE.MeshStandardMaterial({ color: '#7e3526', roughness: .6, metalness: .2 });
+    const BX = [-2.15, .725, 3.6], BZ = [-4.75, ZF - .0675, 1.2, 5, 8.8], EAVE = 6.6, RIDGE = 7.45, LV = SLAB - .2;
+    const FRONT = BZ[BZ.length - 1];
+    const bpart = (geo, x, y, z, o = {}) => {
+      const p = add(geo, geo, primeMat(), 'bld', x, y, z);
+      p.mesh.castShadow = false;
+      return Object.assign(p, o);
+    };
+    const qt = new THREE.Quaternion(), ZA = new V3(0, 0, 1), YA = new V3(0, 1, 0);
+    // an I section (h × b) along the line a → b; columns keep their origin at the foot so they can grow
+    const member = (a, b, h, w, o = {}) => {
+      const A = new V3(...a), D = new V3(...b).sub(A), len = D.length();
+      const geo = new THREE.ExtrudeGeometry(ipe(h, w, Math.max(.005, w * .045), Math.max(.007, h * .055)), { depth: len, bevelEnabled: false });
+      if (!o.grow) geo.translate(0, 0, -len / 2);
+      geo.applyQuaternion(qt.setFromUnitVectors(ZA, D.normalize()));
+      const at = o.grow ? A : A.clone().addScaledVector(D, len / 2);
+      return bpart(geo, at.x, at.y, at.z, o);
+    };
+    const rod = (a, b) => {
+      const A = new V3(...a), D = new V3(...b).sub(A), len = D.length();
+      const geo = new THREE.CylinderGeometry(.012, .012, len, 6).applyQuaternion(qt.setFromUnitVectors(YA, D.clone().normalize()));
+      return bpart(geo, A.x + D.x / 2, A.y + D.y / 2, A.z + D.z / 2);
+    };
+    const roofY = x => EAVE + (RIDGE - EAVE) * (1 - Math.abs(x - BX[1]) / (BX[1] - BX[0]));
+    const plates = [], cols = [], beams1 = [], beams2 = [], joists = [], braces = [], trusses = [], purlins = [];
+    for (const z of BZ) for (const x of BX) {
+      if (x === BX[1] && z !== BZ[0] && z !== FRONT) continue; // mid columns only in the end walls
+      const front = z === FRONT, keep = z === BZ[0];
+      plates.push(bpart(new THREE.BoxGeometry(.34, .02, .34), x, .01, z, { front, keep }));
+      cols.push(member([x, 0, z], [x, EAVE, z], .19, .2, { grow: true, front, keep }));
+    }
+    for (const y of [LV - .135, EAVE - .135]) {
+      for (const x of [BX[0], BX[2]]) for (let k = 1; k < BZ.length; k++)
+        (y < EAVE - 1 ? beams1 : beams2).push(member([x, y, BZ[k - 1]], [x, y, BZ[k]], .27, .135));
+      for (const z of [BZ[0], FRONT]) for (let k = 1; k < BX.length; k++)
+        (y < EAVE - 1 ? beams1 : beams2).push(member([BX[k - 1], y, z], [BX[k], y, z], .27, .135, { front: z === FRONT, keep: z === BZ[0] }));
+    }
+    for (const x of [-1.3, -.45, .4, 1.25, 2.1, 2.95]) joists.push(member([x, LV - .14, BZ[0]], [x, LV - .14, BZ[1]], .18, .09, { keep: true }));
+    // trapezoidal steel deck under the mezzanine slab, ribs running across the joists
+    let deck;
+    {
+      const pts = [];
+      for (let u = 0; u < 2.19; u += .2) pts.push([u, 0], [u + .04, .05], [u + .12, .05], [u + .16, 0]);
+      pts.push([2.2, 0]);
+      const shape = new THREE.Shape([...pts, ...pts.slice().reverse().map(([u, v]) => [u, v - .003])].map(([u, v]) => new THREE.Vector2(u, v)));
+      const geo = new THREE.ExtrudeGeometry(shape, { depth: MX1 - MX0, bevelEnabled: false }).rotateY(Math.PI / 2);
+      deck = bpart(geo, MX0, LV - .05, ZF, { keep: true });
+      deck.mesh.material = new THREE.MeshStandardMaterial({ color: '#9aa1a8', metalness: .6, roughness: .45 });
+    }
+    for (const [y0, y1] of [[.15, LV - .3], [LV + .05, EAVE - .3]]) {
+      for (const x of [BX[0], BX[2]])
+        braces.push(rod([x, y0, BZ[0] + .15], [x, y1, BZ[1] - .15]), rod([x, y0, BZ[1] - .15], [x, y1, BZ[0] + .15]));
+      for (const r of [rod([BX[0] + .15, y0, BZ[0]], [BX[1] - .15, y1, BZ[0]]), rod([BX[1] - .15, y0, BZ[0]], [BX[0] + .15, y1, BZ[0]])]) braces.push(Object.assign(r, { keep: true }));
+    }
+    for (const z of BZ) {
+      const o = { front: z === FRONT }, t = [];
+      t.push(member([BX[0], EAVE, z], [BX[2], EAVE, z], .1, .08, o));
+      t.push(member([BX[0], EAVE, z], [BX[1], RIDGE, z], .1, .08, o), member([BX[1], RIDGE, z], [BX[2], EAVE, z], .1, .08, o));
+      for (const x of [-.71, BX[1], 2.16]) t.push(member([x, EAVE, z], [x, roofY(x), z], .07, .06, o));
+      t.push(member([-.71, roofY(-.71), z], [BX[1], EAVE, z], .07, .06, o), member([2.16, roofY(2.16), z], [BX[1], EAVE, z], .07, .06, o));
+      trusses.push(t);
+    }
+    for (const x of [-1.45, -.35, BX[1], 1.8, 2.9]) purlins.push(member([x, roofY(x) + .07, BZ[0] - .2], [x, roofY(x) + .07, FRONT + .2], .12, .05));
+
+    // erection order (film seconds): plates, columns, floor beams, joists and deck, bracing, eaves, trusses, purlins
+    const order = (list, t0, t1, dur, dy) => list.forEach((p, k) => Object.assign(p, { t0: t0 + (t1 - t0) * k / Math.max(1, list.length - 1), dur, dy }));
+    order(plates, .9, 1.3, .3, 0);
+    order(cols, 1.2, 2.5, .55, 0);
+    order(beams1, 2.4, 3.3, .45, .9);
+    order(joists, 3.2, 3.6, .4, .6);
+    Object.assign(deck, { t0: 3.7, dur: .5, dy: .5 });
+    order(braces, 3.4, 4.1, .35, 0);
+    order(beams2, 4, 4.6, .45, .9);
+    trusses.forEach((t, r) => order(t, 4.6 + r * .22, 4.6 + r * .22, .5, 1.4));
+    order(purlins, 5.5, 6, .4, .7);
+
     await breathe();
 
     // ---- blueprint: every part's outline as one line set, drawn in build order like a plotter ----
-    const edgeVerts = [];
-    for (const { mesh, outline } of parts) {
+    // the building's plan is plotted on load; the stair's is drawn by the scroll once inside
+    const edgeVerts = [], bldVerts = [];
+    for (const { mesh, outline, kind } of parts) {
       if (!outline) continue;
       mesh.updateMatrixWorld();
       const e = new THREE.EdgesGeometry(outline, 20);
       e.applyMatrix4(mesh.matrixWorld);
-      edgeVerts.push(...e.attributes.position.array);
+      const into = kind === 'bld' || kind === 'frame' ? bldVerts : edgeVerts;
+      for (const v of e.attributes.position.array) into.push(v);
     }
-    const blueGeo = new THREE.BufferGeometry();
-    blueGeo.setAttribute('position', new THREE.Float32BufferAttribute(edgeVerts, 3));
-    const blueMat = new THREE.LineBasicMaterial({ color: '#9cc3ea', transparent: true, opacity: 1, depthWrite: false });
-    const blueprint = new THREE.LineSegments(blueGeo, blueMat);
-    blueprint.renderOrder = 2;
-    scene.add(blueprint);
-    const blueCount = edgeVerts.length / 3;
+    const lines = verts => {
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+      const l = new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ color: '#9cc3ea', transparent: true, opacity: 1, depthWrite: false }));
+      l.renderOrder = 2;
+      scene.add(l);
+      return l;
+    };
+    const blueprint = lines(edgeVerts), bldPrint = lines(bldVerts);
+    const blueGeo = blueprint.geometry, blueMat = blueprint.material, blueCount = edgeVerts.length / 3, bldCount = bldVerts.length / 3;
 
-    const grid = new THREE.GridHelper(16, 64, '#3b5675', '#2a3b52');
+    const grid = new THREE.GridHelper(26, 104, '#3b5675', '#2a3b52');
+    grid.position.set(.7, 0, 2);
     grid.material.transparent = true;
     grid.material.depthWrite = false;
     scene.add(grid);
@@ -1094,11 +1202,11 @@
     // ---- build order: when each part appears (film seconds) ----
     const ofKind = k => parts.filter(p => p.kind === k);
     const steelParts = ofKind('steel'), oak = ofKind('oak'), glass = ofKind('glass');
-    steelParts.forEach((p, k) => { p.t0 = 3.5 + k / steelParts.length * 2; p.dur = .35; p.dy = -.35; });
-    ofKind('frame').forEach((p, k) => { p.t0 = 5 + k * .25; p.dur = .45; p.dy = -.6; });
-    oak.forEach((p, k) => { p.t0 = 5.9 + k / oak.length * 1.9; p.dur = .4; p.dy = .7; });
-    glass.forEach((p, k) => { p.t0 = 8 + k / glass.length * 1.1; p.dur = .45; p.dy = -1.2; });
-    ofKind('slab').forEach(p => { p.t0 = 7; p.dur = 1; p.dy = 0; });
+    steelParts.forEach((p, k) => { p.t0 = 11.5 + k / steelParts.length * 2; p.dur = .35; p.dy = -.35; });
+    ofKind('frame').forEach((p, k) => { p.t0 = 2.7 + k * .25; p.dur = .45; p.dy = .9; });
+    oak.forEach((p, k) => { p.t0 = 13.9 + k / oak.length * 1.9; p.dur = .4; p.dy = .7; });
+    glass.forEach((p, k) => { p.t0 = 16 + k / glass.length * 1.1; p.dur = .45; p.dy = -1.2; });
+    ofKind('slab').forEach(p => { p.t0 = 15; p.dur = 1; p.dy = 0; });
 
     await breathe();
 
@@ -1148,12 +1256,17 @@
 
     // ---- camera path (film seconds → position / look-at); daylight shots keep verticals upright ----
     const shots = [
-      [0, [6.6, 3.3, 7.0], [1.3, 1.6, -1.0]],
-      [2.6, [1.4, 1.9, 8.8], [1.3, 1.6, -1.0]],
-      [5, [-3.4, 2.4, 5.8], [1.5, 1.5, -1.0]],
-      [7.4, [6.2, 1.05, 4.6], [1.6, 1.6, -1.0]],
-      [9.6, [5.4, 1.85, 6.3], [1.4, 1.75, -1.2]],
-      [12, [6.9, 1.8, 7.7], [1.3, 1.65, -1.1]],
+      [0, [21, 12.5, 26], [.7, 2.6, 1.8]],          // the site from above, plan on the ground
+      [2.6, [-15.5, 8, 22], [.7, 3, 1.5]],
+      [5, [16, 6, 21], [.7, 3.2, 1]],
+      [6.6, [1.6, 2.3, 14], [1.2, 2, 0]],          // in front of the door
+      [7.6, [2, 2.1, 9.6], [1.3, 1.8, -1]],        // through it
+      [8, [5.4, 3, 7.2], [1.3, 1.6, -1.0]],
+      [10.6, [1.4, 1.9, 8.8], [1.3, 1.6, -1.0]],
+      [13, [-3.4, 2.4, 5.8], [1.5, 1.5, -1.0]],
+      [15.4, [6.2, 1.05, 4.6], [1.6, 1.6, -1.0]],
+      [17.6, [5.4, 1.85, 6.3], [1.4, 1.75, -1.2]],
+      [20, [6.9, 1.8, 7.7], [1.3, 1.65, -1.1]],
     ];
     const posCurve = new THREE.CatmullRomCurve3(shots.map(s => new V3(...s[1])), false, 'centripetal');
     const tgtCurve = new THREE.CatmullRomCurve3(shots.map(s => new V3(...s[2])), false, 'centripetal');
@@ -1176,21 +1289,30 @@
       if (aspect < 1) camera.setViewOffset(cw, ch, 0, ch * .2, cw, ch);
       else camera.setViewOffset(cw, ch, -cw * (aspect > 1.3 ? .16 : .08), 0, cw, ch);
 
-      // blueprint drawn in by the intro, then fades as the steel arrives
-      blueGeo.setDrawRange(0, Math.floor(blueCount * intro / 2) * 2);
-      blueMat.opacity = 1 - .88 * span(t, 3.6, 6.4) - .12 * span(t, 7, 8.4);
-      grid.material.opacity = (1 - span(t, 6.6, 8)) * smooth(intro * 1.5);
-      dimMat.opacity = span(t, 1.3, 1.9) * (1 - span(t, 3.3, 3.8));
+      // the building's plan, plotted by the intro, gives way to the steel; inside, the stair is drawn by the scroll
+      const day = span(t, 14.8, 16.4), walkIn = 1 - span(t, 6.8, 7.5), inside = 1 - span(t, 7.2, 8);
+      bldPrint.geometry.setDrawRange(0, Math.floor(bldCount * intro / 2) * 2);
+      bldPrint.material.opacity = 1 - span(t, 1.2, 5.6);
+      bldPrint.visible = t < 5.6;
+      blueGeo.setDrawRange(0, Math.floor(blueCount * span(t, 7.4, 9.8) / 2) * 2);
+      blueMat.opacity = 1 - .88 * span(t, 11.6, 14.4) - .12 * span(t, 15, 16.4);
+      blueprint.visible = t > 7.4;
+      grid.material.opacity = (1 - span(t, 14.6, 16)) * smooth(intro * 1.5);
+      dimMat.opacity = span(t, 9.3, 9.9) * (1 - span(t, 11.3, 11.8));
 
       for (const p of parts) {
-        const k = span(t, p.t0, p.t0 + p.dur);
+        const b = span(t, p.t0, p.t0 + p.dur);
+        // the front frame clears as the camera walks through, then all but the back wall and the mezzanine
+        // floor; those go when the room's walls come in
+        const k = p.kind === 'bld' ? b * (1 - day) * (p.front ? walkIn : p.keep ? 1 : inside) : b;
         p.mesh.visible = k > 0;
         if (!p.mesh.visible) continue;
         fade(p.mesh.material.length ? p.mesh.material[0] : p.mesh.material, k);
         for (const m of p.extra) fade(m, k);
-        p.mesh.position.y = p.mesh.userData.home.y + p.dy * (1 - k);
+        p.mesh.position.y = p.mesh.userData.home.y + p.dy * (1 - b);
+        if (p.grow) p.mesh.scale.y = Math.max(.001, b);
         // fresh welds glow, then cool to black
-        if (p.kind === 'steel' || p.kind === 'frame') p.mesh.material.emissiveIntensity = 1.15 * k * (1 - span(t, p.t0 + p.dur, p.t0 + p.dur + 1.3));
+        if (p.kind === 'steel') p.mesh.material.emissiveIntensity = 1.15 * b * (1 - span(t, p.t0 + p.dur, p.t0 + p.dur + 1.3));
       }
 
       // sparks fly while the spine is welded; a flickering light follows the active joint
@@ -1206,15 +1328,14 @@
         if (f > lit) { lit = f; weldLight.position.set(sp.o[0], sp.o[1] + .1, sp.o[2]); }
       });
       sparkGeo.attributes.position.needsUpdate = sparkGeo.attributes.color.needsUpdate = true;
-      sparkPts.visible = t > 3.4 && t < 7;
+      sparkPts.visible = t > 11.4 && t < 15;
       weldLight.intensity = lit * (4 + Math.sin(t * 90) * 1.5);
 
       // the room switches on: blueprint navy → daylight
-      const day = span(t, 6.8, 8.4);
       scene.background.copy(DARK).lerp(LIGHT, day);
       for (const m of roomMats) fade(m, day);
       room.visible = day > 0;
-      const dusk = span(t, 9.8, 12);
+      const dusk = span(t, 17.8, 20);
       sun.position.set(-6.5 + .8 * dusk, 6 - 1.5 * dusk, 2.6 + 1.6 * dusk);
       sun.color.set('#fff0db').lerp(GOLD, dusk);
       sun.intensity = (4.6 - .6 * dusk) * day;
