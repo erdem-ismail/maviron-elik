@@ -185,8 +185,8 @@ p { margin: 0; }
 .js .film:not(.film--static) .film__scene { opacity: 0; visibility: hidden; }
 .film__scene .eyebrow { color: var(--oak); }
 .film.is-light .film__scene .eyebrow { color: var(--oak-deep); }
-.film__h1 { font-size: clamp(2.6rem, 5.4vw, 5.6rem); line-height: .94; margin: .3em 0 .28em; }
-.film__title { font-size: clamp(2.3rem, 5vw, 5rem); line-height: .96; margin: .3em 0 .3em; }
+.film__h1 { font-size: clamp(2.6rem, 4.6vw, 5rem); line-height: .94; margin: .3em 0 .28em; }
+.film__title { font-size: clamp(2.3rem, 4.4vw, 4.6rem); line-height: .96; margin: .3em 0 .3em; }
 .film__h1 em, .film__title em { font-style: normal; color: transparent; -webkit-text-stroke: 1.5px var(--fg); }
 .film__lede { max-width: 40ch; color: var(--fg-2); font-size: clamp(1rem, 1.25vw, 1.15rem); transition: color .6s; }
 .film__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
@@ -697,8 +697,8 @@ a.fab__btn--wa:hover { background: #1fb957; }
 
   .film { height: 700vh; }
   .film__scene { bottom: 92px; } /* clear the action bar */
-  .film__h1 { font-size: clamp(2.1rem, 10.4vw, 3.2rem); }
-  .film__title { font-size: clamp(2rem, 9.6vw, 3rem); }
+  .film__h1 { font-size: clamp(1.6rem, 8vw, 3.2rem); }
+  .film__title { font-size: clamp(1.6rem, 8vw, 3rem); }
   .film__lede { font-size: .98rem; }
   .film__scene--hero .film__actions, .film__bio { display: none; } /* the action bar carries the CTAs on phones */
   .film__hint { display: none; }
