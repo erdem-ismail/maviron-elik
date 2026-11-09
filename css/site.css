@@ -518,6 +518,37 @@ a.fab__btn--wa:hover { background: #1fb957; }
 .config__spec dd { margin: 4px 0 0; font: 800 1.3rem/1.1 var(--display); font-stretch: 125%; color: var(--paper); }
 
 /* ---------- Teklif ---------- */
+/* ---------- Kartela (inside Merdivenler) ---------- */
+.kartela { margin: clamp(64px, 8vw, 110px) var(--gutter) 0; padding-top: clamp(28px, 3vw, 40px); border-top: 1px solid var(--ink); display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 36px clamp(28px, 5vw, 80px); }
+.kartela__head { grid-row: span 2; align-self: start; }
+.kartela__head h3 { font-size: clamp(1.6rem, 2.6vw, 2.4rem); line-height: 1; margin: .35em 0 14px; }
+.kartela__head p:last-child { max-width: 40ch; color: var(--muted-ink); }
+.kartela h4 { margin: 0 0 12px; font: 500 .7rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted-ink); }
+.kartela__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.swatch { aspect-ratio: 16 / 10; background: var(--c); color: var(--ink); padding: 12px; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; box-shadow: inset 0 0 0 1px var(--line-ink); }
+.swatch--dark { color: #f3f1ec; }
+.swatch b { font: 600 clamp(1rem, 1.5vw, 1.25rem)/1 var(--body); }
+.swatch span { font: 500 .66rem/1.2 var(--mono); letter-spacing: .08em; text-transform: uppercase; opacity: .75; }
+.mat i { display: block; aspect-ratio: 16 / 10; background: #ccc center / cover; box-shadow: inset 0 0 0 1px var(--line-ink); }
+.mat span { display: block; margin-top: 8px; font-weight: 600; font-size: .92rem; }
+.mat--mese i { background-image: url(../img/tex/oak-diff.webp); }
+.mat--ceviz i { background-image: linear-gradient(rgba(52, 30, 18, .62), rgba(52, 30, 18, .62)), url(../img/tex/oak-diff.webp); }
+.mat--masif i { background-image: repeating-linear-gradient(90deg, rgba(150, 82, 30, .34) 0 17%, transparent 17% 33%, rgba(90, 48, 16, .3) 33% 49%, rgba(255, 220, 170, .12) 49% 66%), url(../img/tex/oak-diff.webp); background-size: auto, 260%; }
+.mat--porselen i { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='f' x='0' y='0' width='100%' height='100%'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.004 .009' numOctaves='5' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.55  0 0 0 0 0.55  0 0 0 0 0.57  1 0 0 0 0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 0 0 0 0 0 0 .85 0 0 0 0 0 0 0'/%3E%3C/feComponentTransfer%3E%3CfeGaussianBlur stdDeviation='.7'/%3E%3C/filter%3E%3Crect width='300' height='300' fill='%23f4f2ee'/%3E%3Crect width='300' height='300' filter='url(%23f)'/%3E%3C/svg%3E"); }
+.mat--traverten i { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='f' x='0' y='0' width='100%' height='100%'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.002 .08' numOctaves='4' seed='5'/%3E%3CfeColorMatrix values='0 0 0 0 0.62  0 0 0 0 0.58  0 0 0 0 0.52  1 0 0 0 0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 .1 .35 .1 0 .25 .55 .2 0 .15 .4'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='300' height='300' fill='%23d2cec6'/%3E%3Crect width='300' height='300' filter='url(%23f)'/%3E%3C/svg%3E"); }
+.mat--mermer i { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='f' x='0' y='0' width='100%' height='100%'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.004 .009' numOctaves='3' seed='9'/%3E%3CfeColorMatrix values='0 0 0 0 0.9  0 0 0 0 0.89  0 0 0 0 0.86  1 0 0 0 0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 0 0 0 0 0 0 0 0 0 .7 0 0 0 0 0 0 0 0 0 0'/%3E%3C/feComponentTransfer%3E%3CfeGaussianBlur stdDeviation='.7'/%3E%3C/filter%3E%3Crect width='300' height='300' fill='%231c1e21'/%3E%3Crect width='300' height='300' filter='url(%23f)'/%3E%3C/svg%3E"); }
+/* Konsol: installation photos under the main picture */
+.model-more { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.model-more img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+.model-more span { position: absolute; left: 10px; top: 10px; padding: 5px 7px; background: rgba(246, 245, 241, .88); font: 500 .66rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted-ink); }
+@media (max-width: 1024px) {
+  .kartela { grid-template-columns: minmax(0, 1fr); }
+  .kartela__head { grid-row: auto; }
+}
+@media (max-width: 560px) {
+  .kartela__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 /* ---------- SSS ---------- */
 .faq { padding: clamp(90px, 12vw, 160px) 0 0; }
 .faq__list { margin: 0 var(--gutter); border-top: 1px solid var(--line); max-width: 1100px; }
