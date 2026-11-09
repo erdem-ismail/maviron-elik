@@ -184,8 +184,7 @@
     <div class="models__body" data-reveal>
       <ul class="models__list" role="tablist" aria-label="Merdiven modelleri">
         <li><button class="model-tab" role="tab" id="t-konsol" aria-controls="p-konsol" aria-selected="true"><span>01</span><b>Konsol (uçan)</b><i>Duvardan</i></button></li>
-        <li><button class="model-tab" role="tab" id="t-duz" aria-controls="p-duz" aria-selected="false" tabindex="-1"><span>02</span><b>Düz omurgalı</b><i>İki tip</i></button>
-          <ul class="model-sub" aria-label="Düz omurgalı tipleri"><li><button type="button" data-variant="ahsap" aria-pressed="true">Ahşap oturtma</button></li><li><button type="button" data-variant="kutu" aria-pressed="false">Ahşap kaplama</button></li></ul></li>
+        <li><button class="model-tab" role="tab" id="t-duz" aria-controls="p-duz" aria-selected="false" tabindex="-1"><span>02</span><b>Düz omurgalı</b><i>Tek omurga</i></button></li>
         <li><button class="model-tab" role="tab" id="t-l" aria-controls="p-l" aria-selected="false" tabindex="-1"><span>03</span><b>L merdiven</b><i>90° dönüş</i></button></li>
         <li><button class="model-tab" role="tab" id="t-z" aria-controls="p-z" aria-selected="false" tabindex="-1"><span>04</span><b>Z merdiven</b><i>İki dönüş</i></button></li>
         <li><button class="model-tab" role="tab" id="t-celik" aria-controls="p-celik" aria-selected="false" tabindex="-1"><span>05</span><b>Çelik profilli</b><i>İki tip</i></button>
@@ -211,26 +210,12 @@
           <dl><div><dt>Taşıyıcı</dt><dd>Duvar ankrajı</dd></div><div><dt>Gereken</dt><dd>Taşıyıcı duvar</dd></div><div><dt>Etki</dt><dd>En hafif görünüm</dd></div></dl>
         </div>
         <div class="model-panel" role="tabpanel" id="p-duz" aria-labelledby="t-duz" tabindex="0" hidden>
-          <div class="variant-switch" role="group" aria-label="Basamak tipi">
-            <button type="button" aria-pressed="true" data-variant="ahsap">Ahşap oturtma</button>
-            <button type="button" aria-pressed="false" data-variant="kutu">Ahşap kaplama</button>
-          </div>
-          <div class="variant" data-variant="ahsap">
           <figure><img class="render" src="img/foto/m-duz-beyaz.webp" width="900" height="1200" loading="lazy" style="object-position: 50% 55%" alt="Beyaz boyalı tek çelik omurga üzerine oturan, alttan çelik plakalarla taşınan masif ahşap basamaklar"><figcaption>Sahadan</figcaption><div class="inset"><img src="img/models/duz-omurgali.svg" width="480" height="320" loading="lazy" alt="Düz omurgalı merdiven yan görünüş: basamakların altında tek, düz, eğimli çelik omurga"><span>Yan görünüş</span></div></figure>
           <div>
-            <h3 class="wide">Ahşap oturtma</h3>
+            <h3 class="wide">Düz omurgalı merdiven</h3>
             <p>Masif ahşap basamaklar omurganın üzerindeki çelik plakalara oturur; alttan bakınca tek ve sade bir çizgi formu oluşturur.</p>
           </div>
           <dl><div><dt>Taşıyıcı</dt><dd>Düz merkez omurga</dd></div><div><dt>Basamak</dt><dd>4–5 cm masif ahşap</dd></div><div><dt>Etki</dt><dd>Hafif, grafik</dd></div></dl>
-          </div>
-          <div class="variant" data-variant="kutu" hidden>
-          <figure><img class="render" src="img/foto/m-kutu.webp" width="1200" height="800" loading="lazy" alt="Beyaz boyalı çelik profil kutu basamaklarla kaplanmış, dönerek yükselen merdiven"><figcaption>Sahadan</figcaption><div class="inset"><img src="img/models/duz-kutu.svg" width="480" height="320" loading="lazy" alt="Ahşap kaplama merdiven yan görünüş: düz omurga üzerinde kalın kutu basamaklar"><span>Yan görünüş</span></div></figure>
-          <div>
-            <h3 class="wide">Ahşap kaplama</h3>
-            <p>Her basamak çelik kutu profilden kaynaklı bir gövdedir; üstü ve alnı ahşapla kaplanır. Kalın, blok gibi basamaklar uzun açıklıklarda bile esnemez.</p>
-          </div>
-          <dl><div><dt>Taşıyıcı</dt><dd>Düz merkez omurga</dd></div><div><dt>Basamak</dt><dd>8–10 cm kutu profil + ahşap</dd></div><div><dt>Etki</dt><dd>Kalın, mimari</dd></div></dl>
-          </div>
         </div>
         <div class="model-panel" role="tabpanel" id="p-l" aria-labelledby="t-l" tabindex="0" hidden>
           <figure><img class="render" src="img/foto/m-l-montaj.webp" width="1200" height="800" loading="lazy" alt="Montaj sırasında koruma naylonuna sarılı, tek siyah çelik omurgalı L merdiven: duvar boyunca çıkan kol köşede 90 derece dönüp odaya iniyor"><figcaption>Sahadan</figcaption><div class="inset inset--left"><img src="img/models/l.svg" width="480" height="320" loading="lazy" alt="L merdiven plan görünüş: düz kol, kare sahanlık ve 90 derece dönen ikinci kol"><span>Plan</span></div></figure>
@@ -775,7 +760,7 @@
     });
   });
 
-  // Düz omurgalı and Çelik profilli: two types share one tab
+  // Çelik profilli: two types share one tab
   // (the switch above the picture, and on wide screens the sub-items under the tab)
   document.querySelectorAll('.model-panel').forEach(panel => {
     const tab = document.getElementById(panel.getAttribute('aria-labelledby'));
