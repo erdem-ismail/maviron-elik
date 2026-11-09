@@ -54,7 +54,7 @@
 <script>
   document.documentElement.classList.add('js');
 </script>
-<link rel="stylesheet" href="css/site.css?v=11">
+<link rel="stylesheet" href="css/site.css?v=12">
 <script src="js/nav.js" defer></script>
 </head>
 <body>
@@ -69,8 +69,10 @@
     <a href="#modeller">Merdivenler</a>
     <a class="long" href="#hizmetler">Hizmetler</a>
     <a class="long" href="#projeler">Projeler</a>
+    <a class="long" href="katalog/Maviron-Celik-Katalog-2026.pdf" target="_blank" rel="noopener" type="application/pdf">Katalog</a>
     <a class="long" href="#surec">Süreç</a>
     <a href="#tasarla">Tasarla</a>
+    <a href="#sss">SSS</a>
     <a href="#iletisim">İletişim</a>
     <a class="btn" href="#teklif">Teklif al</a>
   </nav>
@@ -175,7 +177,7 @@
     <div class="section-head" data-reveal>
       <div>
         <p class="eyebrow">Merdiven modelleri</p>
-        <h2 class="section-title wide" id="models-title">Yedi model,<br>tek ölçü: sizin.</h2>
+        <h2 class="section-title wide" id="models-title">Dokuz model,<br>tek ölçü: sizin.</h2>
       </div>
       <p class="section-note">Her merdiven mekâna göre çizilir. Model sadece başlangıç noktası; basamak, korkuluk ve renk sizin seçiminiz.</p>
     </div>
@@ -187,9 +189,12 @@
           <ul class="model-sub" aria-label="Düz omurgalı tipleri"><li><button type="button" data-variant="ahsap" aria-pressed="true">Ahşap oturtma</button></li><li><button type="button" data-variant="kutu" aria-pressed="false">Ahşap kaplama</button></li></ul></li>
         <li><button class="model-tab" role="tab" id="t-l" aria-controls="p-l" aria-selected="false" tabindex="-1"><span>03</span><b>L merdiven</b><i>90° dönüş</i></button></li>
         <li><button class="model-tab" role="tab" id="t-z" aria-controls="p-z" aria-selected="false" tabindex="-1"><span>04</span><b>Z merdiven</b><i>İki dönüş</i></button></li>
-        <li><button class="model-tab" role="tab" id="t-celik" aria-controls="p-celik" aria-selected="false" tabindex="-1"><span>05</span><b>Çelik profilli</b><i>İki yan profil</i></button></li>
+        <li><button class="model-tab" role="tab" id="t-celik" aria-controls="p-celik" aria-selected="false" tabindex="-1"><span>05</span><b>Çelik profilli</b><i>İki tip</i></button>
+          <ul class="model-sub" aria-label="Çelik profilli tipleri"><li><button type="button" data-variant="profil" aria-pressed="true">Çelik profil</button></li><li><button type="button" data-variant="kaplama" aria-pressed="false">Profil kaplama</button></li></ul></li>
         <li><button class="model-tab" role="tab" id="t-u" aria-controls="p-u" aria-selected="false" tabindex="-1"><span>06</span><b>U merdiven</b><i>180° dönüş</i></button></li>
         <li><button class="model-tab" role="tab" id="t-spiral" aria-controls="p-spiral" aria-selected="false" tabindex="-1"><span>07</span><b>Spiral</b><i>Merkez dikme</i></button></li>
+        <li><button class="model-tab" role="tab" id="t-limon" aria-controls="p-limon" aria-selected="false" tabindex="-1"><span>08</span><b>Limon kiriş</b><i>İki yan kiriş</i></button></li>
+        <li><button class="model-tab" role="tab" id="t-yangin" aria-controls="p-yangin" aria-selected="false" tabindex="-1"><span>09</span><b>Yangın merdiveni</b><i>Dış cephe</i></button></li>
       </ul>
 
       <div>
@@ -248,12 +253,26 @@
           <dl><div><dt>Taşıyıcı</dt><dd>İki omurga + sahanlık</dd></div><div><dt>Gereken</dt><dd>Derin alan</dd></div><div><dt>Etki</dt><dd>Kompakt, katmanlı</dd></div></dl>
         </div>
         <div class="model-panel" role="tabpanel" id="p-celik" aria-labelledby="t-celik" tabindex="0" hidden>
+          <div class="variant-switch" role="group" aria-label="Çelik profilli tipi">
+            <button type="button" aria-pressed="true" data-variant="profil">Çelik profil</button>
+            <button type="button" aria-pressed="false" data-variant="kaplama">Profil kaplama</button>
+          </div>
+          <div class="variant" data-variant="profil">
           <figure><img class="render" src="img/foto/m-celik-karkas.webp" width="1200" height="800" loading="lazy" alt="Yukarıdan bakış: montaj sırasında kırmızı astarlı kutu profil çelik karkas, yelpaze gibi dönen basamaklar ve altta düz basamak çerçeveleri"><figcaption>Sahadan</figcaption><div class="inset inset--left"><img src="img/models/celik.svg" width="480" height="320" loading="lazy" alt="Çelik profilli merdiven yan görünüş: yan profil limon, basamaklar ve metal korkuluk"><span>Yan görünüş</span></div></figure>
           <div>
             <h3 class="wide">Çelik profilli merdiven</h3>
             <p>Basamaklar çelik profilden yerinde kesilerek merdiven formu oluşturulur. Dar alanlarda tercih edilir; dubleks ve ters dubleks gibi alanlarda kullanılır.</p>
           </div>
-          <dl><div><dt>Taşıyıcı</dt><dd>İki yan profil</dd></div><div><dt>Gereken</dt><dd>Düz kol boyu</dd></div><div><dt>Etki</dt><dd>Endüstriyel</dd></div></dl>
+          <dl><div><dt>Taşıyıcı</dt><dd>Kaynaklı profil gövde</dd></div><div><dt>Kullanım</dt><dd>Dubleks, dar alan</dd></div><div><dt>Etki</dt><dd>Endüstriyel</dd></div></dl>
+          </div>
+          <div class="variant" data-variant="kaplama" hidden>
+          <figure><img class="render" src="img/foto/kaplama.webp" width="900" height="1200" loading="lazy" style="object-position: 50% 62%" alt="Çelik profil gövdesi kaplanmış, beyaz yan yüzeyli ve koyu ahşap basamaklı, duvar boyunca çıkan merdiven"><figcaption>Sahadan</figcaption></figure>
+          <div>
+            <h3 class="wide">Profil kaplama</h3>
+            <p>Çelik profilden kurulan gövdenin üstü ve basamak alınları ahşapla kaplanır, yan yüzeyler kapatılıp boyanır. Taşıyıcı tamamen gizlendiği için merdiven yekpare bir ahşap merdiven gibi görünür.</p>
+          </div>
+          <dl><div><dt>Taşıyıcı</dt><dd>Gizli çelik profil</dd></div><div><dt>Kaplama</dt><dd>Ahşap basamak ve alın</dd></div><div><dt>Etki</dt><dd>Klasik, yekpare</dd></div></dl>
+          </div>
         </div>
         <div class="model-panel" role="tabpanel" id="p-spiral" aria-labelledby="t-spiral" tabindex="0" hidden>
           <figure><img class="render" src="img/foto/m-spiral-isikli.webp" width="1200" height="800" loading="lazy" alt="Siyah çelik omurgalı, basamak altları LED ışıklı meşe basamaklı merdiven: alt basamaklar yelpaze gibi dönerek açılıyor, yanda tavana uzanan dikmeler"><figcaption>Sahadan</figcaption><div class="inset inset--left"><img src="img/models/spiral.svg" width="480" height="320" loading="lazy" alt="Spiral merdiven plan görünüş: merkez dikme etrafında yelpaze basamaklar"><span>Plan</span></div></figure>
@@ -262,6 +281,23 @@
             <p>Basamaklar merkezdeki çelik dikmenin etrafında yelpaze gibi açılır. En az alanı kaplar; asma kat, çatı katı ve bahçe çıkışları için ideal.</p>
           </div>
           <dl><div><dt>Taşıyıcı</dt><dd>Merkez dikme</dd></div><div><dt>Gereken</dt><dd>Küçük bir daire</dd></div><div><dt>Etki</dt><dd>Heykelsi</dd></div></dl>
+        </div>
+        <div class="model-panel" role="tabpanel" id="p-limon" aria-labelledby="t-limon" tabindex="0" hidden>
+          <figure><img class="render" src="img/foto/dikme-donus.webp" width="900" height="1200" loading="lazy" style="object-position: 50% 70%" alt="İki yandaki eğimli çelik kirişlerin arasına yerleştirilmiş ahşap basamaklar ve dikmeli metal korkuluk"><figcaption>Temsili</figcaption></figure>
+          <div>
+            <h3 class="wide">Limon kirişli merdiven</h3>
+            <p>Basamaklar, iki yanda uzanan eğimli çelik kirişlerin, yani limonların arasına yerleştirilir. Yük iki kirişe paylaştırıldığı için geniş ve uzun kollarda sağlam bir çözüm sunar. Kirişler duvara yaslanabilir ya da boşlukta serbest durabilir.</p>
+          </div>
+          <dl><div><dt>Taşıyıcı</dt><dd>İki yan limon kirişi</dd></div><div><dt>Basamak</dt><dd>Ahşap, çelik veya sac</dd></div><div><dt>Etki</dt><dd>Sağlam, klasik</dd></div></dl>
+        </div>
+        <div class="model-panel" role="tabpanel" id="p-yangin" aria-labelledby="t-yangin" tabindex="0" hidden>
+          <figure><img class="render" src="img/foto/yangin-montaj.webp" width="1200" height="800" loading="lazy" alt="Montaj sırasında bina cephesine bağlanan çelik yangın merdiveni: eğimli kiriş ve çaprazlı sahanlık kulesi"><figcaption>Sahadan</figcaption></figure>
+          <div>
+            <h3 class="wide">Yangın merdiveni</h3>
+            <p>Bina cephesine bağlanan, eğimli çelik kirişler ve sahanlık kulelerinden oluşan dış merdivendir. Basamaklar kaymayı önleyen baklava desenli sacdan ya da ızgaradan yapılır. Acil durumda her kattan güvenli bir kaçış yolu sağlar.</p>
+            <p><a class="text-link" href="yangin-merdiveni.html">Yangın merdiveni sayfasına gidin <span aria-hidden="true">→</span></a></p>
+          </div>
+          <dl><div><dt>Taşıyıcı</dt><dd>Çelik kiriş ve kule</dd></div><div><dt>Basamak</dt><dd>Baklava sac veya ızgara</dd></div><div><dt>Kullanım</dt><dd>Dış cephe, kaçış yolu</dd></div></dl>
         </div>
       </div>
     </div>
@@ -368,7 +404,7 @@
               <button type="button" class="pager__btn" data-dir="1" aria-label="Sonraki görsel"><span aria-hidden="true">→</span></button>
             </div>
           </div>
-          <p>Omurgalı, konsol, L, Z, U, çelik profilli ve spiral modeller. Ahşap, çelik ya da mermer basamak; cam, metal veya separatör korkuluk.</p>
+          <p>Omurgalı, konsol, L, Z, U, çelik profilli, limon kirişli ve spiral merdivenlerin yanı sıra dış cephe yangın merdivenleri de yapıyoruz. Basamakta ahşap, çelik ya da mermer; korkulukta cam, metal veya separatör seçebilirsiniz.</p>
           <ul><li>Villa</li><li>Ofis</li><li>Mağaza</li><li>Dubleks</li></ul>
           <a class="service__cta" href="#teklif" data-quote="Çelik merdiven">Teklif iste <span aria-hidden="true">→</span></a>
         </article>
@@ -574,6 +610,26 @@
   </section>
 
   <!-- TEKLİF — the form writes a WhatsApp message; nothing is stored or sent anywhere else -->
+  <!-- SSS -->
+  <section class="faq" id="sss" aria-labelledby="faq-title">
+    <div class="section-head" data-reveal>
+      <div>
+        <p class="eyebrow">Sıkça sorulan sorular</p>
+        <h2 class="section-title wide" id="faq-title">Aklınızdaki<br>sorular.</h2>
+      </div>
+      <p class="section-note">Burada cevabını bulamadığınız her soru için bize WhatsApp'tan ya da telefonla ulaşabilirsiniz.</p>
+    </div>
+    <div class="faq__list">
+      <details class="faq__item"><summary>Hangi bölgelerde hizmet veriyorsunuz?</summary><p>İstanbul, Kocaeli ve İzmit'te keşif, üretim ve montaj yapıyoruz. Başka bir şehirdeki projeniz için de bize yazabilirsiniz; işin kapsamına göre değerlendiriyoruz.</p></details>
+      <details class="faq__item"><summary>Fiyat teklifi nasıl alabilirim?</summary><p>Teklif formunu doldurabilir ya da WhatsApp'tan yazabilirsiniz. Kat yüksekliği, merdiven boşluğunun ölçüleri ve birkaç fotoğraf ilk fiyatı çıkarmamız için yeterlidir. Kesin teklifi keşiften sonra veriyoruz.</p></details>
+      <details class="faq__item"><summary>Merdiveni yaptırmadan önce görebilir miyim?</summary><p>Evet. Keşiften sonra merdiveninizi 3D olarak çiziyor ve statik hesabını yapıyoruz. Üretime, siz her detayı görüp onayladıktan sonra başlıyoruz.</p></details>
+      <details class="faq__item"><summary>Hangi malzemeleri seçebilirim?</summary><p>Basamakta ahşap, çelik ya da mermer; korkulukta cam, metal veya separatör kullanabilirsiniz. Çelik aksamın rengini de siz belirlersiniz.</p></details>
+      <details class="faq__item"><summary>Merdiven ne kadar sürede teslim edilir?</summary><p>Süre, merdivenin modeline ve projenin büyüklüğüne göre değişir. Kesin takvimi keşif ve proje onayından sonra size bildiriyoruz.</p></details>
+      <details class="faq__item"><summary>Mevcut bir eve çelik merdiven yapılabilir mi?</summary><p>Evet. Merdiveni mekânın ölçülerine göre tasarlıyoruz. Duvarların ve döşemenin taşıma durumunu keşif sırasında birlikte değerlendiriyoruz.</p></details>
+      <details class="faq__item"><summary>Merdiven dışında hangi işleri yapıyorsunuz?</summary><p>Asma kat, çatı, çelik villa ve bungalov, carport ve sundurma, endüstriyel yapılar ve yangın merdiveni de yapıyoruz. Her işi projelendirmeden montaja kadar biz yürütüyoruz.</p></details>
+    </div>
+  </section>
+
   <section class="quote" id="teklif" aria-labelledby="quote-title">
     <div class="quote__grid">
       <div id="iletisim" data-reveal>
@@ -634,7 +690,8 @@
       <a href="#korkuluklar">Korkuluklar</a>
       <a href="catilar.html">Çatılar</a>
       <a href="yangin-merdiveni.html">Yangın merdiveni</a>
-      <a href="#iletisim">İletişim</a>
+      <a href="#sss">SSS</a>
+    <a href="#iletisim">İletişim</a>
       <a href="kvkk.html">KVKK</a>
     </nav>
   </div>
@@ -676,14 +733,18 @@
     });
   });
 
-  // Düz omurgalı: two tread types share one tab
-  // (the switch above the picture, and on wide screens the two sub-items under the tab)
-  const duzPanel = document.getElementById('p-duz'), duzButtons = document.querySelectorAll('.variant-switch button, .model-sub button');
-  duzButtons.forEach(btn => btn.addEventListener('click', () => {
-    if (btn.closest('.model-sub')) select(document.getElementById('t-duz'));
-    duzButtons.forEach(b => b.setAttribute('aria-pressed', b.dataset.variant === btn.dataset.variant));
-    duzPanel.querySelectorAll('.variant').forEach(v => { v.hidden = v.dataset.variant !== btn.dataset.variant; });
-  }));
+  // Düz omurgalı and Çelik profilli: two types share one tab
+  // (the switch above the picture, and on wide screens the sub-items under the tab)
+  document.querySelectorAll('.model-panel').forEach(panel => {
+    const tab = document.getElementById(panel.getAttribute('aria-labelledby'));
+    const sub = tab.nextElementSibling;
+    const buttons = [...panel.querySelectorAll('.variant-switch button'), ...(sub ? sub.querySelectorAll('button') : [])];
+    buttons.forEach(btn => btn.addEventListener('click', () => {
+      if (sub && sub.contains(btn)) select(tab);
+      buttons.forEach(b => b.setAttribute('aria-pressed', b.dataset.variant === btn.dataset.variant));
+      panel.querySelectorAll('.variant').forEach(v => { v.hidden = v.dataset.variant !== btn.dataset.variant; });
+    }));
+  });
 
   // Side-scrolling strips (catalogue, stair pictures): the arrows move one item
   document.querySelectorAll('.pager').forEach(pager => {

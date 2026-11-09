@@ -518,6 +518,24 @@ a.fab__btn--wa:hover { background: #1fb957; }
 .config__spec dd { margin: 4px 0 0; font: 800 1.3rem/1.1 var(--display); font-stretch: 125%; color: var(--paper); }
 
 /* ---------- Teklif ---------- */
+/* ---------- SSS ---------- */
+.faq { padding: clamp(90px, 12vw, 160px) 0 0; }
+.faq__list { margin: 0 var(--gutter); border-top: 1px solid var(--line); max-width: 1100px; }
+.faq__item { border-bottom: 1px solid var(--line); }
+.faq__item summary {
+  display: flex; justify-content: space-between; align-items: center; gap: 24px;
+  min-height: 64px; padding: 18px 0; cursor: pointer; list-style: none;
+  font: 700 clamp(1.05rem, 1.6vw, 1.3rem)/1.25 var(--body);
+}
+.faq__item summary::-webkit-details-marker { display: none; }
+.faq__item summary::after { content: "+"; flex: none; font: 500 1.6rem/1 var(--mono, monospace); transition: transform .2s; }
+.faq__item[open] summary::after { transform: rotate(45deg); }
+.faq__item summary:hover { color: var(--oak); }
+.faq__item summary:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.faq__item p { margin: 0 0 24px; max-width: 64ch; color: var(--muted); }
+.model-panel .text-link { font-weight: 600; color: inherit; text-decoration: underline; text-underline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) { .faq__item summary::after { transition: none; } }
+
 .quote { padding: clamp(90px, 12vw, 160px) 0 clamp(70px, 9vw, 120px); }
 .quote__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(32px, 6vw, 96px); padding: 0 var(--gutter); }
 .quote__title { font-size: clamp(2.4rem, 5.6vw, 5.4rem); line-height: .95; margin: .4em 0 .4em; }
