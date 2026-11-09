@@ -1183,11 +1183,9 @@
 
     const site = new THREE.Group(), siteMats = [];
     {
-      const raftMaps = Object.fromEntries(Object.entries(floorMaps).map(([k, t]) => {
-        const c = t.clone();
-        c.repeat.set(6.4 / 2.2, 14.2 / 2.2);
-        return [k, c];
-      }));
+      // own copies of the floor textures (a clone made before they load would never get its image)
+      const raftMaps = { map: tex('floor-diff', true), roughnessMap: tex('floor-rough'), normalMap: tex('floor-nor') };
+      for (const t of Object.values(raftMaps)) t.repeat.set(6.4 / 2.2, 14.2 / 2.2);
       const raftMat = new THREE.MeshStandardMaterial({ ...raftMaps, color: '#e4e0d8', roughness: 1, normalScale: new THREE.Vector2(.6, .6) });
       const raft = new THREE.Mesh(new THREE.BoxGeometry(6.4, .3, 14.2), raftMat);
       raft.position.set(BX[1], -.153, (BZ[0] + FRONT) / 2);
