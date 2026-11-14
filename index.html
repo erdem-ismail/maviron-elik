@@ -30,7 +30,7 @@
  "description": "Endüstriyel çelik yapılar, asma kat, villa, bungalov, çatı ve çelik merdiven. Tasarım, proje ve uygulama.",
  "telephone": "+90 536 377 33 70",
  "email": "info@mavironcelik.com",
- "areaServed": ["İstanbul", "Kocaeli", "İzmit"],
+ "areaServed": ["İstanbul", "Kocaeli"],
  "sameAs": ["https://www.instagram.com/mavironcelik/"]
 }
 </script>
@@ -54,7 +54,7 @@
 <script>
   document.documentElement.classList.add('js');
 </script>
-<link rel="stylesheet" href="css/site.css?v=22">
+<link rel="stylesheet" href="css/site.css?v=24">
 <script src="js/nav.js" defer></script>
 </head>
 <body>
@@ -66,8 +66,16 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h12"/></svg>
   </button>
   <nav class="nav" id="nav" aria-label="Ana menü">
-    <a href="#projeler">Projelerimiz</a>
-    <a class="long" href="#hizmetler">Hizmetler</a>
+    <a href="projeler.html">Projelerimiz</a>
+    <div class="nav__group long">
+      <a href="#hizmetler">Hizmetler</a>
+      <div class="nav__sub">
+        <a href="mimari-celik.html">Mimari çelik uygulamalar</a>
+        <a href="celik-yapi.html">Çelik yapı sistemleri</a>
+        <a href="muhendislik.html">Mühendislik ve projelendirme</a>
+        <a href="imalat-montaj.html">İmalat ve montaj</a>
+      </div>
+    </div>
     <a class="long" href="katalog/Maviron-Celik-Katalog-2026.pdf" target="_blank" rel="noopener" type="application/pdf">Katalog</a>
     <a class="long" href="#surec">Süreç</a>
     <a href="#tasarla">Tasarla</a>
@@ -94,7 +102,7 @@
         <p class="film__lede">Çelik yapı ve mimari metal sistemlerde tasarım, mühendislik, imalat ve montaj süreçlerini tek çatı altında yönetiyoruz.</p>
         <div class="film__actions">
           <a class="btn" href="#teklif">Teklif al <span class="arrow" aria-hidden="true">→</span></a>
-          <a class="btn btn--ghost" href="#projeler">Projeler</a>
+          <a class="btn btn--ghost" href="projeler.html">Projeler</a>
         </div>
         <p class="film__bio mono">Tasarım · Proje · Uygulama</p>
       </div>
@@ -173,249 +181,11 @@
     </div>
   </section>
 
-  <!-- MODELLER — the five types from Maviron's "Merdiven modelleri" post -->
-  <section class="models" id="modeller" aria-labelledby="models-title">
-    <div class="section-head" data-reveal>
-      <div>
-        <p class="eyebrow">Merdiven modelleri</p>
-        <h2 class="section-title wide" id="models-title">On model,<br>tek ölçü: sizin.</h2>
-      </div>
-      <p class="section-note">Her merdiven mekâna göre çizilir. Model yalnızca bir başlangıç noktasıdır; basamağı, korkuluğu ve rengi siz seçersiniz.</p>
-    </div>
 
-    <div class="models__body" data-reveal>
-      <ul class="models__list" role="tablist" aria-label="Merdiven modelleri">
-        <li><button class="model-tab" role="tab" id="t-konsol" aria-controls="p-konsol" aria-selected="true"><span>01</span><b>Konsol (uçan)</b><i>Duvardan</i></button></li>
-        <li><button class="model-tab" role="tab" id="t-duz" aria-controls="p-duz" aria-selected="false" tabindex="-1"><span>02</span><b>Düz omurgalı</b><i>Tek omurga</i></button></li>
-        <li><button class="model-tab" role="tab" id="t-l" aria-controls="p-l" aria-selected="false" tabindex="-1"><span>03</span><b>L merdiven</b><i>90° dönüş</i></button></li>
-        <li><button class="model-tab" role="tab" id="t-z" aria-controls="p-z" aria-selected="false" tabindex="-1"><span>04</span><b>Z merdiven</b><i>İki dönüş</i></button></li>
-        <li><button class="model-tab" role="tab" id="t-celik" aria-controls="p-celik" aria-selected="false" tabindex="-1"><span>05</span><b>Çelik profilli</b><i>İki tip</i></button>
-          <ul class="model-sub" aria-label="Çelik profilli tipleri"><li><button type="button" data-variant="profil" aria-pressed="true">Çelik profil</button></li><li><button type="button" data-variant="kaplama" aria-pressed="false">Profil kaplama</button></li></ul></li>
-        <li><button class="model-tab" role="tab" id="t-u" aria-controls="p-u" aria-selected="false" tabindex="-1"><span>06</span><b>U merdiven</b><i>180° dönüş</i></button></li>
-        <li><button class="model-tab" role="tab" id="t-spiral" aria-controls="p-spiral" aria-selected="false" tabindex="-1"><span>07</span><b>Spiral</b><i>Helezon</i></button></li>
-        <li><button class="model-tab" role="tab" id="t-limon" aria-controls="p-limon" aria-selected="false" tabindex="-1"><span>08</span><b>Limon kiriş</b><i>İki yan kiriş</i></button></li>
-        <li><button class="model-tab" role="tab" id="t-yangin" aria-controls="p-yangin" aria-selected="false" tabindex="-1"><span>09</span><b>Yangın merdiveni</b><i>Dış cephe</i></button></li>
-        <li><button class="model-tab" role="tab" id="t-yarim" aria-controls="p-yarim" aria-selected="false" tabindex="-1"><span>10</span><b>Yarı döner omurgalı</b><i>Yarım dönüş</i></button></li>
-      </ul>
 
-      <div>
-        <div class="model-panel" role="tabpanel" id="p-konsol" aria-labelledby="t-konsol" tabindex="0">
-          <figure><img class="render" src="img/foto/m-konsol-mese.webp" width="1200" height="800" loading="lazy" alt="Duvardan çıkan masif meşe blok basamaklı, altında taşıyıcı görünmeyen konsol merdiven"><figcaption>Sahadan</figcaption><div class="inset"><img src="img/models/konsol.svg" width="480" height="320" loading="lazy" alt="Konsol merdiven yan görünüş: basamaklar duvardan çıkıyor, altta taşıyıcı yok"><span>Yan görünüş</span></div></figure>
-          <div class="model-more">
-            <img src="img/foto/konsol-montaj.webp" width="600" height="800" loading="lazy" alt="Montaj sırasında duvara cıvatayla bağlanan kalın çelik lama ve ondan çıkan konsol basamak çerçeveleri">
-            <img src="img/foto/konsol-ustten.webp?v=2" width="600" height="800" loading="lazy" alt="Yukarıdan bakış: duvardaki çelik lamaya bağlı, kaplama öncesi konsol basamak iskeletleri ve köşede dönen sahanlık">
-            <span>Montajdan</span>
-          </div>
-          <div>
-            <h3 class="wide">Konsol merdiven (uçan)</h3>
-            <p>Basamaklar gizli çelik ankrajlarla doğrudan betonarme veya taşıyıcı duvara bağlanır, alttan hiçbir taşıyıcı görünmez. Merdiven havada asılı gibi durur; dar ve sade mekânlarda en çok tercih edilen modeldir.</p>
-          </div>
-          <dl><div><dt>Taşıyıcı</dt><dd>Duvar ankrajı</dd></div><div><dt>Gereken</dt><dd>Taşıyıcı duvar</dd></div><div><dt>Etki</dt><dd>En hafif görünüm</dd></div></dl>
-        </div>
-        <div class="model-panel" role="tabpanel" id="p-duz" aria-labelledby="t-duz" tabindex="0" hidden>
-          <figure><img class="render" src="img/foto/m-duz-beyaz.webp" width="900" height="1200" loading="lazy" style="object-position: 50% 55%" alt="Beyaz boyalı tek çelik omurga üzerine oturan, alttan çelik plakalarla taşınan masif ahşap basamaklar"><figcaption>Sahadan</figcaption><div class="inset"><img src="img/models/duz-omurgali.svg" width="480" height="320" loading="lazy" alt="Düz omurgalı merdiven yan görünüş: basamakların altında tek, düz, eğimli çelik omurga"><span>Yan görünüş</span></div></figure>
-          <div>
-            <h3 class="wide">Düz omurgalı merdiven</h3>
-            <p>Masif ahşap basamaklar omurganın üzerindeki çelik plakalara oturur; alttan bakınca tek ve sade bir çizgi formu oluşturur.</p>
-          </div>
-          <dl><div><dt>Taşıyıcı</dt><dd>Düz merkez omurga</dd></div><div><dt>Basamak</dt><dd>4–5 cm masif ahşap</dd></div><div><dt>Etki</dt><dd>Hafif, grafik</dd></div></dl>
-        </div>
-        <div class="model-panel" role="tabpanel" id="p-l" aria-labelledby="t-l" tabindex="0" hidden>
-          <figure><img class="render" src="img/foto/m-l-montaj.webp" width="1200" height="800" loading="lazy" alt="Montaj sırasında koruma naylonuna sarılı, tek siyah çelik omurgalı L merdiven: duvar boyunca çıkan kol köşede 90 derece dönüp odaya iniyor"><figcaption>Sahadan</figcaption><div class="inset inset--left"><img src="img/models/l.svg" width="480" height="320" loading="lazy" alt="L merdiven plan görünüş: düz kol, kare sahanlık ve 90 derece dönen ikinci kol"><span>Plan</span></div></figure>
-          <div>
-            <h3 class="wide">L merdiven</h3>
-            <p>Bir sahanlıkla 90° döner. Her kolun kendi düz omurgası vardır, sahanlık tek bir çelik dikmeye oturur.</p>
-          </div>
-          <dl><div><dt>Taşıyıcı</dt><dd>İki omurga + sahanlık</dd></div><div><dt>Gereken</dt><dd>Köşe</dd></div><div><dt>Etki</dt><dd>Kompakt</dd></div></dl>
-        </div>
-        <div class="model-panel" role="tabpanel" id="p-z" aria-labelledby="t-z" tabindex="0" hidden>
-          <figure><img class="render" src="img/models/z.webp?v=3" width="1200" height="800" loading="lazy" alt="Yukarıdan bakış: siyah omurgalı meşe basamaklar ve dikme korkuluk, sahanlıkta dönüp ikinci kolla aşağı inen Z merdiven"><figcaption>Sahadan</figcaption><div class="inset"><img src="img/models/z.svg" width="480" height="320" loading="lazy" alt="Z merdiven plan görünüş: üç kol ve iki sahanlıkla iki kez dönen merdiven"><span>Plan</span></div></figure>
-          <div>
-            <h3 class="wide">Z merdiven</h3>
-            <p>İki sahanlıkla iki kez 90° döner, planda bir Z çizer. Kollar duvarlara yaslanır, merdiven odanın bir ucundan ötekine yürür.</p>
-          </div>
-          <dl><div><dt>Taşıyıcı</dt><dd>Üç omurga, dikmesiz sahanlık</dd></div><div><dt>Gereken</dt><dd>Geniş, köşeli alan</dd></div><div><dt>Etki</dt><dd>Dinamik</dd></div></dl>
-        </div>
-        <div class="model-panel" role="tabpanel" id="p-u" aria-labelledby="t-u" tabindex="0" hidden>
-          <figure><img class="render" src="img/foto/m-u-cam.webp" width="900" height="1200" loading="lazy" style="object-position: 50% 62%" alt="Tek siyah çelik omurgalı, meşe basamaklı ve noktasal bağlantılı cam korkuluklu merdiven: sahanlıkta dönüp ikinci kolla üst kata çıkıyor"><figcaption>Sahadan</figcaption><div class="inset"><img src="img/models/u.svg" width="480" height="320" loading="lazy" alt="U merdiven plan görünüş: yan yana iki kol ve aralarında geniş sahanlık"><span>Plan</span></div></figure>
-          <div>
-            <h3 class="wide">U merdiven</h3>
-            <p>Sahanlıkta 180° döner; ikinci kol birincinin yanından geri gelir. Dar ama derin merdiven boşluklarında yüksekliği en az alanda kazanır.</p>
-          </div>
-          <dl><div><dt>Taşıyıcı</dt><dd>İki omurga + sahanlık</dd></div><div><dt>Gereken</dt><dd>Derin alan</dd></div><div><dt>Etki</dt><dd>Kompakt, katmanlı</dd></div></dl>
-        </div>
-        <div class="model-panel" role="tabpanel" id="p-celik" aria-labelledby="t-celik" tabindex="0" hidden>
-          <div class="variant-switch" role="group" aria-label="Çelik profilli tipi">
-            <button type="button" aria-pressed="true" data-variant="profil">Çelik profil</button>
-            <button type="button" aria-pressed="false" data-variant="kaplama">Profil kaplama</button>
-          </div>
-          <div class="variant" data-variant="profil">
-          <figure><img class="render" src="img/foto/m-celik-karkas.webp" width="1200" height="800" loading="lazy" alt="Yukarıdan bakış: montaj sırasında kırmızı astarlı kutu profil çelik karkas, yelpaze gibi dönen basamaklar ve altta düz basamak çerçeveleri"><figcaption>Sahadan</figcaption><div class="inset inset--left"><img src="img/models/celik.svg" width="480" height="320" loading="lazy" alt="Çelik profilli merdiven yan görünüş: yan profil limon, basamaklar ve metal korkuluk"><span>Yan görünüş</span></div></figure>
-          <div>
-            <h3 class="wide">Çelik profilli merdiven</h3>
-            <p>Çelik profiller yerinde kesilip birleştirilerek merdiven formu oluşturulur. Dar alanlarda tercih edilir; dubleks ve ters dubleks dairelerde kullanılır.</p>
-          </div>
-          <dl><div><dt>Taşıyıcı</dt><dd>Kaynaklı profil gövde</dd></div><div><dt>Kullanım</dt><dd>Dubleks, dar alan</dd></div><div><dt>Etki</dt><dd>Endüstriyel</dd></div></dl>
-          </div>
-          <div class="variant" data-variant="kaplama" hidden>
-          <figure><img class="render" src="img/foto/kaplama.webp" width="900" height="1200" loading="lazy" style="object-position: 50% 62%" alt="Çelik profil gövdesi kaplanmış, beyaz yan yüzeyli ve koyu ahşap basamaklı, duvar boyunca çıkan merdiven"><figcaption>Sahadan</figcaption></figure>
-          <div>
-            <h3 class="wide">Profil kaplama</h3>
-            <p>Çelik profilden kurulan gövdenin üstü ve basamak alınları ahşapla kaplanır, yan yüzeyler kapatılıp boyanır. Taşıyıcı tamamen gizlendiği için merdiven yekpare bir ahşap merdiven gibi görünür.</p>
-          </div>
-          <dl><div><dt>Taşıyıcı</dt><dd>Gizli çelik profil</dd></div><div><dt>Kaplama</dt><dd>Ahşap basamak ve alın</dd></div><div><dt>Etki</dt><dd>Klasik, yekpare</dd></div></dl>
-          </div>
-        </div>
-        <div class="model-panel" role="tabpanel" id="p-spiral" aria-labelledby="t-spiral" tabindex="0" hidden>
-          <figure><img class="render" src="img/foto/helezon-1.webp" width="708" height="870" loading="lazy" alt="Atölyede bükülerek imal edilen helezon çelik merdiven omurgası ve yelpaze basamak plakaları"><figcaption>Atölyeden</figcaption><div class="inset inset--left"><img src="img/models/spiral.svg" width="480" height="320" loading="lazy" alt="Spiral merdiven plan görünüş: merkez dikme etrafında yelpaze basamaklar"><span>Plan</span></div></figure>
-          <div>
-            <h3 class="wide">Spiral merdiven</h3>
-            <p>Basamaklar helezon biçiminde bükülen çelik taşıyıcı boyunca yelpaze gibi açılır. En az alanı kaplar; asma kat, çatı katı ve bahçe çıkışları için idealdir.</p>
-          </div>
-          <dl><div><dt>Taşıyıcı</dt><dd>Helezon çelik omurga</dd></div><div><dt>Gereken</dt><dd>Küçük bir daire</dd></div><div><dt>Etki</dt><dd>Heykelsi</dd></div></dl>
-        </div>
-        <div class="model-panel" role="tabpanel" id="p-limon" aria-labelledby="t-limon" tabindex="0" hidden>
-          <figure><img class="render" src="img/foto/dikme-donus.webp" width="900" height="1200" loading="lazy" style="object-position: 50% 70%" alt="İki yandaki eğimli çelik kirişlerin arasına yerleştirilmiş ahşap basamaklar ve dikmeli metal korkuluk"><figcaption>Temsili</figcaption></figure>
-          <div>
-            <h3 class="wide">Limon kirişli merdiven</h3>
-            <p>Basamaklar, iki yanda uzanan eğimli çelik kirişlerin, yani limonların arasına yerleştirilir. Yük iki kirişe paylaştırıldığı için geniş ve uzun kollarda sağlam bir çözüm sunar. Kirişler duvara yaslanabilir ya da boşlukta serbest durabilir.</p>
-          </div>
-          <dl><div><dt>Taşıyıcı</dt><dd>İki yan limon kirişi</dd></div><div><dt>Basamak</dt><dd>Ahşap, çelik veya sac</dd></div><div><dt>Etki</dt><dd>Sağlam, klasik</dd></div></dl>
-        </div>
-        <div class="model-panel" role="tabpanel" id="p-yangin" aria-labelledby="t-yangin" tabindex="0" hidden>
-          <figure><img class="render" src="img/foto/yangin-bitmis.webp" width="765" height="1024" loading="lazy" style="object-position: 50% 60%" alt="Teslim edilmiş çelik dış cephe merdiveni: bina cephesine bağlanan, dikmeli korkuluklu kol ve cıvatalı çapraz bağlantılı sahanlık kulesi"><figcaption>Sahadan</figcaption></figure>
-          <div>
-            <h3 class="wide">Yangın merdiveni</h3>
-            <p>Bina cephesine bağlanan, eğimli çelik kirişler ve sahanlık kulelerinden oluşan dış merdivendir. Basamaklar kaymayı önleyen baklava desenli sacdan ya da ızgaradan yapılır. Acil durumda her kattan güvenli bir kaçış yolu sağlar.</p>
-            <p><a class="text-link" href="yangin-merdiveni.html">Yangın merdiveni sayfasına gidin <span aria-hidden="true">→</span></a></p>
-          </div>
-          <dl><div><dt>Taşıyıcı</dt><dd>Çelik kiriş ve kule</dd></div><div><dt>Basamak</dt><dd>Baklava sac veya ızgara</dd></div><div><dt>Kullanım</dt><dd>Dış cephe, kaçış yolu</dd></div></dl>
-        </div>
-        <div class="model-panel" role="tabpanel" id="p-yarim" aria-labelledby="t-yarim" tabindex="0" hidden>
-          <figure><img class="render" src="img/foto/m-spiral-isikli.webp" width="1200" height="800" loading="lazy" alt="Siyah çelik omurgalı, basamak altları LED ışıklı meşe basamaklı merdiven: alt basamaklar yelpaze gibi dönerek açılıyor, yanda tavana uzanan dikmeler"><figcaption>Sahadan</figcaption></figure>
-          <div>
-            <h3 class="wide">Yarı döner omurgalı merdiven</h3>
-            <p>Tek çelik omurga, kolun başında yarım dönüş yaparak basamakları yelpaze gibi açar. Dönüşü sahanlıksız çözdüğü için dar alanlarda bile kesintisiz ve akıcı bir çizgi oluşturur.</p>
-          </div>
-          <dl><div><dt>Taşıyıcı</dt><dd>Dönen tek omurga</dd></div><div><dt>Basamak</dt><dd>Yelpaze dönüş</dd></div><div><dt>Etki</dt><dd>Akıcı, heykelsi</dd></div></dl>
-        </div>
-      </div>
-    </div>
-      <div class="kartela" id="kartela" data-reveal>
-      <div class="kartela__head">
-        <p class="eyebrow">Kartela</p>
-        <h3 class="wide">Renk ve malzeme</h3>
-        <p>Omurga ve korkuluk çeliği standart RAL renklerinde boyanır; projeye özel bir renk de seçebilirsiniz. Basamaklarda dişbudak, kayın ve ladin gibi masif ahşapları farklı tonlarda uyguluyoruz. Ekrandaki renkler gerçek boyadan biraz farklı görünebilir.</p>
-      </div>
-      <div class="kartela__group">
-        <h4 class="mono">Omurga renkleri</h4>
-        <ul class="kartela__grid">
-          <li class="swatch swatch--dark" style="--c: #383e42"><b>RAL 7016</b><span>Antrasit gri</span></li>
-          <li class="swatch swatch--dark" style="--c: #0e0e10"><b>RAL 9005</b><span>Siyah</span></li>
-          <li class="swatch" style="--c: #b5b0a1"><b>RAL 7032</b><span>Çakıl gri</span></li>
-          <li class="swatch" style="--c: #f1ece1"><b>RAL 9010</b><span>Kırık beyaz</span></li>
-          <li class="swatch swatch--dark" style="--c: #797669"><b>RAL 7048</b><span>Sedef gri</span></li>
-          <li class="swatch" style="--c: #e3d9c6"><b>RAL 1013</b><span>İnci beyazı</span></li>
-        </ul>
-      </div>
-      <div class="kartela__group">
-        <h4 class="mono">Basamak malzemeleri</h4>
-        <ul class="kartela__grid">
-          <li class="mat mat--mese"><i aria-hidden="true"></i><span>Meşe kaplama MDF</span></li>
-          <li class="mat mat--ceviz"><i aria-hidden="true"></i><span>Ceviz kaplama MDF</span></li>
-          <li class="mat mat--masif"><i aria-hidden="true"></i><span>Ekli masif panel</span></li>
-          <li class="mat mat--porselen"><i aria-hidden="true"></i><span>Porselen</span></li>
-          <li class="mat mat--traverten"><i aria-hidden="true"></i><span>Traverten</span></li>
-          <li class="mat mat--mermer"><i aria-hidden="true"></i><span>Mermer</span></li>
-        </ul>
-      </div>
-      <div class="kartela__group">
-        <h4 class="mono">Masif ahşap · işlerimizde kullandığımız türler ve tonlar</h4>
-        <ul class="kartela__grid kartela__grid--4">
-          <li class="mat mat--photo"><i aria-hidden="true" style="background-image: url(img/kartela/kayin-naturel.webp)"></i><span>Kayın<small>Naturel</small></span></li>
-          <li class="mat mat--photo"><i aria-hidden="true" style="background-image: url(img/kartela/kayin-acik-ceviz.webp)"></i><span>Kayın<small>Açık ceviz</small></span></li>
-          <li class="mat mat--photo"><i aria-hidden="true" style="background-image: url(img/kartela/disbudak-acik-ceviz.webp)"></i><span>Dişbudak<small>Açık ceviz</small></span></li>
-          <li class="mat mat--photo"><i aria-hidden="true" style="background-image: url(img/kartela/disbudak-naturel.webp)"></i><span>Dişbudak<small>Naturel / ham ceviz</small></span></li>
-          <li class="mat mat--photo"><i aria-hidden="true" style="background-image: url(img/kartela/disbudak-koyu-ceviz.webp)"></i><span>Dişbudak<small>Koyu ceviz</small></span></li>
-          <li class="mat mat--photo"><i aria-hidden="true" style="background-image: url(img/kartela/ladin-acik-ceviz.webp)"></i><span>Ladin<small>Açık ceviz</small></span></li>
-          <li class="mat mat--photo"><i aria-hidden="true" style="background-image: url(img/kartela/ladin-naturel.webp)"></i><span>Ladin<small>Naturel / ham ceviz</small></span></li>
-          <li class="mat mat--photo"><i aria-hidden="true" style="background-image: url(img/kartela/ladin-koyu-ceviz.webp)"></i><span>Ladin<small>Koyu ceviz</small></span></li>
-        </ul>
-      </div>
-    </div>
-  </section>
 
-  <!-- MERDİVEN KATALOĞU — Maviron's own work from Instagram; sizes and prices come from the client later -->
-  <section class="catalog" id="katalog" aria-labelledby="catalog-title">
-    <div class="section-head" data-reveal>
-      <div>
-        <p class="eyebrow">Yaptıklarımızdan seçmeler</p>
-        <h2 class="section-title wide" id="catalog-title">Merdiven<br>kataloğu.</h2>
-      </div>
-      <p class="section-note">Her biri kurduğumuz bir merdivendir. Ölçü ve malzeme bilgilerini yakında ekleyeceğiz; tüm işlerimizi 25 sayfalık PDF katalogda bulabilirsiniz.</p>
-    </div>
-    <div class="catalog__wrap" data-reveal>
-      <ol class="catalog__track" tabindex="0" aria-label="Merdiven kataloğu, yana kaydırılabilir">
-        <li class="catalog__item">
-          <div class="catalog__media"><img src="img/foto/alttan-cam.webp" width="900" height="1200" loading="lazy" alt="Aşağıdan bakış: iki yanı noktasal bağlantılı cam korkuluklu, tek omurgalı düz merdiven"></div>
-          <p class="catalog__code mono">MK-01</p>
-          <h3>Düz omurgalı</h3>
-          <p>Tek omurga · iki yanı cam korkuluk</p>
-          <dl><div><dt>Ölçü</dt><dd>Yakında</dd></div><div><dt>Fiyat</dt><dd>Teklifle</dd></div></dl>
-        </li>
-        <li class="catalog__item">
-          <div class="catalog__media"><img src="img/foto/dikme-donus.webp" width="900" height="1200" loading="lazy" alt="Siyah omurgalı, alt basamakları dönen, ince dikmeli ve ahşap küpeşteli merdiven"></div>
-          <p class="catalog__code mono">MK-02</p>
-          <h3>L merdiven</h3>
-          <p>Ahşap basamak · metal dikme · ahşap küpeşte</p>
-          <dl><div><dt>Ölçü</dt><dd>Yakında</dd></div><div><dt>Fiyat</dt><dd>Teklifle</dd></div></dl>
-        </li>
-        <li class="catalog__item">
-          <div class="catalog__media"><img src="img/foto/ustten-cam.webp" width="900" height="1200" loading="lazy" alt="Yukarıdan bakış: kayın basamaklı, sahanlıklı ve cam korkuluklu U merdiven"></div>
-          <p class="catalog__code mono">MK-03</p>
-          <h3>U merdiven</h3>
-          <p>Kayın basamak · cam korkuluk</p>
-          <dl><div><dt>Ölçü</dt><dd>Yakında</dd></div><div><dt>Fiyat</dt><dd>Teklifle</dd></div></dl>
-        </li>
-        <li class="catalog__item">
-          <div class="catalog__media"><img src="img/foto/yangin-bitmis.webp" width="765" height="1024" loading="lazy" alt="Teslim edilmiş çelik dış cephe merdiveni: bina cephesine bağlanan, dikmeli korkuluklu kol ve cıvatalı çapraz bağlantılı sahanlık kulesi"></div>
-          <p class="catalog__code mono">MK-04</p>
-          <h3>Dış cephe merdiveni / Yangın merdiveni</h3>
-          <p>Çelik kule · baklava sac basamak</p>
-          <dl><div><dt>Ölçü</dt><dd>Yakında</dd></div><div><dt>Fiyat</dt><dd>Teklifle</dd></div></dl>
-        </li>
-      </ol>
-      <div class="catalog__foot">
-        <div class="pager" data-track=".catalog__track">
-          <button type="button" class="pager__btn" data-dir="-1" aria-label="Önceki"><span aria-hidden="true">←</span></button>
-          <button type="button" class="pager__btn" data-dir="1" aria-label="Sonraki"><span aria-hidden="true">→</span></button>
-        </div>
-        <a class="btn btn--ghost" href="katalog/Maviron-Celik-Katalog-2026.pdf" target="_blank" rel="noopener" type="application/pdf">PDF katalog <span class="mono">· 25 sayfa, 5 MB</span></a>
-      </div>
-    </div>
-  </section>
-
-  <!-- KORKULUKLAR — renders from tools/studio.html?model=kork-cam|kork-metal|kork-separator|kork-lama -->
-  <section class="rails" id="korkuluklar" aria-labelledby="rails-title">
-    <div class="section-head" data-reveal>
-      <div>
-        <p class="eyebrow">Korkuluklar</p>
-        <h2 class="section-title wide" id="rails-title">Cam ve<br>metal.</h2>
-      </div>
-      <p class="section-note">Korkuluk merdivenin karakterini belirler. Her modelle birleşir; merdiven, galeri boşluğu ve asma kat kenarında kullanılır.</p>
-    </div>
-    <ol class="rails__list" data-reveal>
-      <li class="rail"><span class="rail__n mono">01</span><div><h3 class="wide">Cam korkuluk</h3><p>6+6 veya 8+8 mm lamine cam, paslanmaz noktasal cam tutucularla çelik taşıyıcı basamağa ya da ahşap basamağın alnına monte edilir. Mekânı kapatmaz, ışığı kesmez.</p><ul><li>6+6 / 8+8 lamine</li><li>Noktasal bağlantı</li></ul></div><img src="img/foto/kork-cam.webp" width="1200" height="800" loading="lazy" alt="Siyah çelik omurgalı L merdivende çerçevesiz, noktasal bağlantılı cam korkuluk"></li>
-      <li class="rail"><span class="rail__n mono">02</span><div><h3 class="wide">Metal korkuluk</h3><p>Mil, lama, kare profil ve farklı metal formları kullanarak mimari projelere özel metal korkuluk sistemleri tasarlıyor ve üretiyoruz.</p><ul><li>Mil, lama, kare profil</li><li>Projeye özel</li></ul></div><img src="img/foto/kork-dikme.webp" width="1200" height="800" loading="lazy" alt="Siyah omurgalı merdivende ince siyah dikmeler ve ahşap küpeşteli metal korkuluk"></li>
-      <li class="rail"><span class="rail__n mono">03</span><div><h3 class="wide">Separatör metal korkuluk</h3><p>Yerden tavana uzanan dikey çelik çubuklar merdiveni mekândan ayırır ama görüşü kesmez. Hem korkuluk hem de ayırıcı duvar görevi görür.</p><ul><li>Yerden tavana</li><li>Ayırıcı</li></ul></div><img src="img/foto/kork-separator.webp" width="1200" height="800" loading="lazy" alt="Montaj sırasında bir mağazada, merdiveni mekândan ayıran yerden tavana dikey çelik çubuklu separatör korkuluk"></li>
-      <li class="rail"><span class="rail__n mono">04</span><div><h3 class="wide">Yatay lama korkuluk</h3><p>Seyrek dikmelerin arasına yatay çelik lamalar yerleştirilir. Modern ve hafif bir görünüm sağlar; dış merdivende ve terasta da kullanılır.</p><ul><li>Yatay lama</li><li>İç ve dış mekân</li></ul></div><img src="img/foto/kork-yatay-lama.webp" width="736" height="491" loading="lazy" alt="Beyaz merdivende siyah dikmeler arasında yatay çelik lamalı korkuluk ve ahşap küpeşte"></li>
-      <li class="rail"><span class="rail__n mono">05</span><div><h3 class="wide">Asimetrik korkuluk</h3><p>Kutu profilden, projeye özel çizilen asimetrik bir paneldir. Düz bir dikme dizisi yerine farklı boylarda dikdörtgenlerden oluşur; korkuluk merdivenin yanında bir çizim gibi durur.</p><ul><li>Kutu profil</li><li>Projeye özel desen</li></ul></div><img src="img/foto/kork-asimetrik.webp" width="1200" height="800" loading="lazy" alt="Beyaz omurgalı, ahşap basamaklı merdivenin yanında siyah kutu profilden asimetrik metal korkuluk paneli"></li>
-      <li class="rail"><span class="rail__n mono">06</span><div><h3 class="wide">Galeri korkuluğu</h3><p>Kat boşluğunu ve galeriyi çevreleyen metal dikme korkuluktur. Ahşap ya da metal küpeşteyle merdiven korkuluğunun çizgisini üst katta kesintisiz sürdürür.</p><ul><li>Kat boşluğu</li><li>Ahşap küpeşte</li></ul></div><img src="img/foto/kork-galeri.webp" width="1200" height="800" loading="lazy" alt="Galeri boşluğunu çevreleyen, ahşap küpeşteli siyah metal dikme korkuluk; altta ahşap basamaklı merdiven"></li>
-    </ol>
-  </section>
-
-  <!-- HİZMETLER — from the Instagram bio: endüstriyel çelik yapılar, asma kat, villa, bungalov, çatı, merdiven -->
-  <section class="services" id="hizmetler" aria-labelledby="services-title">
+  <!-- HİZMETLER — the four service areas; each has its own page -->
+  <section class="services services--home" id="hizmetler" aria-labelledby="services-title">
     <div class="section-head" data-reveal>
       <div>
         <p class="eyebrow">Hizmetler</p>
@@ -423,226 +193,61 @@
       </div>
       <p class="section-note">Küçük bir asma kattan endüstriyel yapıya kadar statik hesabı, imalatı ve montajı aynı ekip yürütür.</p>
     </div>
-
-    <div class="areas" data-reveal>
-      <article><span class="mono">01</span><h3 class="wide">Mimari çelik uygulamalar</h3><p>Çelik merdivenler, metal korkuluklar, separatörler ve özel tasarım metal işler üretiyoruz.</p></article>
-      <article><span class="mono">02</span><h3 class="wide">Çelik yapı sistemleri</h3><p>Asma katlar, çelik karkas yapılar, endüstriyel yapılar ve çelik çatılar kuruyoruz.</p></article>
-      <article><span class="mono">03</span><h3 class="wide">Mühendislik ve projelendirme</h3><p>Statik hesabı yapıyor; çelik konstrüksiyon projelerini, 3D modelleri ve uygulama projelerini hazırlıyoruz.</p></article>
-      <article><span class="mono">04</span><h3 class="wide">İmalat ve montaj</h3><p>Atölye üretimini, kaynaklı imalatı ve saha montajını kendimiz yapıyor, işleri anahtar teslim veriyoruz.</p></article>
+    <div class="areas areas--cards" data-reveal>
+      <article class="area">
+        <a class="area__img" href="mimari-celik.html" tabindex="-1" aria-hidden="true"><img src="img/foto/m-u-cam.webp" loading="lazy" alt=""></a>
+        <span class="mono">01</span>
+        <h3 class="wide"><a href="mimari-celik.html">Mimari çelik uygulamalar</a></h3>
+        <p>Çelik merdivenler, metal korkuluklar, separatörler ve özel tasarım metal işler üretiyoruz.</p>
+        <ul><li><a href="mimari-celik.html#modeller">Çelik merdivenler</a></li><li><a href="mimari-celik.html#korkuluklar">Metal korkuluklar</a></li><li><a href="mimari-celik.html#korkuluklar">Separatörler</a></li><li><a href="mimari-celik.html#katalog">Özel tasarım işler</a></li></ul>
+        <a class="service__cta" href="mimari-celik.html">İncele <span aria-hidden="true">→</span></a>
+      </article>
+      <article class="area">
+        <a class="area__img" href="celik-yapi.html" tabindex="-1" aria-hidden="true"><img src="img/yapi/asmakat-saha.webp" loading="lazy" alt=""></a>
+        <span class="mono">02</span>
+        <h3 class="wide"><a href="celik-yapi.html">Çelik yapı sistemleri</a></h3>
+        <p>Asma katlar, çelik karkas yapılar, endüstriyel yapılar ve çelik çatılar kuruyoruz.</p>
+        <ul><li><a href="celik-yapi.html#asma-kat">Asma katlar</a></li><li><a href="celik-yapi.html#villa">Çelik karkas yapılar</a></li><li><a href="celik-yapi.html#endustriyel">Endüstriyel yapılar</a></li><li><a href="catilar.html">Çelik çatılar</a></li></ul>
+        <a class="service__cta" href="celik-yapi.html">İncele <span aria-hidden="true">→</span></a>
+      </article>
+      <article class="area">
+        <a class="area__img" href="muhendislik.html" tabindex="-1" aria-hidden="true"><img src="img/catilar/besik.webp" loading="lazy" alt=""></a>
+        <span class="mono">03</span>
+        <h3 class="wide"><a href="muhendislik.html">Mühendislik ve projelendirme</a></h3>
+        <p>Statik hesabı yapıyor; çelik konstrüksiyon projelerini, 3D modelleri ve uygulama projelerini hazırlıyoruz.</p>
+        <ul><li><a href="muhendislik.html">Statik hesap</a></li><li><a href="muhendislik.html">Konstrüksiyon projesi</a></li><li><a href="muhendislik.html">3D modelleme</a></li><li><a href="muhendislik.html">Uygulama projesi</a></li></ul>
+        <a class="service__cta" href="muhendislik.html">İncele <span aria-hidden="true">→</span></a>
+      </article>
+      <article class="area">
+        <a class="area__img" href="imalat-montaj.html" tabindex="-1" aria-hidden="true"><img src="img/steps/uretim-atolye.webp" loading="lazy" alt=""></a>
+        <span class="mono">04</span>
+        <h3 class="wide"><a href="imalat-montaj.html">İmalat ve montaj</a></h3>
+        <p>Atölye üretimini, kaynaklı imalatı ve saha montajını kendimiz yapıyor, işleri anahtar teslim veriyoruz.</p>
+        <ul><li><a href="imalat-montaj.html">Atölye üretimi</a></li><li><a href="imalat-montaj.html">Kaynaklı imalat</a></li><li><a href="imalat-montaj.html">Saha montajı</a></li><li><a href="imalat-montaj.html">Anahtar teslim</a></li></ul>
+        <a class="service__cta" href="imalat-montaj.html">İncele <span aria-hidden="true">→</span></a>
+      </article>
     </div>
-
-    <div class="services__body">
-      <figure class="services__visual" data-reveal>
-        <img id="svc-photo" src="img/foto/svc-merdiven.webp" width="800" height="800" loading="lazy" alt="Beyaz bir mekânda siyah çelik omurgalı, meşe basamaklı ve cam korkuluklu L merdiven">
-        <figcaption class="mono" id="svc-caption">Sahadan · omurgalı L merdiven</figcaption>
-      </figure>
-
-      <div>
-        <article class="service" data-reveal data-photo="img/foto/svc-merdiven.webp" data-caption="Sahadan · omurgalı L merdiven" data-alt="Beyaz bir mekânda siyah çelik omurgalı, meşe basamaklı ve cam korkuluklu L merdiven">
-          <span class="service__n">01</span>
-          <h3 class="wide">Çelik merdiven</h3>
-          <div class="slides">
-            <ul class="slides__track" tabindex="0" aria-label="Çelik merdiven görselleri, yana kaydırılabilir">
-              <li><img src="img/foto/geometrik.webp" width="900" height="1200" loading="lazy" alt="Beyaz düz omurgalı, ahşap basamaklı ve asimetrik siyah metal korkuluklu L merdiven"><span class="mono">Asimetrik korkuluk</span></li>
-              <li><img src="img/foto/ust.webp" width="900" height="1200" loading="lazy" alt="Yukarıdan bakış: ahşap basamaklı, ahşap küpeşteli U merdiven"><span class="mono">U merdiven</span></li>
-              <li><img src="img/foto/kaplama.webp" width="900" height="1200" loading="lazy" alt="Çelik iskelet üzerine beyaz rıhtlı, koyu ahşap kaplama basamaklı dönen merdiven"><span class="mono">Ahşap kaplama</span></li>
-              <li><img src="img/foto/kutu.webp" width="900" height="1200" loading="lazy" alt="Montaj aşamasında, beyaz kutu profil kaplama basamaklarla dönerek yükselen merdiven"><span class="mono">Profil kaplama</span></li>
-            </ul>
-            <div class="pager" data-track=".slides__track">
-              <button type="button" class="pager__btn" data-dir="-1" aria-label="Önceki görsel"><span aria-hidden="true">←</span></button>
-              <button type="button" class="pager__btn" data-dir="1" aria-label="Sonraki görsel"><span aria-hidden="true">→</span></button>
-            </div>
-          </div>
-          <p>Omurgalı, yarı döner, konsol, L, Z, U, çelik profilli, limon kirişli ve spiral merdivenlerin yanı sıra dış cephe yangın merdivenleri de yapıyoruz. Basamakta ahşap, çelik ya da mermer; korkulukta cam, metal veya separatör seçebilirsiniz.</p>
-          <ul><li>Villa</li><li>Ofis</li><li>Mağaza</li><li>Dubleks</li></ul>
-          <a class="service__cta" href="#teklif" data-quote="Çelik merdiven">Teklif iste <span aria-hidden="true">→</span></a>
-        </article>
-        <article class="service" data-reveal data-photo="img/yapi/asmakat-saha.webp" data-caption="Sahadan · depo içine çelik asma kat" data-alt="Montaj sırasında depo içinde: I profil kolon ve kirişli, trapez sac döşemeli çelik asma kat ve tek kollu çelik merdiveni">
-          <span class="service__n">02</span>
-          <h3 class="wide">Asma kat</h3>
-          <div class="flip">
-            <button type="button" class="flip__card" aria-pressed="false" aria-label="Asma kat kartını çevir">
-              <span class="flip__face flip__front"><img src="img/yapi/asmakat-saha.webp" width="800" height="800" loading="lazy" alt=""><span class="flip__hint mono">Çevir ↻</span></span>
-              <span class="flip__face flip__back">
-                <b>Çelik asma kat</b>
-                <span>I profil kiriş ve kolonlardan çelik iskelet, üzerine ahşap, betopan ya da trapez sac üstü beton döşeme. Kenarları cam veya metal korkulukla kapanır, çıkışı bir çelik merdivenle verilir.</span>
-                <span class="flip__spec mono">Kiriş · kolon · döşeme · korkuluk · merdiven</span>
-                <span class="flip__hint mono">Geri çevir ↺</span>
-              </span>
-            </button>
-          </div>
-          <p>Tavanı yüksek yapılarda çelik kiriş ve kolonla kullanılabilir ek alan yaratıyoruz.</p>
-          <ul><li>Depo</li><li>Dükkân</li><li>Atölye</li></ul>
-          <a class="service__cta" href="#teklif" data-quote="Asma kat">Teklif iste <span aria-hidden="true">→</span></a>
-        </article>
-        <article class="service" data-reveal data-photo="img/yapi/endustri.webp" data-caption="Proje görseli · çelik yapı iskeleti" data-alt="Sık çelik kolonlar, kirişler ve çatı aşıklarıyla kurulmuş geniş açıklıklı çelik yapı iskeletinin proje görseli">
-          <span class="service__n">03</span>
-          <h3 class="wide">Endüstriyel yapılar</h3>
-          <img class="service__img" src="img/yapi/endustri.webp" width="800" height="800" loading="lazy" alt="Sık çelik kolonlar, kirişler ve çatı aşıklarıyla kurulmuş geniş açıklıklı çelik yapı iskeletinin proje görseli">
-          <p>Depo, atölye ve üretim tesisleri için çelik yapıları projelendirip kuruyoruz. Kolon, kiriş, çatı makası ve aşıklar statik hesapla boyutlandırılır; cephe ve çatı trapez sac ya da sandviç panelle kapatılır.</p>
-          <ul><li>Depo</li><li>Atölye</li><li>Üretim alanı</li></ul>
-          <a class="service__cta" href="#teklif" data-quote="Endüstriyel çelik yapı">Teklif iste <span aria-hidden="true">→</span></a>
-        </article>
-        <article class="service" data-reveal data-photo="img/foto/asansor-1.webp" data-caption="Sahadan · Fikirtepe, taşıyıcı asansör çelikleri" data-alt="Fikirtepe: asansör kuyusu boyunca sıralanan siyah çelik kolonlar ve kuşak kirişler">
-          <span class="service__n">04</span>
-          <h3 class="wide">Taşıyıcı asansör çelikleri</h3>
-          <img class="service__img" src="img/foto/asansor-1.webp" width="708" height="816" loading="lazy" alt="Fikirtepe: asansör kuyusu boyunca sıralanan siyah çelik kolonlar ve kuşak kirişler">
-          <p>Asansör kuyusu için çelik taşıyıcı sistem kuruyoruz. Kuyu karkası, ray bağlantı konsolları, kapı ve makine kirişleri projeye göre çizilir, atölyede üretilir ve sahada monte edilir. Sonradan asansör eklenen mevcut binalarda da uygulanır.</p>
-          <ul><li>Kuyu karkası</li><li>Ray konsolu</li><li>Makine kirişi</li></ul>
-          <a class="service__cta" href="#teklif" data-quote="Taşıyıcı asansör çelikleri">Teklif iste <span aria-hidden="true">→</span></a>
-        </article>
-        <article class="service" data-reveal data-photo="img/yapi/carport-egri.webp" data-caption="Proje görseli · çok araçlık carport" data-alt="Eğri galvaniz çelik kolonlar üzerinde trapez sac örtülü, sıra halinde çok araçlık carport görselleştirmesi">
-          <span class="service__n">05</span>
-          <h3 class="wide">Carport &amp; sundurma</h3>
-          <img class="service__img" src="img/yapi/carport-egri.webp" width="900" height="900" loading="lazy" alt="Eğri galvaniz çelik kolonlar üzerinde trapez sac örtülü, sıra halinde çok araçlık carport görselleştirmesi">
-          <p>Tek araçlık carporttan site otoparklarına kadar her ölçüde çelik örtü yapıyoruz. Kolonlar düz ya da eğri formda çizilir; örtü trapez sac veya polikarbonattan seçilir. Giriş ve teras üstleri için sundurmalar da aynı özenle hazırlanır.</p>
-          <ul><li>Carport</li><li>Sundurma</li><li>Otopark</li></ul>
-          <a class="service__cta" href="#teklif" data-quote="Carport / sundurma">Teklif iste <span aria-hidden="true">→</span></a>
-        </article>
-        <article class="service" data-reveal data-photo="img/yapi/karkas-saha.webp" data-caption="Sahadan · çelik karkas yapı" data-alt="Yapım aşamasında iki katlı çelik karkas yapı: I profil kolon ve kirişler, döşemede duvar blokları">
-          <span class="service__n">06</span>
-          <h3 class="wide">Villa &amp; bungalov</h3>
-          <img class="service__img" src="img/yapi/karkas-saha.webp" width="900" height="900" loading="lazy" alt="Yapım aşamasında iki katlı çelik karkas yapı: I profil kolon ve kirişler, döşemede duvar blokları">
-          <p>Çelik karkas konut ve bungalov yapıyoruz. Hafif, hızlı kurulan ve uzun ömürlü taşıyıcı sistem ahşap ve camla tamamlanır.</p>
-          <ul><li>Çelik karkas</li><li>Bungalov</li><li>Tiny house</li></ul>
-          <a class="service__cta" href="#teklif" data-quote="Villa / bungalov">Teklif iste <span aria-hidden="true">→</span></a>
-        </article>
-        <article class="service" data-reveal data-photo="img/yapi/cati-saha.webp" data-caption="Sahadan · konut binasına çelik çatı" data-alt="Beş katlı binanın teras katına kurulan kırmızı astar boyalı çelik kafes çatı makasları">
-          <span class="service__n">07</span>
-          <h3 class="wide">Çatı</h3>
-          <img class="service__img" src="img/yapi/cati-saha.webp" width="800" height="800" loading="lazy" alt="Beş katlı binanın teras katına kurulan kırmızı astar boyalı çelik kafes çatı makasları">
-          <p>Mevcut çatılarınızın yenilenmesini ve yeni başlayan mansard çatı projelerini yönetmeliklere uygun olarak yapıyoruz.</p>
-          <ul><li>Çatı makası</li><li>Çatı katı</li><li>Yenileme</li></ul>
-          <div class="service__links"><a class="service__cta" href="catilar.html">Çatıları incele <span aria-hidden="true">→</span></a><a class="service__cta" href="#teklif" data-quote="Çatı">Teklif iste <span aria-hidden="true">→</span></a></div>
-        </article>
-        <article class="service" data-reveal data-photo="img/yapi/yangin.webp" data-caption="Sahadan · dış cephe merdiveni montajı" data-alt="Montaj sırasında ticari bir binanın cephesine kurulan, çaprazlı çelik kule üzerinde sahanlıklı dış merdiven">
-          <span class="service__n">08</span>
-          <h3 class="wide">Yangın merdiveni</h3>
-          <img class="service__img" src="img/yapi/yangin.webp" width="800" height="800" loading="lazy" alt="Montaj sırasında ticari bir binanın cephesine kurulan, çaprazlı çelik kule üzerinde sahanlıklı dış merdiven">
-          <p>Hastane, ofis ve siteler için dış cephe kaçış merdivenleri tasarlıyor; projeden sahaya kadar yönetmeliğe uygun biçimde yapıp teslim ediyoruz.</p>
-          <ul><li>Hastane</li><li>Ofis</li><li>Site</li></ul>
-          <div class="service__links"><a class="service__cta" href="yangin-merdiveni.html">İncele <span aria-hidden="true">→</span></a><a class="service__cta" href="#teklif" data-quote="Yangın merdiveni">Teklif iste <span aria-hidden="true">→</span></a></div>
-        </article>
-      </div>
-    </div>
-    <div class="eng" id="muhendislik" data-reveal>
-      <div>
-        <p class="eyebrow">Mühendislik</p>
-        <h3 class="wide">Hesaptan<br><em>detaya.</em></h3>
-        <p>Her iş, imalata geçmeden önce mühendislik masasından geçer. Hesabı yapan ekip, uygulamayı da takip eder.</p>
-      </div>
-      <ol>
-        <li>Statik analiz ve hesaplama</li>
-        <li>Çelik konstrüksiyon projelendirme</li>
-        <li>3D modelleme ve detaylandırma</li>
-        <li>İmalat ve montaj çizimleri</li>
-        <li>Birleşim ve bağlantı detayları</li>
-        <li>Mevcut yapılara özel çelik çözümler</li>
-      </ol>
-    </div>
+    <p class="areas__more"><a class="service__cta" href="projeler.html">Tüm projeleri görün <span aria-hidden="true">→</span></a></p>
   </section>
 
-  <!-- PROJELER — photos are thumbnails of Maviron's own Instagram posts (October 2026) -->
-  <section class="work" id="projeler" aria-labelledby="work-title">
+
+
+
+  <!-- SÜREÇ — mirrors the Instagram highlights: Keşif, Projelendirme, Üretim, (montaj) -->
+  <section class="process" id="surec" aria-labelledby="process-title">
     <div class="section-head" data-reveal>
       <div>
-        <p class="eyebrow">Sahadan</p>
-        <h2 class="section-title wide" id="work-title">Son<br>projeler.</h2>
+        <p class="eyebrow">Nasıl çalışıyoruz</p>
+        <h2 class="section-title wide" id="process-title">Ölçüden<br>montaja.</h2>
       </div>
-      <p class="section-note">Montajdan ve teslimden kareler paylaşıyoruz. İşleri türüne göre filtreleyebilirsiniz; montaj videoları <a href="https://www.instagram.com/mavironcelik/" target="_blank" rel="noopener">Instagram'da</a>.</p>
+      <p class="section-note">Dört adımın her birinde muhatabınız aynı ekiptir. Ölçüyü alan ekip montajı da yapar.</p>
     </div>
-
-    <div class="filter" role="group" aria-label="Projeleri filtrele">
-      <button type="button" data-f="all" aria-pressed="true">Tümü</button>
-      <button type="button" data-f="merdiven" aria-pressed="false">Çelik merdivenler</button>
-      <button type="button" data-f="korkuluk" aria-pressed="false">Metal korkuluklar</button>
-      <button type="button" data-f="asmakat" aria-pressed="false">Asma katlar</button>
-      <button type="button" data-f="yapi" aria-pressed="false">Çelik yapılar</button>
-      <button type="button" data-f="cati" aria-pressed="false">Çatı sistemleri</button>
-      <button type="button" data-f="ozel" aria-pressed="false">Özel imalatlar</button>
-    </div>
-
-    <div class="work__grid" data-reveal>
-      <figure class="shot" data-cat="korkuluk">
-        <img src="img/foto/galeri.webp" width="900" height="1200" loading="lazy" alt="Galeri boşluğunda sık siyah dikmeli, ahşap küpeşteli separatör korkuluk">
-        <figcaption class="shot__cap"><b>Galeri korkuluğu</b><span class="mono">Separatör · ahşap küpeşte</span></figcaption>
-      </figure>
-      <figure class="shot" data-cat="merdiven korkuluk">
-        <img src="img/foto/beyaz-aci.webp" width="900" height="1200" loading="lazy" alt="Beyaz çift omurgalı merdiven ve önünde asimetrik siyah metal korkuluk">
-        <figcaption class="shot__cap"><b>Beyaz omurga</b><span class="mono">Asimetrik korkuluk</span></figcaption>
-      </figure>
-      <figure class="shot" data-cat="merdiven korkuluk">
-        <img src="img/foto/ustten-dikme.webp" width="900" height="1200" loading="lazy" alt="Yukarıdan bakış: kayın basamaklı, ince dikmeli ve ahşap küpeşteli merdiven">
-        <figcaption class="shot__cap"><b>Kayın ahşap basamaklar</b><span class="mono">Dikme korkuluk</span></figcaption>
-      </figure>
-      <figure class="shot" data-cat="korkuluk">
-        <img src="img/foto/bronz.webp" width="900" height="1200" loading="lazy" alt="Kat boşluğunu çevreleyen bronz renkli dikme korkuluk, altta dönen ahşap basamaklar">
-        <figcaption class="shot__cap"><b>Kat boşluğu</b><span class="mono">Bronz dikme korkuluk</span></figcaption>
-      </figure>
-      <figure class="shot" data-cat="merdiven">
-        <img src="img/foto/koyu-donus.webp" width="900" height="1200" loading="lazy" alt="Yukarıdan bakış: beyaz rıhtlı, koyu ahşap kaplama, yelpaze gibi dönen basamaklar">
-        <figcaption class="shot__cap"><b>Dönen merdiven</b><span class="mono">Ahşap kaplama</span></figcaption>
-      </figure>
-      <figure class="shot" data-cat="merdiven korkuluk">
-        <img src="img/foto/separator-donus.webp" width="900" height="1200" loading="lazy" alt="Montaj sırasında yukarıdan: dönen ahşap basamaklar ve separatör korkuluk">
-        <figcaption class="shot__cap"><b>Montaj günü</b><span class="mono">Dönen merdiven</span></figcaption>
-      </figure>
-      <figure class="shot" data-cat="merdiven">
-        <img src="img/foto/kutu-karkas.webp" width="900" height="1200" loading="lazy" alt="Yukarıdan bakış: ahşap basamaklar takılmış, altta çelik kutu karkaslar bekliyor">
-        <figcaption class="shot__cap"><b>Karkastan basamağa</b><span class="mono">Kutu basamak</span></figcaption>
-      </figure>
-      <figure class="shot" data-cat="merdiven">
-        <img src="img/foto/kaba-insaat.webp" width="900" height="1200" loading="lazy" alt="Kaba inşaatta duvara bağlı ilk kol ve tek omurgalı ikinci kol, çelik plaka basamaklar">
-        <figcaption class="shot__cap"><b>Kaba inşaatta</b><span class="mono">Çelik omurga</span></figcaption>
-      </figure>
-      <figure class="shot" data-cat="merdiven">
-        <img src="img/foto/isikli.webp" width="900" height="1200" loading="lazy" alt="Tek siyah çelik omurgalı, basamak altları LED ışıklı meşe basamaklı ve tavana uzanan dikmeli merdiven">
-        <figcaption class="shot__cap"><b>LED'li basamak</b><span class="mono">Tek omurga · LED</span></figcaption>
-      </figure>
-      <figure class="shot" data-cat="merdiven ozel">
-        <img src="img/foto/atolye.webp" width="900" height="1200" loading="lazy" alt="Atölyede sehpalar üzerinde beyaz boyalı çelik omurgalar ve kaynaklı basamak plakaları">
-        <figcaption class="shot__cap"><b>Atölyede</b><span class="mono">Omurga ve plaka</span></figcaption>
-      </figure>
-      <figure class="shot" data-cat="merdiven">
-        <img src="img/foto/donus-karkas.webp" width="900" height="1200" loading="lazy" alt="Yukarıdan bakış: yelpaze gibi dönen basamakların kutu profil çelik karkası, montaj sırasında">
-        <figcaption class="shot__cap"><b>Dönüş karkası</b><span class="mono">Kutu profil</span></figcaption>
-      </figure>
-      <figure class="shot" data-cat="merdiven korkuluk">
-        <img src="img/foto/ustten-omurga.webp" width="900" height="1200" loading="lazy" alt="Yukarıdan bakış: tek siyah omurgalı meşe basamaklar, dikme korkuluk ve aşağıda dönen ikinci kol">
-        <figcaption class="shot__cap"><b>Katlar arası</b><span class="mono">Dikme korkuluk</span></figcaption>
-      </figure>
-      <figure class="shot" data-cat="asmakat yapi">
-        <img src="img/yapi/asmakat-saha.webp" width="800" height="800" loading="lazy" alt="Montaj sırasında depo içinde: I profil kolon ve kirişli, trapez sac döşemeli çelik asma kat">
-        <figcaption class="shot__cap"><b>Depo içine asma kat</b><span class="mono">I profil · trapez sac</span></figcaption>
-      </figure>
-      <figure class="shot" data-cat="yapi">
-        <img src="img/yapi/karkas-saha.webp" width="900" height="900" loading="lazy" alt="Yapım aşamasında iki katlı çelik karkas yapı: I profil kolon ve kirişler">
-        <figcaption class="shot__cap"><b>Çelik karkas yapı</b><span class="mono">Kolon · kiriş</span></figcaption>
-      </figure>
-      <figure class="shot" data-cat="yapi ozel">
-        <img src="img/foto/asansor-2.webp" width="708" height="876" loading="lazy" alt="Fikirtepe: asansör kuyusunda sıralanan çelik kolonlar ve kuşak kirişler">
-        <figcaption class="shot__cap"><b>Asansör çelikleri</b><span class="mono">Fikirtepe</span></figcaption>
-      </figure>
-      <figure class="shot" data-cat="cati yapi">
-        <img src="img/yapi/cati-saha.webp" width="800" height="800" loading="lazy" alt="Beş katlı binanın teras katına kurulan kırmızı astar boyalı çelik çatı makasları">
-        <figcaption class="shot__cap"><b>Mansard çatı</b><span class="mono">Çelik çatı makası</span></figcaption>
-      </figure>
-      <figure class="shot" data-cat="merdiven yapi">
-        <img src="img/foto/yangin-bitmis.webp" width="765" height="1024" loading="lazy" alt="Teslim edilmiş çelik dış cephe merdiveni ve çapraz bağlantılı sahanlık kulesi">
-        <figcaption class="shot__cap"><b>Dış cephe merdiveni</b><span class="mono">Yangın merdiveni</span></figcaption>
-      </figure>
-      <figure class="shot" data-cat="ozel merdiven">
-        <img src="img/foto/helezon-1.webp" width="708" height="870" loading="lazy" alt="Atölyede bükülerek imal edilen helezon çelik merdiven omurgası">
-        <figcaption class="shot__cap"><b>Helezon omurga</b><span class="mono">Atölyede bükme</span></figcaption>
-      </figure>
-    </div>
-
-    <div class="places" data-reveal>
-      <span class="mono">Sahada olduğumuz yerler</span>
-      <ul>
-        <li>Şile</li><li>Ömerli</li><li>Gebze</li><li>Acıbadem</li><li>Beylikdüzü</li><li>Benesta Center</li><li>Ersoy Hastanesi</li>
-      </ul>
-    </div>
+    <ol class="steps" data-reveal>
+      <li class="step"><img class="step__img" src="img/steps/kesif.webp" width="800" height="640" loading="lazy" alt="Teknik çizimde merdivenin kat yüksekliği, basamak ve sahanlık ölçüleri"><div class="step__body"><span class="step__n">01</span><h3 class="wide">Keşif</h3><p>Yerinde ölçü alıyor, zemini ve taşıyıcıları kontrol ediyoruz.</p></div></li>
+      <li class="step"><img class="step__img" src="img/steps/proje-cizim.webp" width="800" height="640" loading="lazy" alt="Merdiven projesinin 3D tel çizimi: iki kollu çelik merdiven, ızgara sahanlık ve kat boşluğu, 1:100"><div class="step__body"><span class="step__n">02</span><h3 class="wide">Proje</h3><p>3D modeli ve statik hesabı hazırlıyoruz. Onayınızdan önce her detayı birlikte görüyoruz.</p></div></li>
+      <li class="step"><img class="step__img" src="img/steps/uretim-atolye.webp" width="800" height="640" loading="lazy" alt="Atölyede sehpalar üzerinde boyanmış çelik omurgalar ve kaynaklı basamak plakaları"><div class="step__body"><span class="step__n">03</span><h3 class="wide">Üretim</h3><p>Kesim, kaynak ve boya kendi atölyemizde, kontrollü koşullarda yapılır.</p></div></li>
+      <li class="step"><img class="step__img" src="img/steps/montaj-saha.webp" width="800" height="640" loading="lazy" alt="Yukarıdan bakış: sahada kurulan sac basamaklı çelik merdiven, ızgara sahanlık ve tek omurgalı ikinci kol"><div class="step__body"><span class="step__n">04</span><h3 class="wide">Montaj</h3><p>Kurulum sahada hızlı ve temiz yapılır; son kontroller tamamlandıktan sonra teslim edilir.</p></div></li>
+    </ol>
   </section>
 
   <!-- REFERANSLAR -->
@@ -662,23 +267,6 @@
       <li><b>Osta İnşaat</b><span class="mono">İzmit</span></li>
       <li><b>Cenk Bey</b><span class="mono">İzmit</span></li>
     </ul>
-  </section>
-
-  <!-- SÜREÇ — mirrors the Instagram highlights: Keşif, Projelendirme, Üretim, (montaj) -->
-  <section class="process" id="surec" aria-labelledby="process-title">
-    <div class="section-head" data-reveal>
-      <div>
-        <p class="eyebrow">Nasıl çalışıyoruz</p>
-        <h2 class="section-title wide" id="process-title">Ölçüden<br>montaja.</h2>
-      </div>
-      <p class="section-note">Dört adımın her birinde muhatabınız aynı ekiptir. Ölçüyü alan ekip montajı da yapar.</p>
-    </div>
-    <ol class="steps" data-reveal>
-      <li class="step"><img class="step__img" src="img/steps/kesif.webp" width="800" height="640" loading="lazy" alt="Teknik çizimde merdivenin kat yüksekliği, basamak ve sahanlık ölçüleri"><div class="step__body"><span class="step__n">01</span><h3 class="wide">Keşif</h3><p>Yerinde ölçü alıyor, zemini ve taşıyıcıları kontrol ediyoruz.</p></div></li>
-      <li class="step"><img class="step__img" src="img/steps/proje-cizim.webp" width="800" height="640" loading="lazy" alt="Merdiven projesinin 3D tel çizimi: iki kollu çelik merdiven, ızgara sahanlık ve kat boşluğu, 1:100"><div class="step__body"><span class="step__n">02</span><h3 class="wide">Proje</h3><p>3D modeli ve statik hesabı hazırlıyoruz. Onayınızdan önce her detayı birlikte görüyoruz.</p></div></li>
-      <li class="step"><img class="step__img" src="img/steps/uretim-atolye.webp" width="800" height="640" loading="lazy" alt="Atölyede sehpalar üzerinde boyanmış çelik omurgalar ve kaynaklı basamak plakaları"><div class="step__body"><span class="step__n">03</span><h3 class="wide">Üretim</h3><p>Kesim, kaynak ve boya kendi atölyemizde, kontrollü koşullarda yapılır.</p></div></li>
-      <li class="step"><img class="step__img" src="img/steps/montaj-saha.webp" width="800" height="640" loading="lazy" alt="Yukarıdan bakış: sahada kurulan sac basamaklı çelik merdiven, ızgara sahanlık ve tek omurgalı ikinci kol"><div class="step__body"><span class="step__n">04</span><h3 class="wide">Montaj</h3><p>Kurulum sahada hızlı ve temiz yapılır; son kontroller tamamlandıktan sonra teslim edilir.</p></div></li>
-    </ol>
   </section>
 
   <!-- TASARLA — js/configurator.js, loaded when the section nears the screen -->
@@ -745,7 +333,7 @@
       <p class="section-note">Burada cevabını bulamadığınız her soru için bize WhatsApp'tan ya da telefonla ulaşabilirsiniz.</p>
     </div>
     <div class="faq__list">
-      <details class="faq__item"><summary>Hangi bölgelerde hizmet veriyorsunuz?</summary><p>İstanbul, Kocaeli ve İzmit'te keşif, üretim ve montaj yapıyoruz. Başka bir şehirdeki projeniz için de bize yazabilirsiniz; işin kapsamına göre değerlendiriyoruz.</p></details>
+      <details class="faq__item"><summary>Hangi bölgelerde hizmet veriyorsunuz?</summary><p>İstanbul ve Kocaeli'de keşif, üretim ve montaj yapıyoruz. Başka bir şehirdeki projeniz için de bize yazabilirsiniz; işin kapsamına göre değerlendiriyoruz.</p></details>
       <details class="faq__item"><summary>Fiyat teklifi nasıl alabilirim?</summary><p>Teklif formunu doldurabilir ya da WhatsApp'tan yazabilirsiniz. Kat yüksekliği, merdiven boşluğunun ölçüleri ve birkaç fotoğraf ilk fiyatı çıkarmamız için yeterlidir. Kesin teklifi keşiften sonra veriyoruz.</p></details>
       <details class="faq__item"><summary>Merdiveni yaptırmadan önce görebilir miyim?</summary><p>Evet. Keşiften sonra merdiveninizi 3D olarak çiziyor ve statik hesabını yapıyoruz. Üretime, siz her detayı görüp onayladıktan sonra başlıyoruz.</p></details>
       <details class="faq__item"><summary>Hangi malzemeleri seçebilirim?</summary><p>Basamakta ahşap, çelik ya da mermer; korkulukta cam, metal veya separatör kullanabilirsiniz. Çelik aksamın rengini de siz belirlersiniz.</p></details>
@@ -766,7 +354,7 @@
           <div><dt>WhatsApp</dt><dd><a href="https://wa.me/905363773370" target="_blank" rel="noopener">0536 377 33 70</a></dd></div>
           <div><dt>E-posta</dt><dd><a href="mailto:info@mavironcelik.com">info@mavironcelik.com</a></dd></div>
           <div><dt>Instagram</dt><dd><a href="https://www.instagram.com/mavironcelik/" target="_blank" rel="noopener">@mavironcelik</a></dd></div>
-          <div><dt>Bölge</dt><dd>İstanbul, Kocaeli ve İzmit</dd></div>
+          <div><dt>Bölge</dt><dd>İstanbul ve Kocaeli</dd></div>
         </dl>
       </div>
 
@@ -811,13 +399,16 @@
   <div class="site-footer__row">
     <span>© 2026 Maviron Çelik Mühendislik · Tasarım · Proje · Uygulama</span>
     <nav aria-label="Alt menü">
-      <a href="#modeller">Merdivenler</a>
-      <a href="#hizmetler">Hizmetler</a>
-      <a href="#korkuluklar">Korkuluklar</a>
+      <a href="projeler.html">Projeler</a>
+      <a href="mimari-celik.html">Merdivenler</a>
+      <a href="mimari-celik.html#korkuluklar">Korkuluklar</a>
+      <a href="celik-yapi.html">Çelik yapı</a>
       <a href="catilar.html">Çatılar</a>
       <a href="yangin-merdiveni.html">Yangın merdiveni</a>
+      <a href="muhendislik.html">Mühendislik</a>
+      <a href="imalat-montaj.html">İmalat ve montaj</a>
       <a href="#sss">SSS</a>
-    <a href="#iletisim">İletişim</a>
+      <a href="#iletisim">İletişim</a>
       <a href="hakkimizda.html">Hakkımızda</a>
       <a href="kvkk.html">KVKK</a>
     </nav>
@@ -838,103 +429,11 @@
 
 
 <script>
-  // Stair model tabs (WAI-ARIA tabs pattern; arrows move across)
-  const tabs = [...document.querySelectorAll('.model-tab')];
-  const select = tab => tabs.forEach(t => {
-    const on = t === tab;
-    t.setAttribute('aria-selected', on);
-    t.tabIndex = on ? 0 : -1;
-    document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
-    // on phones the tabs scroll sideways: keep the chosen one in view
-    if (on) t.parentElement.parentElement.scrollTo({ left: t.parentElement.offsetLeft - 16, behavior: 'smooth' });
-  });
-  tabs.forEach((tab, i) => {
-    tab.addEventListener('click', () => select(tab));
-    tab.addEventListener('keydown', e => {
-      const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
-      if (!step) return;
-      e.preventDefault();
-      const next = tabs[(i + step + tabs.length) % tabs.length];
-      next.focus();
-      select(next);
-    });
-  });
-
-  // Çelik profilli: two types share one tab
-  // (the switch above the picture, and on wide screens the sub-items under the tab)
-  document.querySelectorAll('.model-panel').forEach(panel => {
-    const tab = document.getElementById(panel.getAttribute('aria-labelledby'));
-    const sub = tab.nextElementSibling;
-    const buttons = [...panel.querySelectorAll('.variant-switch button'), ...(sub ? sub.querySelectorAll('button') : [])];
-    buttons.forEach(btn => btn.addEventListener('click', () => {
-      if (sub && sub.contains(btn)) select(tab);
-      buttons.forEach(b => b.setAttribute('aria-pressed', b.dataset.variant === btn.dataset.variant));
-      panel.querySelectorAll('.variant').forEach(v => { v.hidden = v.dataset.variant !== btn.dataset.variant; });
-    }));
-  });
 
 
-  // Projects: filter by kind of work
-  const filterBtns = document.querySelectorAll('.filter button'), shots = document.querySelectorAll('.work__grid .shot');
-  filterBtns.forEach(btn => btn.addEventListener('click', () => {
-    const f = btn.dataset.f;
-    filterBtns.forEach(b => b.setAttribute('aria-pressed', b === btn));
-    shots.forEach(sh => { sh.hidden = f !== 'all' && !sh.dataset.cat.split(' ').includes(f); });
-    document.querySelector('.work__grid').classList.toggle('is-filtered', f !== 'all');
-  }));
 
-  // Side-scrolling strips (catalogue, stair pictures): the arrows move one item
-  document.querySelectorAll('.pager').forEach(pager => {
-    const track = pager.parentElement.closest('section, .slides').querySelector(pager.dataset.track);
-    const sync = () => {
-      const [prev, next] = pager.querySelectorAll('button');
-      prev.disabled = track.scrollLeft < 4;
-      next.disabled = track.scrollLeft + track.clientWidth > track.scrollWidth - 4;
-    };
-    pager.addEventListener('click', e => {
-      const btn = e.target.closest('button');
-      if (!btn) return;
-      const item = track.firstElementChild, gap = parseFloat(getComputedStyle(track).columnGap) || 0;
-      track.scrollBy({ left: +btn.dataset.dir * (item.offsetWidth + gap), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
-    });
-    track.addEventListener('scroll', sync, { passive: true });
-    addEventListener('resize', sync);
-    sync();
-  });
 
-  // Asma kat card: tap or press to turn it over
-  document.querySelectorAll('.flip__card').forEach(card => card.addEventListener('click', () => {
-    card.setAttribute('aria-pressed', card.getAttribute('aria-pressed') !== 'true');
-  }));
 
-  // Services: the sticky picture follows whichever row is closest to the middle of the screen
-  const svcPhoto = document.getElementById('svc-photo'), svcCaption = document.getElementById('svc-caption');
-  const svcVisual = svcPhoto.closest('figure'), svcRows = [...document.querySelectorAll('.service[data-photo]')];
-  let svcWanted = svcRows[0], svcTimer = 0, svcQueued = false;
-  const svcShow = el => {
-    if (el === svcWanted) return;
-    svcWanted = el;
-    svcPhoto.classList.add('is-swapping');
-    clearTimeout(svcTimer);
-    svcTimer = setTimeout(() => {
-      svcPhoto.onload = () => svcPhoto.classList.remove('is-swapping');
-      svcPhoto.src = svcWanted.dataset.photo;
-      svcPhoto.alt = svcWanted.dataset.alt;
-      svcCaption.textContent = svcWanted.dataset.caption;
-    }, 180);
-  };
-  const svcPick = () => {
-    svcQueued = false;
-    if (!svcVisual.offsetParent) return;           // hidden on narrow screens: rows carry their own pictures
-    const mid = innerHeight / 2;
-    let best = svcRows[0], bestD = Infinity;
-    for (const r of svcRows) {
-      const box = r.getBoundingClientRect(), d = Math.abs((box.top + box.bottom) / 2 - mid);
-      if (d < bestD) { bestD = d; best = r; }
-    }
-    svcShow(best);
-  };
-  addEventListener('scroll', () => { if (!svcQueued) { svcQueued = true; requestAnimationFrame(svcPick); } }, { passive: true });
 
   // Tasarla: the configurator module loads when its section comes near
   const configRoot = document.getElementById('tasarla');
