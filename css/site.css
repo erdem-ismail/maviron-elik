@@ -473,7 +473,10 @@ a.fab__btn--wa:hover { background: #1fb957; }
 .page-hero__lede { max-width: 52ch; font-size: clamp(1.05rem, 1.4vw, 1.25rem); color: #c3c9d1; }
 .page-hero__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
 .page-hero--split { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: clamp(28px, 5vw, 80px); align-items: end; }
+.page-hero--about .page-hero__title { font-size: clamp(2rem, 4.8vw, 4.6rem); line-height: .96; max-width: 18ch; }
+.page-hero--about .page-hero__lede + .page-hero__lede { margin-top: .7em; }
 .page-hero--split .page-hero__title { font-size: clamp(2.6rem, 5.8vw, 5.8rem); }
+.page-hero--split .page-hero__title--line { font-size: clamp(1.9rem, 4.6vw, 4.6rem); white-space: nowrap; }
 .page-hero__figure { margin: 0; }
 .page-hero__figure img { width: 100%; aspect-ratio: 1; object-fit: cover; background: #e7e4de; }
 .page-hero__figure figcaption { margin-top: 12px; font-size: .7rem; color: var(--muted); }
@@ -536,7 +539,6 @@ a.fab__btn--wa:hover { background: #1fb957; }
 .mat--masif i { background-image: repeating-linear-gradient(90deg, rgba(150, 82, 30, .34) 0 17%, transparent 17% 33%, rgba(90, 48, 16, .3) 33% 49%, rgba(255, 220, 170, .12) 49% 66%), url(../img/tex/oak-diff.webp); background-size: auto, 260%; }
 .mat--porselen i { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='f' x='0' y='0' width='100%' height='100%'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.004 .009' numOctaves='5' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.55  0 0 0 0 0.55  0 0 0 0 0.57  1 0 0 0 0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 0 0 0 0 0 0 .85 0 0 0 0 0 0 0'/%3E%3C/feComponentTransfer%3E%3CfeGaussianBlur stdDeviation='.7'/%3E%3C/filter%3E%3Crect width='300' height='300' fill='%23f4f2ee'/%3E%3Crect width='300' height='300' filter='url(%23f)'/%3E%3C/svg%3E"); }
 .mat--traverten i { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='f' x='0' y='0' width='100%' height='100%'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.002 .08' numOctaves='4' seed='5'/%3E%3CfeColorMatrix values='0 0 0 0 0.62  0 0 0 0 0.58  0 0 0 0 0.52  1 0 0 0 0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 .1 .35 .1 0 .25 .55 .2 0 .15 .4'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='300' height='300' fill='%23d2cec6'/%3E%3Crect width='300' height='300' filter='url(%23f)'/%3E%3C/svg%3E"); }
-.mat--mermer i { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='f' x='0' y='0' width='100%' height='100%'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.004 .009' numOctaves='3' seed='9'/%3E%3CfeColorMatrix values='0 0 0 0 0.9  0 0 0 0 0.89  0 0 0 0 0.86  1 0 0 0 0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 0 0 0 0 0 0 0 0 0 .7 0 0 0 0 0 0 0 0 0 0'/%3E%3C/feComponentTransfer%3E%3CfeGaussianBlur stdDeviation='.7'/%3E%3C/filter%3E%3Crect width='300' height='300' fill='%231c1e21'/%3E%3Crect width='300' height='300' filter='url(%23f)'/%3E%3C/svg%3E"); }
 .kartela__grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .mat span small { display: block; font-weight: 500; color: var(--muted-ink); font-size: .82rem; }
 @media (max-width: 560px) { .kartela__grid--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -820,7 +822,7 @@ a.fab__btn--wa:hover { background: #1fb957; }
   visibility: hidden; opacity: 0; transform: translateY(-4px); transition: opacity .18s, transform .18s, visibility 0s .18s;
 }
 .nav__sub::before { content: ""; position: absolute; left: 0; right: 0; top: -14px; height: 14px; } /* keeps hover across the gap */
-.nav__group:hover .nav__sub, .nav__group:focus-within .nav__sub { visibility: visible; opacity: 1; transform: none; transition: opacity .18s, transform .18s; }
+.nav__group:hover .nav__sub, .nav__group:focus-within .nav__sub, .nav__group.is-open .nav__sub { visibility: visible; opacity: 1; transform: none; transition: opacity .18s, transform .18s; }
 .nav__sub a { display: block; padding: 11px 0 !important; border-bottom: 1px solid var(--line) !important; white-space: nowrap; }
 .nav__sub a:last-child { border-bottom: 0 !important; }
 .nav__sub a:hover, .nav__sub a[aria-current="page"] { color: var(--oak); }

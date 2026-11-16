@@ -12,6 +12,20 @@ toggle.addEventListener('click', () => setNav(!nav.classList.contains('is-open')
 nav.addEventListener('click', e => { if (e.target.closest('a')) setNav(false); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && nav.classList.contains('is-open')) { setNav(false); toggle.focus(); } });
 
+// Touch screens wider than the hamburger breakpoint have no hover: the first tap on
+// "Hizmetler" opens its submenu instead of leaving the page; a second tap follows the link.
+const noHover = matchMedia('(hover: none) and (min-width: 1025px)');
+document.querySelectorAll('.nav__group > a').forEach(link => {
+  const group = link.parentElement;
+  link.addEventListener('click', e => {
+    if (!noHover.matches || group.classList.contains('is-open')) return;
+    e.preventDefault();
+    e.stopPropagation();
+    group.classList.add('is-open');
+  });
+  document.addEventListener('click', e => { if (!group.contains(e.target)) group.classList.remove('is-open'); });
+});
+
 // Quick contact: the four buttons fold behind one chat bubble
 const fab = document.querySelector('.fab');
 if (fab) {
