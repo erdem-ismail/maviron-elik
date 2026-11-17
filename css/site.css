@@ -182,7 +182,8 @@ p { margin: 0; }
   transition: color .6s;
   will-change: opacity, transform, filter;
 }
-.js .film:not(.film--static) .film__scene { opacity: 0; visibility: hidden; }
+/* the hero copy shows at once over the poster; later captions wait for the film to drive them */
+.js .film:not(.film--static) .film__scene:not(.film__scene--hero) { opacity: 0; visibility: hidden; }
 .film__scene .eyebrow { color: var(--oak); }
 .film.is-light .film__scene .eyebrow { color: var(--oak-deep); }
 .film__h1 { font-size: clamp(2.2rem, 3.6vw, 4.2rem); line-height: .94; margin: .3em 0 .28em; }
@@ -274,6 +275,11 @@ section { position: relative; }
 .model-tab:hover { background: var(--paper-2); }
 .model-tab[aria-selected="true"] { background: var(--ink); color: var(--paper); padding-left: 16px; }
 .model-tab[aria-selected="true"] span:first-child, .model-tab[aria-selected="true"] i { color: var(--oak); }
+/* a narrow list column: the tag drops under the name instead of running into it */
+@media (max-width: 1180px) {
+  .model-tab { grid-template-columns: 44px minmax(0, 1fr); row-gap: 6px; }
+  .model-tab i { grid-column: 2; }
+}
 .model-panel { display: grid; grid-template-rows: auto auto; gap: 22px; }
 .model-panel[hidden] { display: none; }
 .model-panel figure { margin: 0; position: relative; background: #e7e4de; overflow: hidden; }
