@@ -628,6 +628,7 @@ a.fab__btn--wa:hover { background: #1fb957; }
 .quote dt { font: 500 .72rem/1.9 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 .quote dd { margin: 0; }
 .quote dd a { text-decoration-color: var(--oak); text-underline-offset: 4px; }
+.quote dd.tels { display: grid; gap: 8px; justify-items: start; }
 .form { display: grid; gap: 18px; padding: clamp(22px, 3vw, 40px); background: var(--navy); border: 1px solid var(--line); align-self: start; }
 .form fieldset { border: 0; margin: 0; padding: 0; }
 .form legend, .form label { display: block; font: 500 .72rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--steel); margin-bottom: 10px; }

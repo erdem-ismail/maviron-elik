@@ -4,7 +4,7 @@
 // Risers follow the comfort rule 2h + g ≈ 63 cm. Without WebGL2 the numbers and the
 // WhatsApp message still work; a still render stands in for the view.
 
-const PHONE = '905387256162';
+const PHONE = '905363773370';
 const NAMES = {
   model: { konsol: 'Konsol merdiven', duz: 'Düz omurgalı merdiven', l: 'L merdiven', z: 'Z merdiven', u: 'U merdiven', spiral: 'Spiral merdiven' },
   tread: { mese: 'meşe basamak', ceviz: 'ceviz basamak', celik: 'çelik basamak', mermer: 'mermer basamak' },
