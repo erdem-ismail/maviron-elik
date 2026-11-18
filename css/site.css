@@ -833,7 +833,8 @@ a.fab__btn--wa:hover { background: #1fb957; }
 .nav__sub a:last-child { border-bottom: 0 !important; }
 .nav__sub a:hover, .nav__sub a[aria-current="page"] { color: var(--oak); }
 @media (max-width: 1024px) {
-  .nav__sub { position: static; visibility: visible; opacity: 1; transform: none; min-width: 0; padding: 0 0 6px 16px; background: none; border: 0; }
+  .nav__sub { position: static; visibility: inherit; /* follows the closed menu: never an invisible tap target */  opacity: 1; transform: none; min-width: 0; padding: 0 0 6px 16px; background: none; border: 0; }
+  .nav:not(.is-open) .nav__sub { visibility: hidden; } /* hover/focus rules from the desktop menu must not revive it */
   .nav__sub::before { content: none; }
   .nav .nav__sub a:not(.btn) { font: 600 1rem/1.2 var(--body); text-transform: none; padding: 12px 0 !important; }
 }
