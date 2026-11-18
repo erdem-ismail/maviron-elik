@@ -660,7 +660,6 @@ a.fab__btn--wa:hover { background: #1fb957; }
 .site-footer__row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 18px 40px; margin-top: 34px; font-size: .9rem; color: var(--muted); }
 .site-footer__row nav { display: flex; flex-wrap: wrap; gap: 22px; }
 .site-footer__row a { text-underline-offset: 4px; }
-.demo-note { font: 500 .72rem/1.6 var(--mono); letter-spacing: .04em; color: var(--muted); max-width: 72ch; margin-top: 22px; }
 
 /* ---------- Legal text (kvkk.html) ---------- */
 .legal { padding: clamp(60px, 8vw, 110px) var(--gutter) clamp(80px, 10vw, 140px); background: var(--paper); color: var(--ink); }
