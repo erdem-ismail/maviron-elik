@@ -5,3 +5,11 @@ README.md
 .playwright-mcp/
 .env*
 .vercel
+
+# Working folders: catalogue sources, tool state and scratch images are not part of the site
+_katalog/
+_katalogw/
+yatay-lama/
+.swarm/
+.claude-flow/
+spiral-karsilastirma.png

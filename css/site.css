@@ -569,8 +569,8 @@ a.fab__btn--wa:hover { background: #1fb957; }
 .areas h3 { font-size: clamp(1.05rem, 1.5vw, 1.35rem); line-height: 1.05; margin: 14px 0 10px; }
 .areas p { color: var(--steel); font-size: .95rem; line-height: 1.55; }
 .eng { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 28px clamp(28px, 5vw, 80px); margin: clamp(70px, 9vw, 120px) var(--gutter) 0; padding-top: clamp(28px, 3vw, 40px); border-top: 1px solid var(--line); }
-.eng h3 { font-size: clamp(1.8rem, 3.4vw, 3rem); line-height: .95; margin: .35em 0 14px; }
-.eng h3 em { font-style: normal; color: var(--oak); }
+.eng h2, .eng h3 { font-size: clamp(1.8rem, 3.4vw, 3rem); line-height: .95; margin: .35em 0 14px; }
+.eng h2 em, .eng h3 em { font-style: normal; color: var(--oak); }
 .eng > div > p:last-child { color: var(--muted); max-width: 36ch; }
 .eng ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; counter-reset: e; align-self: start; }
 .eng li { counter-increment: e; display: flex; gap: 14px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--line); font-weight: 600; font-size: 1.05rem; }
